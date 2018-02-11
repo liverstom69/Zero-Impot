@@ -21,5 +21,4 @@ export const returnState = state => {
     return state;
 };
 
-
 export default reducers;

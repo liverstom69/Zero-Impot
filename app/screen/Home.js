@@ -12,23 +12,27 @@ import ConstanceButton from '../components/public/ConstanceButton';
 import images from '../config/images';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
+import TaxTest from "../components/law/TaxTest";
 
 export default class Home extends React.Component {
   state: {
-    value: String,
-    socity: String,
+      value: String,
+      socity: String,
+      taxConcern: Number,
   };
 
   constructor(props) {
-    super(props);
-    this.state = {
-      value: '',
-      socity: '',
-    };
-    this.returnButtonColor = this.returnButtonColor.bind(this);
-    this.onChangeValue = this.onChangeValue.bind(this);
-    this.onChangeSocity = this.onChangeSocity.bind(this);
-    this.onClickButton = this.onClickButton.bind(this);
+      super(props);
+      this.state = {
+          value: '45678',
+          socity: '',
+          taxConcern: 1,
+      };
+      this.returnButtonColor = this.returnButtonColor.bind(this);
+      this.onChangeValue = this.onChangeValue.bind(this);
+      this.onChangeSocity = this.onChangeSocity.bind(this);
+      this.onClickButton = this.onClickButton.bind(this);
+      this.selectTaxConcern = this.selectTaxConcern.bind(this);
   }
 
   returnButtonColor() : String {
@@ -55,47 +59,104 @@ export default class Home extends React.Component {
     this.props.navigation.navigate('Result');
   }
 
+  selectTaxConcern(taxConcern) {
+    if (taxConcern !== this.state.taxConcern) {
+        this.setState({ taxConcern });
+    }
+  }
+
   render() {
-    return (
-      <View style={styles.scrollView}>
-        <KeyboardAwareScrollView bounces={false}>
-          <ScrollView bounces={false}>
-            <View style={styles.viewWithMarg}>
-              <Text style={[styles.bigText, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
-              <Text style={[styles.bigText, styles.greyBlackColor, styles.textCenter]}>{I18n.t('translation.customer')}</Text>
-              <Input
-                value={this.state.value}
-                onChangeText={(text) => this.onChangeValue(text)}
-                isBig
-              />
-            </View>
-            <View style={styles.halfSpace} />
-            <View style={styles.line} />
-            <View style={styles.halfSpace} />
-            <View style={styles.viewWithMarg}>
-              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                <Image source={images.point} style={{marginRight: 10}}/>
-                <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.socity')}</Text>
-              </View>
-              <Input
-                value={this.state.socity}
-                onChangeText={(text) => this.onChangeSocity(text)}
-                isBig={false}
-              />
-              <View style={styles.halfSpace} />
-            </View>
-          </ScrollView>
-        </KeyboardAwareScrollView>
-        <View style={{height: 92}}>
-          <ConstanceButton
-              title={I18n.t('translation.launchSimulation')}
-              color={this.returnButtonColor()}
-              isBottom
-              onPress={this.onClickButton}
-          />
-        </View>
-      </View>
-    )
+      return (
+          <View style={styles.scrollView}>
+              <KeyboardAwareScrollView bounces={false}>
+                  <ScrollView bounces={false}>
+                      <View style={styles.viewWithMarg}>
+                          <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{I18n.t('translation.taxQuestion')}</Text>
+                        </View>
+                    <TaxTest
+                        title={I18n.t('translation.irTax')}
+                        taxConcern={Const.TAX.IR}
+                        onClick={() => this.selectTaxConcern(Const.TAX.IR)}
+                        isChecked={this.state.taxConcern === Const.TAX.IR}
+                    />
+                      <TaxTest
+                          title={I18n.t('translation.bfTax')}
+                          subTitle={I18n.t('translation.bfTaxSub')}
+                          taxConcern={Const.TAX.BF}
+                          onClick={() => this.selectTaxConcern(Const.TAX.BF)}
+                          isChecked={this.state.taxConcern === Const.TAX.BF}
+                      />
+                      <TaxTest
+                          title={I18n.t('translation.isTax')}
+                          subTitle={I18n.t('translation.isTaxSub')}
+                          taxConcern={Const.TAX.IS}
+                          onClick={() => this.selectTaxConcern(Const.TAX.IS)}
+                          isChecked={this.state.taxConcern === Const.TAX.IS}
+                      />
+                      {this.state.taxConcern === Const.TAX.IR &&
+                      (
+                          <View style={styles.viewWithMMarg}>
+                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
+                              <Input
+                                  value={this.state.value}
+                                  onChangeText={(text) => this.onChangeValue(text)}
+                                  isBig
+                              />
+                              <View style={styles.halfSpace} />
+                          </View>
+                      )
+                      }
+                      {this.state.taxConcern === Const.TAX.BF &&
+                      (
+                          <View style={styles.viewWithMMarg}>
+                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxIR')}</Text>
+                              <Input
+                                  value={this.state.value}
+                                  onChangeText={(text) => this.onChangeValue(text)}
+                                  isBig
+                              />
+                              <View style={styles.halfSpace} />
+                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.bfTaxText')}</Text>
+                              <Input
+                                  value={this.state.value}
+                                  onChangeText={(text) => this.onChangeValue(text)}
+                                  isBig={false}
+                              />
+                              <View style={styles.halfSpace} />
+                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.numberParts')}</Text>
+                              <Input
+                                  value={this.state.value}
+                                  onChangeText={(text) => this.onChangeValue(text)}
+                                  isBig={false}
+                              />
+                              <View style={styles.halfSpace} />
+                          </View>
+                      )}
+                      {this.state.taxConcern === Const.TAX.IS &&
+                      (
+                          <View style={styles.viewWithMMarg}>
+                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxSocity')}</Text>
+                              <Input
+                                  value={this.state.value}
+                                  onChangeText={(text) => this.onChangeValue(text)}
+                                  isBig
+                              />
+                              <View style={styles.halfSpace} />
+                          </View>
+                      )
+                      }
+                  </ScrollView>
+                  <View style={{height: 92}}>
+                      <ConstanceButton
+                          title={I18n.t('translation.launchSimulation')}
+                          color={this.returnButtonColor()}
+                          isBottom
+                          onPress={this.onClickButton}
+                      />
+                  </View>
+              </KeyboardAwareScrollView>
+          </View>
+      );
   }
 }
 

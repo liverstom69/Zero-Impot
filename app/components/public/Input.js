@@ -33,17 +33,18 @@ export default class Input extends React.Component {
           style={this.renderInputStyle()}
           editable={this.props.isEdit}
         />
-        <View style={this.renderViewStyle()}>
-          {this.props.isPhone !== undefined && this.props.isPhone === true ?
-            <Image
-              source={images.call}
-              style={{tintColor: 'white'}}
-            />
-            :
-            <Text style={[styles.textRegular, styles.whiteColor]}>€</Text>
-          }
-
-        </View>
+          {this.props.isBig && (
+              <View style={this.renderViewStyle()}>
+                {this.props.isPhone !== undefined && this.props.isPhone === true ?
+                  <Image
+                    source={images.call}
+                    style={{tintColor: 'white'}}
+                  />
+                  :
+                  <Text style={[styles.textRegular, styles.whiteColor]}>€</Text>
+                }
+              </View>
+          )}
       </View>
     )
   }
@@ -74,8 +75,8 @@ const inputStyle = StyleSheet.create({
     color: Const.COLOR.BLACKGREY,
   },
   bigInput: {
-    height: 80,
-    fontSize: 24,
+    height: 60,
+    fontSize: 22,
   },
   smallInput: {
     height: 42,
@@ -88,8 +89,8 @@ const inputStyle = StyleSheet.create({
     borderBottomRightRadius: 3,
   },
   bigView: {
-    height: 80,
-    width: 80,
+    height: 60,
+    width: 60,
   },
   smallView: {
     height: 42,

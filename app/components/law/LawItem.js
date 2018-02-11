@@ -27,16 +27,17 @@ export default class LawItem extends React.Component {
             renderItem={ (item) => <EconomyLaw economy={item.item} /> }
           />
         </View>
-        <View style={styles.line} />
+          {this.props.isLast === false && <View style={styles.line} />}
       </View>
     )
   }
 }
 
 LawItem.propTypes = {
-  navigation: PropTypes.object.isRequired,
-  economy: PropTypes.array.isRequired,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired,
+    navigation: PropTypes.object.isRequired,
+    economy: PropTypes.array.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    isLast: PropTypes.bool.isRequired,
 };

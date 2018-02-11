@@ -24,9 +24,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Catamaran-Bold'
   },
   mediumTextBold: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: 'Catamaran-Bold',
   },
+    smallMediumTB: {
+        fontSize: 18,
+        fontFamily: 'Catamaran-Bold',
+    },
   bigText: {
     fontSize: 28,
     fontFamily: 'Catamaran-Bold',
@@ -75,6 +79,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+    viewWithMMarg: {
+        marginVertical: 5,
+        marginHorizontal: 10,
+    },
   viewWithMarg: {
     marginVertical: 15,
     marginHorizontal: 10,

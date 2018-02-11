@@ -45,8 +45,7 @@ export default class ConstanceButton extends React.Component {
       <TouchableOpacity
         style={this.renderViewStyle()}
         onPress={ () => this.props.onPress() }>
-      <View
-        >
+      <View style={buttonStyle.centerView}>
         {this.props.image !== undefined &&
         <Image
           source={this.props.image}
@@ -71,39 +70,42 @@ ConstanceButton.propTypes = {
 };
 
 const buttonStyle = StyleSheet.create({
-  view: {
-    flex: 1,
-    height: 62,
-    borderRadius: 2,
-    justifyContent: 'center',
-  },
-  blueView: {
-    backgroundColor: Const.COLOR.BLUE,
-    shadowOpacity: 0.75,
-    shadowRadius: 5,
-    shadowColor: Const.COLOR.BLUE,
-    shadowOffset: { height: 5, width: 0 },
-  },
-  greyView: {
-    backgroundColor: Const.COLOR.GREY
-  },
-  whiteView: {
-    borderColor: Const.COLOR.BLUE,
-    borderWidth: 1,
-  },
-  icon: {
-    position: 'absolute',
-    left: 10,
-  },
-  blueIcon: {
-    tintColor: Const.COLOR.BLUE,
-  },
-  whiteIcon: {
-    tintColor: 'white',
-  },
-  textView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+    view: {
+        flex: 1,
+        height: 62,
+        borderRadius: 2,
+        justifyContent: 'center',
+    },
+    blueView: {
+      backgroundColor: Const.COLOR.BLUE,
+      shadowOpacity: 0.75,
+      shadowRadius: 5,
+      shadowColor: Const.COLOR.BLUE,
+      shadowOffset: { height: 5, width: 0 },
+    },
+    greyView: {
+        backgroundColor: Const.COLOR.GREY
+    },
+    whiteView: {
+        borderColor: Const.COLOR.BLUE,
+        borderWidth: 1,
+    },
+    icon: {
+        position: 'absolute',
+        left: 10,
+    },
+    blueIcon: {
+        tintColor: Const.COLOR.BLUE,
+    },
+    whiteIcon: {
+        tintColor: 'white',
+    },
+    textView: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    centerView: {
+        justifyContent: "center",
+    }
 });

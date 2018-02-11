@@ -13,10 +13,15 @@ export default class PresentationLaw extends React.Component {
     return (
       <View>
         <View style={styles.container}>
-          <View style={presentationStyle.lawView}>
-            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
-            <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t('translation.investiment')}</Text>
-          </View>
+            <View>
+                <View style={presentationStyle.lawView}>
+                    <TouchableOpacity style={{ alignItems: "center", justifyContent: "center", marginRight: 5 }}>
+                        <Image style={{ width: 23, height: 23, resizeMode: "contain" }} source={images.trash} />
+                    </TouchableOpacity>
+                  <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
+                </View>
+                <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t('translation.investiment')}</Text>
+            </View>
           <View style={presentationStyle.textView}>
             <Text style={[styles.smallTextMedium, styles.blueColor]}>{I18n.t('translation.zeroApport')}</Text>
           </View>
@@ -44,12 +49,13 @@ export default class PresentationLaw extends React.Component {
 
 const presentationStyle = StyleSheet.create({
   lawView: {
-    flex: 6,
-    paddingRight: 5,
+      flex: 6,
+      flexDirection: "row",
+      paddingRight: 5,
   },
   textView: {
-    flex: 3,
-    alignItems: 'flex-end',
+      flex: 3,
+      alignItems: 'flex-end',
   }
 });
 
