@@ -9,24 +9,27 @@ import styles from '../config/styles';
 import Const from '../config/Const';
 import Input from '../components/public/Input';
 import ConstanceButton from '../components/public/ConstanceButton';
-import images from '../config/images';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
 import TaxTest from "../components/law/TaxTest";
 
 export default class Home extends React.Component {
   state: {
-      value: String,
-      socity: String,
+      ir: String,
+      is: String,
+      bf: String,
       taxConcern: Number,
+      nbParts: String,
   };
 
   constructor(props) {
       super(props);
       this.state = {
-          value: '45678',
-          socity: '',
-          taxConcern: 1,
+          ir: '3000',
+          is: '',
+          bf: '',
+          taxConcern: Const.TAX.IR,
+          nbParts: '',
       };
       this.returnButtonColor = this.returnButtonColor.bind(this);
       this.onChangeValue = this.onChangeValue.bind(this);
@@ -36,7 +39,14 @@ export default class Home extends React.Component {
   }
 
   returnButtonColor() : String {
-    return this.state.value.length > 0 ? Const.COLOR.BLUE : Const.COLOR.GREY;
+      switch (this.state.taxConcern) {
+          case Const.TAX.IR:
+              return this.state.ir.length > 0 ? Const.COLOR.BLUE : Const.COLOR.GREY;
+          case Const.TAX.BF:
+              return this.state.ir.length > 0 && this.state.bf.length > 0 && this.state.nbParts.length > 0 ? Const.COLOR.BLUE : Const.COLOR.GREY;
+          default:
+              return this.state.is.length > 0 ? Const.COLOR.BLUE : Const.COLOR.GREY;
+      }
   }
 
   onChangeValue(value: String) {
@@ -48,15 +58,41 @@ export default class Home extends React.Component {
   }
 
   onClickButton() {
-    if (this.state.value.length === 0) {
-      AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
-      return;
-    }
-    if (parseInt(this.state.value) <= 2500) {
-      AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
-      return;
-    }
-    this.props.navigation.navigate('Result');
+      switch (this.state.taxConcern) {
+          case Const.TAX.IR:
+              if (this.state.ir.length === 0) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
+                  return;
+              }
+              if (parseInt(this.state.ir) <= 2500) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
+                  return;
+              }
+              break;
+          case Const.TAX.IS:
+              if (this.state.is.length === 0) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
+                  return;
+              }
+              if (parseInt(this.state.ir) <= 60000) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
+                  return;
+              }
+              break;
+          default:
+              if (this.state.bf.length === 0 ||
+                  this.state.nbParts.length === 0 ||
+                  this.state.is.length === 0 ) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
+                  return;
+              }
+              if (parseInt(this.state.bf) <= 60000) {
+                  AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
+                  return;
+              }
+              break;
+      }
+      this.props.navigation.navigate('Result');
   }
 
   selectTaxConcern(taxConcern) {
@@ -98,7 +134,7 @@ export default class Home extends React.Component {
                           <View style={styles.viewWithMMarg}>
                               <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
                               <Input
-                                  value={this.state.value}
+                                  value={this.state.ir}
                                   onChangeText={(text) => this.onChangeValue(text)}
                                   isBig
                               />
@@ -111,21 +147,21 @@ export default class Home extends React.Component {
                           <View style={styles.viewWithMMarg}>
                               <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxIR')}</Text>
                               <Input
-                                  value={this.state.value}
+                                  value={this.state.ir}
                                   onChangeText={(text) => this.onChangeValue(text)}
                                   isBig
                               />
                               <View style={styles.halfSpace} />
                               <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.bfTaxText')}</Text>
                               <Input
-                                  value={this.state.value}
+                                  value={this.state.bf}
                                   onChangeText={(text) => this.onChangeValue(text)}
                                   isBig={false}
                               />
                               <View style={styles.halfSpace} />
                               <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.numberParts')}</Text>
                               <Input
-                                  value={this.state.value}
+                                  value={this.state.nbParts}
                                   onChangeText={(text) => this.onChangeValue(text)}
                                   isBig={false}
                               />
@@ -137,7 +173,7 @@ export default class Home extends React.Component {
                           <View style={styles.viewWithMMarg}>
                               <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxSocity')}</Text>
                               <Input
-                                  value={this.state.value}
+                                  value={this.state.is}
                                   onChangeText={(text) => this.onChangeValue(text)}
                                   isBig
                               />

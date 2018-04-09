@@ -10,7 +10,8 @@ const styleTax = StyleSheet.create({
     viewStyle: {
         flexDirection: "row",
         alignItems: "flex-start",
-        height: 65
+        height: 55,
+        marginBottom: 10,
     },
     checkStyle: {
         paddingHorizontal: 10
