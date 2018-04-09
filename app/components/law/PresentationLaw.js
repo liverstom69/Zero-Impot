@@ -7,57 +7,67 @@ import styles from '../../config/styles';
 import images from '../../config/images';
 import Input from "../public/Input";
 
+const presentationStyle = StyleSheet.create({
+    lawView: {
+        flex: 6,
+        flexDirection: "row",
+        paddingRight: 5,
+    },
+    textView: {
+        flex: 3,
+        alignItems: 'flex-end',
+        justifyContent: "center"
+    },
+    trashImg: {
+        width: 23,
+        height: 23,
+        resizeMode: "contain"
+    },
+    trashView: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginRight: 10,
+    }
+});
+
 export default class PresentationLaw extends React.Component {
   // TODO : Adding ActionSheet action on Input component
-  render() {
-    return (
-      <View>
-        <View style={styles.container}>
+    render() {
+        return (
             <View>
-                <View style={presentationStyle.lawView}>
-                    <TouchableOpacity style={{ alignItems: "center", justifyContent: "center", marginRight: 5 }}>
-                        <Image style={{ width: 23, height: 23, resizeMode: "contain" }} source={images.trash} />
-                    </TouchableOpacity>
-                  <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
+                <View style={styles.container}>
+                    <View>
+                        <View style={presentationStyle.lawView}>
+                            <TouchableOpacity style={presentationStyle.trashView}>
+                                <Image style={presentationStyle.trashImg} source={images.trash} />
+                            </TouchableOpacity>
+                            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
+                        </View>
+                    </View>
+                    <View style={presentationStyle.textView}>
+                        <Text style={[styles.smallTextMedium, styles.blueColor]}>{I18n.t('translation.zeroApport')}</Text>
+                    </View>
                 </View>
                 <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t('translation.investiment')}</Text>
+                <View style={styles.container}>
+                    <View style={presentationStyle.lawView}>
+                        <Input
+                            value={this.props.value}
+                            onChangeText={null}
+                            isBig={false}
+                            isEdit={false}
+                        />
+                    </View>
+                    <View style={presentationStyle.textView}>
+                        <TouchableOpacity onPress={() => this.props.onPress()}>
+                            <Image source={images.arrow} />
+                        </TouchableOpacity>
+                    </View>
+                </View>
             </View>
-          <View style={presentationStyle.textView}>
-            <Text style={[styles.smallTextMedium, styles.blueColor]}>{I18n.t('translation.zeroApport')}</Text>
-          </View>
-        </View>
-        <View style={styles.halfSpace} />
-        <View style={styles.container}>
-          <View style={presentationStyle.lawView}>
-            <Input
-              value={this.props.value}
-              onChangeText={null}
-              isBig={false}
-              isEdit={false}
-            />
-          </View>
-          <View style={presentationStyle.textView}>
-            <TouchableOpacity onPress={() => this.props.onPress()}>
-              <Image source={images.arrow} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        </View>
-    )
-  }
+        )
+    }
 }
-
-const presentationStyle = StyleSheet.create({
-  lawView: {
-      flex: 6,
-      flexDirection: "row",
-      paddingRight: 5,
-  },
-  textView: {
-      flex: 3,
-      alignItems: 'flex-end',
-  }
-});
 
 PresentationLaw.propTypes = {
   name: PropTypes.string.isRequired,

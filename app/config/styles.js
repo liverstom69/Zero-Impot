@@ -87,6 +87,9 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginHorizontal: 10,
   },
+    littleSpace: {
+        height: 7.5,
+    },
   halfSpace: {
     height: 15,
   },

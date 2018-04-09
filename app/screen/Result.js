@@ -15,40 +15,23 @@ const elem = [
         key: '0',
         name: 'Loi Pinel',
         investiment: '300000',
-        horizon: [
-            {
-                key: '0',
-                duree: "6",
-                economy: '36000',
-                saving: '2000',
-            },
-        ]
+        horizon: {
+            key: '0',
+            duree: "6",
+            economy: '36000',
+            saving: '2000',
+        },
     },
     {
         key: '1',
         name: 'Loi Pinel Outremer',
         investiment: '300000',
-        horizon: [
-            {
-                key: '0',
-                duree: "6",
-                economy: '36000',
-                saving: '2000',
-            },
-        ]
-    },
-    {
-        key: '2',
-        name: 'Loi Malraux',
-        investiment: '300000',
-        horizon: [
-            {
-                key: '1',
-                duree: "9",
-                economy: '45000',
-                saving: '3000',
-            },
-        ]
+        horizon: {
+            key: '0',
+            duree: "6",
+            economy: '36000',
+            saving: '2000',
+        },
     },
 ];
 
@@ -74,12 +57,11 @@ export default class Result extends React.Component {
                   economy={item.horizon}
                   value={item.investiment}
                   isLast={index === elem.length - 1}
-                  onPress={() => alert('tes')}
+                  onPress={() => alert('test')}
               />
           )}
         />
         <View style={styles.viewWithMarg}>
-          <View style={styles.halfSpace}/>
           <ConstanceButton
             title={I18n.t('translation.contactUs')}
             color={Const.COLOR.BLUE}

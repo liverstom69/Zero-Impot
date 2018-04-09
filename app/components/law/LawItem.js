@@ -6,36 +6,44 @@ import I18n from 'ex-react-native-i18n';
 import styles from '../../config/styles';
 import PresentationLaw from './PresentationLaw';
 import EconomyLaw from "./EconomyLaw";
+import LawDelimiter from "./LawDelimiter";
 
 export default class LawItem extends React.Component {
-  render() {
-    return (
-      <View>
-        <View style={styles.viewWithMarg}>
-          <PresentationLaw
-            name={this.props.name}
-            value={this.props.value}
-            onPress={this.props.onPress}
-          />
-          <View style={styles.halfSpace} />
-          <View style={styles.line} />
-          <View style={styles.halfSpace} />
-          <Text style={[styles.semiBoldText, styles.greyBlackColor]}>{I18n.t('translation.economy')}</Text>
-          <View style={styles.halfSpace} />
-          <FlatList
-            data={this.props.economy}
-            renderItem={ (item) => <EconomyLaw economy={item.item} /> }
-          />
-        </View>
-          {this.props.isLast === false && <View style={styles.line} />}
-      </View>
-    )
-  }
+    render() {
+        return (
+            <View>
+                <View style={styles.viewWithMarg}>
+                    <PresentationLaw
+                        name={this.props.name}
+                        value={this.props.value}
+                        onPress={this.props.onPress}
+                    />
+                    <View style={styles.halfSpace} />
+                    <View style={styles.line} />
+                    <View style={styles.halfSpace} />
+                    <Text style={[styles.semiBoldText, styles.greyBlackColor]}>{I18n.t('translation.economy')}</Text>
+                    <View style={styles.littleSpace} />
+                    <EconomyLaw economy={this.props.economy} />
+                </View>
+                {this.props.isLast === false && (
+                    <View>
+                        <LawDelimiter text={"OU"} />
+                        <View style={styles.halfSpace} />
+                    </View>
+                )}
+                </View>
+        )
+    }
 }
 
 LawItem.propTypes = {
     navigation: PropTypes.object.isRequired,
-    economy: PropTypes.array.isRequired,
+    economy: PropTypes.shape({
+        key: PropTypes.string,
+        duree: PropTypes.string,
+        economy: PropTypes.string,
+        saving: PropTypes.string,
+    }).isRequired,
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,

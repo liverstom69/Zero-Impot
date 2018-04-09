@@ -25,7 +25,7 @@ const MainScreen = StackNavigator({
     }
   }
 }, {
-  initialRouteName: 'Home',
+  initialRouteName: 'Result',
   navigationOptions: ({ navigation }) => {
     return {
       headerStyle: styles.backgroundWhite,
