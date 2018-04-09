@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     },
   bigText: {
     fontSize: 28,
+      lineHeight: 35,
     fontFamily: 'Catamaran-Bold',
   },
   semiBoldText: {
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
   line: {
     height: 1,
     backgroundColor: Const.COLOR.GREY,
-    flex: 1,
   },
   headerLeft: {
     position: 'absolute',

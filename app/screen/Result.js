@@ -57,7 +57,7 @@ export default class Result extends React.Component {
                   economy={item.horizon}
                   value={item.investiment}
                   isLast={index === elem.length - 1}
-                  onPress={() => alert('test')}
+                  onPress={() => this.props.navigation.navigate("Law", { title: item.name })}
               />
           )}
         />

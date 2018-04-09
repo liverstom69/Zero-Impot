@@ -13,6 +13,7 @@ const images = {
     checkboxChecked: require('../../assets/images/checkbox-check.png'),
     trash: require('../../assets/images/trash.png'),
     shape: require("../../assets/images/shape.png"),
+    pig: require("../../assets/images/pig.png"),
 };
 
 export default images;

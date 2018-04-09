@@ -49,6 +49,13 @@ const translation = {
     phone: 'Numéro de téléphone',
     sendMail: 'Envoyer par mail',
     sendSMS: 'Envoyer par SMS',
+    initialText: 'Pour changer votre épargne, changez votre montant d\'opération.',
+    updateEpargne: 'Modifier mon épargne',
+    titleOperator: 'Meilleurs opérations Pinel en fonction des villes',
+    subtitleOperator: 'Avec financement 100% et zéro apport',
+    epargneProgramTitle: 'Votre épargne pour ce programme\n',
+    epargneProgramSubtitle: '(En fonction du loyer)',
+    epargneGain: 'Gain moyen à ',
 };
 
 export default translation;

@@ -12,7 +12,7 @@ export default class ElemItem extends React.Component {
         <View style={styles.viewWithMarg}>
           <TouchableOpacity onPress={() => this.props.item.onPress(this.props.item.id)}>
             <View style={[styles.containerSpacing, styles.alignCenter]}>
-              <View style={elemStyle.viewText}>
+              <View style={elemStyle.viewTitle}>
                 <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.item.title}</Text>
               </View>
               {this.props.item.optionalText && <Text style={[styles.textMedium, styles.greyColor2]}>{this.props.item.optionalText}</Text>}
@@ -29,7 +29,7 @@ export default class ElemItem extends React.Component {
 }
 
 const elemStyle = StyleSheet.create({
-  viewText: {
+  viewTitle: {
     width: 150,
   },
 });

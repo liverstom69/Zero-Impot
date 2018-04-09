@@ -8,6 +8,7 @@ import Const from '../config/Const';
 import Home from '../screen/Home';
 import Result from '../screen/Result';
 import HeaderLeft from '../components/public/HeaderLeft';
+import Law from "../screen/Law";
 
 const MainScreen = StackNavigator({
   Home: {
@@ -23,7 +24,16 @@ const MainScreen = StackNavigator({
       headerTitle: 'Résultats',
       headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
     }
-  }
+  },
+    Law: {
+      screen: Law,
+        navigationOptions: ({ navigation }) => {
+          return {
+              headerTitle: navigation.state.params.title,
+              headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
+          }
+        }
+    }
 }, {
   initialRouteName: 'Result',
   navigationOptions: ({ navigation }) => {
