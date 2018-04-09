@@ -6,11 +6,16 @@ import I18n from 'ex-react-native-i18n';
 import styles from '../../config/styles';
 import images from '../../config/images';
 import Input from "../public/Input";
+import LawSelectorInput from "./LawSelectorInput";
 
 const presentationStyle = StyleSheet.create({
-    lawView: {
+    lawView1: {
         flex: 6,
         flexDirection: "row",
+        paddingRight: 5,
+    },
+    lawView2: {
+        flex: 6,
         paddingRight: 5,
     },
     textView: {
@@ -31,13 +36,12 @@ const presentationStyle = StyleSheet.create({
 });
 
 export default class PresentationLaw extends React.Component {
-  // TODO : Adding ActionSheet action on Input component
     render() {
         return (
             <View>
                 <View style={styles.container}>
                     <View>
-                        <View style={presentationStyle.lawView}>
+                        <View style={presentationStyle.lawView1}>
                             <TouchableOpacity style={presentationStyle.trashView}>
                                 <Image style={presentationStyle.trashImg} source={images.trash} />
                             </TouchableOpacity>
@@ -50,12 +54,12 @@ export default class PresentationLaw extends React.Component {
                 </View>
                 <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t('translation.investiment')}</Text>
                 <View style={styles.container}>
-                    <View style={presentationStyle.lawView}>
-                        <Input
-                            value={this.props.value}
-                            onChangeText={null}
-                            isBig={false}
-                            isEdit={false}
+                    <View style={presentationStyle.lawView2}>
+                        <LawSelectorInput
+                            value={"300"}
+                            onPress={() => console.log("test")}
+                            law={"Loi Pinel"}
+                            basicValue={"300"}
                         />
                     </View>
                     <View style={presentationStyle.textView}>

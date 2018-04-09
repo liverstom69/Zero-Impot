@@ -11,7 +11,8 @@ const images = {
     point: require('../../assets/images/point.png'),
     checkboxUnchecked: require('../../assets/images/checkbox-uncheck.png'),
     checkboxChecked: require('../../assets/images/checkbox-check.png'),
-    trash: require('../../assets/images/trash.png')
+    trash: require('../../assets/images/trash.png'),
+    shape: require("../../assets/images/shape.png"),
 };
 
 export default images;

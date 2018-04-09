@@ -1,4 +1,5 @@
 const translation = {
+    cancel: "Annuler",
     taxQuestion: "Quel impôt vous concerne ?",
     result: 'Résultats',
     tax: 'Saisir le montant',

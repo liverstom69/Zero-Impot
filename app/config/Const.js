@@ -16,6 +16,7 @@ const Const = {
         SELECT_TAX: "SELECT_TAX",
         SET_FETCHING: "SET_FETCHING",
     },
+    ACTIVE_OPACITY: 0.8,
 };
 
 export default Const;
