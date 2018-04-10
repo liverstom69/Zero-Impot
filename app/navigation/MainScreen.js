@@ -11,6 +11,7 @@ import HeaderLeft from '../components/public/HeaderLeft';
 import Law from "../screen/Law";
 import Appartment from "../screen/Appartment";
 import Article from "../screen/Article";
+import Contact from "../screen/Contact";
 
 const MainScreen = StackNavigator({
   Home: {
@@ -51,9 +52,16 @@ const MainScreen = StackNavigator({
             headerTitle: 'Article 217',
             headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
         }
+    },
+    Contact: {
+      screen: Contact,
+        navigationOptions: {
+            headerTitle: 'Contact',
+            headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
+        }
     }
 }, {
-  initialRouteName: 'Result',
+  initialRouteName: 'Contact',
   navigationOptions: ({ navigation }) => {
     return {
       headerStyle: styles.backgroundWhite,

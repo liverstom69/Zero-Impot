@@ -71,11 +71,15 @@ const translation = {
     articleDef: "* L'article 217 duodecies vous permet de déduire 100% de la valeur du bien de votre résultat net imposable",
     articleOperation: "Opération financée à 100% sans apport",
     //Resume
+    resumeTitle: "Récapitulatif",
     resumeGain: "Gain d'impôt",
     resumeEpargne: "Epargne",
     resumeFiscal: "Dispositif fiscal",
     resumeProgramme: "Ville/Programme choisi",
     resumeComment: "Laissez-nous un commentaire",
+    resumePhone: "Numéro de téléphone",
+    resumeEmail: "Envoyer par email",
+    resumeSms: "Envoyer par SMS",
 };
 
 export default translation;

@@ -8,7 +8,7 @@ import images from '../../config/images';
 
 export default class Input extends React.Component {
   renderInputStyle() : Array {
-    return this.props.isBig !== undefined && this.props.isBig === true ?
+    return this.props.isBig !== undefined && this.props.isBig === true && this.props.isPhone === false ?
       [ inputStyle.input, inputStyle.bigInput ]
 
     :
@@ -17,7 +17,7 @@ export default class Input extends React.Component {
 
   renderViewStyle() : Array {
     const background = this.props.value.length > 0 ? { backgroundColor: Const.COLOR.GREEN } : { backgroundColor : Const.COLOR.GREY };
-    return this.props.isBig !== undefined && this.props.isBig === true ?
+    return this.props.isBig !== undefined && this.props.isBig === true && this.props.isPhone === false ?
       [ inputStyle.view, inputStyle.bigView, background ]
       :
       [ inputStyle.view, inputStyle.smallView, background ];
@@ -32,6 +32,7 @@ export default class Input extends React.Component {
           onChangeText={(text) => this.props.onChangeText(text)}
           style={this.renderInputStyle()}
           editable={this.props.isEdit}
+          placeholder={this.props.placeholder === undefined ? "" : this.props.placeholder}
         />
           {this.props.isBig && (
               <View style={this.renderViewStyle()}>
@@ -57,6 +58,7 @@ Input.propTypes = {
   isPhone: PropTypes.bool,
   launchAnimation: PropTypes.func,
   isEdit: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 const inputStyle = StyleSheet.create({
