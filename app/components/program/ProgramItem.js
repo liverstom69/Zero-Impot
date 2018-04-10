@@ -19,8 +19,8 @@ export default class ProgramItem extends React.Component {
         return (
             <View>
                 <View style={styles.viewWithMarg}>
-                    <TouchableOpacity activeOpacity={Const.ACTIVE_OPACITY} onPress={() => console.log("test")}>
-                        <View style={[styles.containerSpacing, styles.alignCenter]}>
+                    <TouchableOpacity activeOpacity={Const.ACTIVE_OPACITY} onPress={() => this.props.navigate("Appartment", { title: this.props.program.title })}>
+                        <View style={[styles.containerSpacing, styles.alignCenter, { paddingTop: 10, paddingBottom: 5 }]}>
                             <View style={elemStyle.viewTitle}>
                                 <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.title}</Text>
                             </View>

@@ -9,6 +9,8 @@ import Home from '../screen/Home';
 import Result from '../screen/Result';
 import HeaderLeft from '../components/public/HeaderLeft';
 import Law from "../screen/Law";
+import Appartment from "../screen/Appartment";
+import Article from "../screen/Article";
 
 const MainScreen = StackNavigator({
   Home: {
@@ -32,6 +34,22 @@ const MainScreen = StackNavigator({
               headerTitle: navigation.state.params.title,
               headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
           }
+        }
+    },
+    Appartment: {
+        screen: Appartment,
+        navigationOptions: ({ navigation }) => {
+            return {
+                headerTitle: navigation.state.params.title,
+                headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
+            }
+        }
+    },
+    Article: {
+      screen: Article,
+        navigationOptions: {
+            headerTitle: 'Article 217',
+            headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
         }
     }
 }, {

@@ -1,12 +1,13 @@
 import React from "react";
 import { ScrollView, View, Image, Text, FlatList, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
+import I18n from "ex-react-native-i18n";
+
 import Input from "../components/public/Input";
 import ConstanceButton from "../components/public/ConstanceButton";
 import Const from "../config/Const";
 import styles from "../config/styles";
 import SavingResult from "../components/saving/SavingResult";
-import I18n from "ex-react-native-i18n";
 import images from "../config/images";
 import ProgramItem from "../components/program/ProgramItem";
 
@@ -87,7 +88,6 @@ export default class Law extends React.Component {
                             </Text>
                         </View>
                     </View>
-                    <View style={styles.halfSpace} />
                 </View>
                 <FlatList
                     data={data}

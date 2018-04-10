@@ -24,9 +24,12 @@ const translation = {
     bfTaxSub: "(mini 10k€/an)",
     isTax: "Impôt société (IS)",
     isTaxSub: "(mini 50k€/an)",
+    en: "En ",
     on: 'sur',
     years: 'ans',
     year: 'an',
+    from: "De ",
+    fromTo: " à ",
     savingText: 'Pour changer votre épargne, changez vote montant d\'opération.',
     editSaving: 'Modifier mon épargne',
     bestOperationTitle: 'Meilleures opérations Pinel en fonction des villes',
@@ -49,6 +52,7 @@ const translation = {
     phone: 'Numéro de téléphone',
     sendMail: 'Envoyer par mail',
     sendSMS: 'Envoyer par SMS',
+    //Law
     initialText: 'Pour changer votre épargne, changez votre montant d\'opération.',
     updateEpargne: 'Modifier mon épargne',
     titleOperator: 'Meilleurs opérations Pinel en fonction des villes',
@@ -56,6 +60,22 @@ const translation = {
     epargneProgramTitle: 'Votre épargne pour ce programme\n',
     epargneProgramSubtitle: '(En fonction du loyer)',
     epargneGain: 'Gain moyen à ',
+    //Appartment
+    appartmentDescription: "Description de la résidence",
+    //Article
+    articleTaxTitle: "Montant d'impôt",
+    articleConservator: "Conservation 6 ans minimum",
+    articleEconomy: "Economie d'impôt",
+    articleRent: "Revenu locatif",
+    articleGain: "Gain à ",
+    articleDef: "* L'article 217 duodecies vous permet de déduire 100% de la valeur du bien de votre résultat net imposable",
+    articleOperation: "Opération financée à 100% sans apport",
+    //Resume
+    resumeGain: "Gain d'impôt",
+    resumeEpargne: "Epargne",
+    resumeFiscal: "Dispositif fiscal",
+    resumeProgramme: "Ville/Programme choisi",
+    resumeComment: "Laissez-nous un commentaire",
 };
 
 export default translation;

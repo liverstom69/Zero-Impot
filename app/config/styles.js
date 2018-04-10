@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
   textMedium: {
     fontSize: 18,
+      lineHeight: 24,
     fontFamily: 'Catamaran-Medium',
   },
   textBold: {
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     },
   viewWithMarg: {
     marginVertical: 15,
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
     littleSpace: {
         height: 7.5,
