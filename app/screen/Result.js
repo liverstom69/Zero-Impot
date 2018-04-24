@@ -56,18 +56,22 @@ export default class Result extends React.Component {
     handleUpdate() { this.setState({ isUpdate: true }) }
 
     handleClickActionSheet(name, value) {
+        let isUpdate = false;
         let laws = this.state.laws.map(law => {
-            if (law.name === name) {
+            if (law.name === name && parseInt(law.investiment) !== value) {
                 law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
                     name,
                     TaxLib.getTaxByInvestmentByLaw(name, value));
+                isUpdate = true;
             }
             return law;
         });
-        this.setState({
-            laws,
-            isUpdate: true,
-        });
+        if (isUpdate === true) {
+            this.setState({
+                laws,
+                isUpdate,
+            });
+        }
     }
 
   render() {
@@ -98,7 +102,7 @@ export default class Result extends React.Component {
                   economy={item.horizon}
                   value={item.investiment}
                   isLast={index === this.state.laws.length - 1}
-                  onPress={() => this.props.navigation.navigate("Law", { title: item.name })}
+                  onPress={() => this.props.navigation.navigate("Law", { title: "Loi ".concat(item.name) })}
                   isTrashHidden={this.state.laws.length <= 1}
                   onPressTrash={this.handleClick}
                   onPressActionSheet={this.handleClickActionSheet}
