@@ -36,6 +36,15 @@ const presentationStyle = StyleSheet.create({
 });
 
 export default class PresentationLaw extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.handleClickActionSheet = this.handleClickActionSheet.bind(this);
+    }
+
+    handleClickActionSheet(value) { this.props.onPressActionSheet(this.props.name, parseInt(value)) }
+
     render() {
         return (
             <View>
@@ -49,7 +58,7 @@ export default class PresentationLaw extends React.Component {
                                     <Image style={[presentationStyle.trashImg, ]} source={images.trash} />
                                 </TouchableOpacity>
                             )}
-                            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
+                            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>Loi {this.props.name}</Text>
                         </View>
                     </View>
                     <View style={presentationStyle.textView}>
@@ -64,6 +73,7 @@ export default class PresentationLaw extends React.Component {
                             onPress={() => console.log("test")}
                             law={this.props.lawName}
                             basicValue={this.props.value}
+                            onPressActionSheet={this.handleClickActionSheet}
                         />
                     </View>
                     <View style={presentationStyle.textView}>
@@ -84,4 +94,5 @@ PresentationLaw.propTypes = {
     onPress: PropTypes.func.isRequired,
     isTrashHidden: PropTypes.bool.isRequired,
     onPressTrash: PropTypes.func.isRequired,
+    onPressActionSheet: PropTypes.func.isRequired,
 };

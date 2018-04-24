@@ -65,7 +65,7 @@ export default class LawSelectorInput extends React.Component {
                     options={actionSheetValues}
                     cancelButtonIndex={actionSheetValues.length - 1}
                     destructiveButtonIndex={actionSheetValues.indexOf(this.props.value)}
-                    onPress={(index) => { console.log(index) }}
+                    onPress={(index) => { this.props.onPressActionSheet(actionSheetValues[index]) }}
                 />
             </TouchableOpacity>
         )
@@ -76,4 +76,5 @@ LawSelectorInput.propTypes = {
     onPress: PropTypes.func.isRequired,
     law: PropTypes.string.isRequired,
     basicValue: PropTypes.string.isRequired,
+    onPressActionSheet: PropTypes.func.isRequired,
 };

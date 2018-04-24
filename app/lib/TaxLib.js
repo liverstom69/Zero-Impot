@@ -3,6 +3,7 @@
 import I18n from 'ex-react-native-i18n';
 
 import AlertLib from './AlertLib';
+import Const from "../config/Const";
 
 export default class TaxLib {
   static checkNumber(number: String) {
@@ -56,10 +57,19 @@ export default class TaxLib {
       return taxAmount * 50;
   }
 
+  static getPinelTaxByInvestment(investment) {
+      return investment / 50;
+  }
+
+  static getPinelFinalAmount(taxAmount, investment) {
+      const value = taxAmount - investment / 50;
+      return value < 0 ? 0 : value;
+  }
+
   static getPinel(pinelLaw, taxAmount) {
       const investment = this.getPinelInvestment(taxAmount);
       return {
-          name: 'Pinel',
+          name: Const.LAW_NAME.PINEL,
           investiment: investment.toString(),
           programs: this.getPinelPrograms(pinelLaw, taxAmount),
           horizon: this.getPinelHorizon(investment)
@@ -106,8 +116,43 @@ export default class TaxLib {
 
     static getActionSheetByLaw(lawName, investment) {
       switch (lawName) {
-          case 'Pinel':
+          case Const.LAW_NAME.PINEL:
               return this.getPinelActionSheetValue(parseInt(investment));
+          default:
+              break;
+      }
+    }
+
+    static getLawData(laws, lawName, taxAmount) {
+      const filterLaws = TaxLib.getProgramFromLaw(laws, lawName);
+      switch (lawName) {
+          case Const.LAW_NAME.PINEL:
+              return this.getPinel(filterLaws, taxAmount);
+          default:
+              break;
+      }
+    }
+
+    static getTaxMinByLaw(laws, taxAmount) {
+      let min = taxAmount;
+      laws.map(law => {
+          let value = min;
+          switch (law.name) {
+              case Const.LAW_NAME.PINEL:
+                  value = this.getPinelFinalAmount(taxAmount, parseInt(law.investiment));
+                  break;
+              default:
+                  break;
+          }
+          if (value < min) { min = value }
+      });
+      return min;
+    }
+
+    static getTaxByInvestmentByLaw(lawName, investment) {
+      switch (lawName) {
+          case Const.LAW_NAME.PINEL:
+              return this.getPinelTaxByInvestment(investment);
           default:
               break;
       }

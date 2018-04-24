@@ -9,6 +9,7 @@ import images from '../config/images';
 import SavingResult from "../components/saving/SavingResult";
 import LawItem from "../components/law/LawItem";
 import ConstanceButton from "../components/public/ConstanceButton";
+import TaxLib from "../lib/TaxLib";
 let moment = require('moment');
 
 const elem = [
@@ -48,6 +49,8 @@ export default class Result extends React.Component {
             state: PropTypes.shape({
                 params: PropTypes.shape({
                     laws: PropTypes.array,
+                    taxAmount: PropTypes.number,
+                    basicLaws: PropTypes.array,
                 })
             })
         }),
@@ -63,6 +66,7 @@ export default class Result extends React.Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleClickActionSheet = this.handleClickActionSheet.bind(this);
     }
 
     handleClick(name) {
@@ -75,6 +79,18 @@ export default class Result extends React.Component {
     }
 
     handleUpdate() { this.setState({ isUpdate: true }) }
+
+    handleClickActionSheet(name, value) {
+        let laws = this.state.laws.map(law => {
+            if (law.name === name) {
+                law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
+                    name,
+                    TaxLib.getTaxByInvestmentByLaw(name, value));
+            }
+            return law;
+        });
+        this.setState({ laws });
+    }
 
   render() {
     return (
@@ -90,7 +106,7 @@ export default class Result extends React.Component {
           <View style={styles.halfSpace}/>
           <SavingResult
             image={images.smiley}
-            value="0"
+            value={TaxLib.getTaxMinByLaw(this.state.laws, this.props.navigation.state.params.taxAmount).toString()}
             text={I18n.t('translation.taxYear').concat(moment().format("YYYY"))}
           />
         </View>
@@ -106,6 +122,7 @@ export default class Result extends React.Component {
                   onPress={() => this.props.navigation.navigate("Law", { title: item.name })}
                   isTrashHidden={this.state.laws.length <= 1}
                   onPressTrash={this.handleClick}
+                  onPressActionSheet={this.handleClickActionSheet}
               />
           )}
         />

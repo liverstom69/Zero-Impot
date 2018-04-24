@@ -111,7 +111,6 @@ export default class Home extends React.Component {
   onClickButton() {
       const ir = parseInt(this.state.ir);
       // Pinel
-      laws[0] = TaxLib.getPinel(TaxLib.getProgramFromLaw(this.props.navigation.state.params.laws, "Pinel"), ir);
       switch (this.state.taxConcern) {
           case Const.TAX.IR:
               if (this.state.ir.length === 0) {
@@ -122,6 +121,7 @@ export default class Home extends React.Component {
                   AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
                   return;
               }
+              laws[0] = TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.PINEL, ir);
               break;
           case Const.TAX.IS:
               if (this.state.is.length === 0) {

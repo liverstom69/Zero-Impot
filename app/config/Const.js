@@ -17,6 +17,10 @@ const Const = {
         SET_FETCHING: "SET_FETCHING",
     },
     ACTIVE_OPACITY: 0.8,
+    LAW_NAME: {
+        PINEL: "Pinel",
+        PINEL_OUTREMER: "Pinel Outremer",
+    }
 };
 
 export default Const;

@@ -9,6 +9,15 @@ import EconomyLaw from "./EconomyLaw";
 import LawDelimiter from "./LawDelimiter";
 
 export default class LawItem extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.handleClickAS = this.handleClickAS.bind(this);
+    }
+
+    handleClickAS(name, value) { this.props.onPressActionSheet(name, value) }
+
     render() {
         return (
             <View>
@@ -20,6 +29,7 @@ export default class LawItem extends React.Component {
                         isTrashHidden={this.props.isTrashHidden}
                         onPressTrash={this.props.onPressTrash}
                         lawName={this.props.name}
+                        onPressActionSheet={this.handleClickAS}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.line} />
@@ -53,4 +63,5 @@ LawItem.propTypes = {
     isLast: PropTypes.bool.isRequired,
     isTrashHidden: PropTypes.bool.isRequired,
     onPressTrash: PropTypes.func.isRequired,
+    onPressActionSheet: PropTypes.func.isRequired,
 };
