@@ -89,7 +89,10 @@ export default class Result extends React.Component {
             }
             return law;
         });
-        this.setState({ laws });
+        this.setState({
+            laws,
+            isUpdate: true,
+        });
     }
 
   render() {
