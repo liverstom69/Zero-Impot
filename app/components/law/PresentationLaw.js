@@ -60,10 +60,10 @@ export default class PresentationLaw extends React.Component {
                 <View style={styles.container}>
                     <View style={presentationStyle.lawView2}>
                         <LawSelectorInput
-                            value={"300"}
+                            value={this.props.value}
                             onPress={() => console.log("test")}
-                            law={"Loi Pinel"}
-                            basicValue={"300"}
+                            law={this.props.lawName}
+                            basicValue={this.props.value}
                         />
                     </View>
                     <View style={presentationStyle.textView}>
@@ -78,6 +78,7 @@ export default class PresentationLaw extends React.Component {
 }
 
 PresentationLaw.propTypes = {
+    lawName: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,

@@ -28,7 +28,6 @@ export default class TaxLib {
       const maxPinelAmount = pinelAmount + ((percent / 100) * pinelAmount);
       let programs = [];
       let isAlreadyIn = false;
-      console.log(pinel.programs);
       pinel.programs.map(program => {
           isAlreadyIn = false;
           program.apartments.map(appartment => {
@@ -67,6 +66,19 @@ export default class TaxLib {
       }
   }
 
+  static getPinelActionSheetValue(investment) {
+      const values = [
+          150000,
+          200000,
+          250000,
+          300000,
+          investment
+      ].sort((a, b) => a < b);
+      return values.map(value => {
+          return value.toString();
+      });
+  }
+
   // Pinel OutreMer
 
     static getPinelOutremerPrograms(pinelOM, taxAmount) {
@@ -88,5 +100,16 @@ export default class TaxLib {
           });
       });
       return programs;
+    }
+
+    // Communs
+
+    static getActionSheetByLaw(lawName, investment) {
+      switch (lawName) {
+          case 'Pinel':
+              return this.getPinelActionSheetValue(parseInt(investment));
+          default:
+              break;
+      }
     }
 }

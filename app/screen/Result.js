@@ -118,7 +118,6 @@ export default class Result extends React.Component {
           />
         </View>
         <View style={styles.halfSpace}/>
-        <View style={styles.line}/>
       </ScrollView>
     )
   }

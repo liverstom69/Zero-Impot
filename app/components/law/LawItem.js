@@ -19,6 +19,7 @@ export default class LawItem extends React.Component {
                         onPress={this.props.onPress}
                         isTrashHidden={this.props.isTrashHidden}
                         onPressTrash={this.props.onPressTrash}
+                        lawName={this.props.name}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.line} />

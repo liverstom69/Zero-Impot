@@ -8,6 +8,7 @@ import I18n from 'ex-react-native-i18n';
 import images from "../../config/images";
 import styles from "../../config/styles";
 import Const from "../../config/Const";
+import TaxLib from "../../lib/TaxLib";
 
 const selectorStyles = StyleSheet.create({
     container: {
@@ -38,6 +39,10 @@ export default class LawSelectorInput extends React.Component {
     };
 
     render() {
+        const actionSheetValues = TaxLib.getActionSheetByLaw(
+            this.props.law,
+            this.props.value)
+            .concat([I18n.t("translation.cancel")]);
         return (
             <TouchableOpacity
                 activeOpacity={Const.ACTIVE_OPACITY}
@@ -57,10 +62,10 @@ export default class LawSelectorInput extends React.Component {
                 </View>
                 <ActionSheet
                     ref={o => this.ActionSheet = o}
-                    options={['150000', '200000', I18n.t("translation.cancel")]}
-                    cancelButtonIndex={2}
-                    destructiveButtonIndex={1}
-                    onPress={(index) => { /* do something */ }}
+                    options={actionSheetValues}
+                    cancelButtonIndex={actionSheetValues.length - 1}
+                    destructiveButtonIndex={actionSheetValues.indexOf(this.props.value)}
+                    onPress={(index) => { console.log(index) }}
                 />
             </TouchableOpacity>
         )
