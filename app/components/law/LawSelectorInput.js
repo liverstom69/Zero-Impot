@@ -57,7 +57,7 @@ export default class LawSelectorInput extends React.Component {
                 </View>
                 <ActionSheet
                     ref={o => this.ActionSheet = o}
-                    options={['Apple', 'Banana', I18n.t("translation.cancel")]}
+                    options={['150000', '200000', I18n.t("translation.cancel")]}
                     cancelButtonIndex={2}
                     destructiveButtonIndex={1}
                     onPress={(index) => { /* do something */ }}

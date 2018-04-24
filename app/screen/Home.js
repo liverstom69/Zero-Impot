@@ -1,6 +1,6 @@
 //@flow
 import React from 'react';
-import { ScrollView, View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import I18n from 'ex-react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -11,7 +11,54 @@ import Input from '../components/public/Input';
 import ConstanceButton from '../components/public/ConstanceButton';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
-import TaxTest from "../components/law/TaxTest";
+import TaxText from "../components/law/TaxText";
+
+let laws = [
+    {
+        name: 'Loi Pinel',
+        programs: [],
+        investiment: 0,
+        horizon: {
+            key: '0',
+            duree: '9',
+            economy: '0',
+            saving: '0',
+        }
+    },
+    {
+        name: 'Loi Pinel Outremer',
+        programs: [],
+        investiment: 0,
+        horizon: {
+            key: '0',
+            duree: '9',
+            economy: '0',
+            saving: '0',
+        }
+    },
+    {
+        name: 'Loi Malraux',
+        programs: [],
+        investiment: 0,
+        horizon: {
+            key: '0',
+            duree: '9',
+            economy: '0',
+            saving: '0',
+        }
+    },
+    {
+        name: 'Loi Monument Historique',
+        programs: [],
+        investiment: 0,
+        horizon: {
+            key: '0',
+            duree: '9',
+            economy: '0',
+            saving: '0',
+        }
+    }
+];
 
 export default class Home extends React.Component {
   state: {
@@ -25,7 +72,7 @@ export default class Home extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          ir: '3000',
+          ir: '4000',
           is: '',
           bf: '',
           taxConcern: Const.TAX.IR,
@@ -36,6 +83,10 @@ export default class Home extends React.Component {
       this.onChangeSocity = this.onChangeSocity.bind(this);
       this.onClickButton = this.onClickButton.bind(this);
       this.selectTaxConcern = this.selectTaxConcern.bind(this);
+      this.handleIRText = this.handleIRText.bind(this);
+      this.handleISText = this.handleISText.bind(this);
+      this.handleBFText = this.handleBFText.bind(this);
+      this.handleNbText = this.handleNbText.bind(this);
   }
 
   returnButtonColor() : String {
@@ -58,13 +109,16 @@ export default class Home extends React.Component {
   }
 
   onClickButton() {
+      const ir = parseInt(this.state.ir);
+      // Pinel
+      laws[0] = TaxLib.getPinel(TaxLib.getProgramFromLaw(this.props.navigation.state.params.laws, "Pinel"), ir);
       switch (this.state.taxConcern) {
           case Const.TAX.IR:
               if (this.state.ir.length === 0) {
                   AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
                   return;
               }
-              if (parseInt(this.state.ir) <= 2500) {
+              if (ir < 0) {
                   AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
                   return;
               }
@@ -74,7 +128,7 @@ export default class Home extends React.Component {
                   AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
                   return;
               }
-              if (parseInt(this.state.ir) <= 60000) {
+              if (parseInt(this.state.ir) < 0) {
                   AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
                   return;
               }
@@ -86,13 +140,22 @@ export default class Home extends React.Component {
                   AlertLib.alertOK(I18n.t('translation.errorTaxLenght'));
                   return;
               }
-              if (parseInt(this.state.bf) <= 60000) {
+              if (parseInt(this.state.bf) < 0) {
                   AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
                   return;
               }
               break;
       }
-      this.props.navigation.navigate('Result');
+      laws = laws.filter(law => law.programs.length > 0);
+      if (laws.length === 0) {
+          AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
+      } else {
+          this.props.navigation.navigate('Result', {
+              laws,
+              basicLaws: this.props.navigation.state.params.laws,
+              taxAmount: ir,
+          });
+      }
   }
 
   selectTaxConcern(taxConcern) {
@@ -101,87 +164,93 @@ export default class Home extends React.Component {
     }
   }
 
+  handleIRText(ir) { this.setState({ ir }) }
+
+  handleISText(is) { this.setState({ is }) }
+
+  handleBFText(bf) { this.setState({ bf }) }
+
+  handleNbText(nbParts) { this.setState({ nbParts }) }
+
   render() {
       return (
           <View style={styles.scrollView}>
-              <KeyboardAwareScrollView bounces={false}>
-                  <ScrollView bounces={false}>
-                      <View style={styles.viewWithMarg}>
-                          <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{I18n.t('translation.taxQuestion')}</Text>
-                        </View>
-                    <TaxTest
-                        title={I18n.t('translation.irTax')}
-                        taxConcern={Const.TAX.IR}
-                        onClick={() => this.selectTaxConcern(Const.TAX.IR)}
-                        isChecked={this.state.taxConcern === Const.TAX.IR}
-                    />
-                      <TaxTest
-                          title={I18n.t('translation.bfTax')}
-                          subTitle={I18n.t('translation.bfTaxSub')}
-                          taxConcern={Const.TAX.BF}
-                          onClick={() => this.selectTaxConcern(Const.TAX.BF)}
-                          isChecked={this.state.taxConcern === Const.TAX.BF}
-                      />
-                      <TaxTest
-                          title={I18n.t('translation.isTax')}
-                          subTitle={I18n.t('translation.isTaxSub')}
-                          taxConcern={Const.TAX.IS}
-                          onClick={() => this.selectTaxConcern(Const.TAX.IS)}
-                          isChecked={this.state.taxConcern === Const.TAX.IS}
-                      />
-                      {this.state.taxConcern === Const.TAX.IR &&
-                      (
-                          <View style={styles.viewWithMMarg}>
-                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
-                              <Input
-                                  value={this.state.ir}
-                                  onChangeText={(text) => this.onChangeValue(text)}
-                                  isBig
-                              />
-                              <View style={styles.halfSpace} />
-                          </View>
-                      )
-                      }
-                      {this.state.taxConcern === Const.TAX.BF &&
-                      (
-                          <View style={styles.viewWithMMarg}>
-                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxIR')}</Text>
-                              <Input
-                                  value={this.state.ir}
-                                  onChangeText={(text) => this.onChangeValue(text)}
-                                  isBig
-                              />
-                              <View style={styles.halfSpace} />
-                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.bfTaxText')}</Text>
-                              <Input
-                                  value={this.state.bf}
-                                  onChangeText={(text) => this.onChangeValue(text)}
-                                  isBig={false}
-                              />
-                              <View style={styles.halfSpace} />
-                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.numberParts')}</Text>
-                              <Input
-                                  value={this.state.nbParts}
-                                  onChangeText={(text) => this.onChangeValue(text)}
-                                  isBig={false}
-                              />
-                              <View style={styles.halfSpace} />
-                          </View>
-                      )}
-                      {this.state.taxConcern === Const.TAX.IS &&
-                      (
-                          <View style={styles.viewWithMMarg}>
-                              <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxSocity')}</Text>
-                              <Input
-                                  value={this.state.is}
-                                  onChangeText={(text) => this.onChangeValue(text)}
-                                  isBig
-                              />
-                              <View style={styles.halfSpace} />
-                          </View>
-                      )
-                      }
-                  </ScrollView>
+              <KeyboardAwareScrollView>
+                  <View style={styles.viewWithMarg}>
+                      <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{I18n.t('translation.taxQuestion')}</Text>
+                  </View>
+                  <TaxText
+                      title={I18n.t('translation.irTax')}
+                      taxConcern={Const.TAX.IR}
+                      onClick={() => this.selectTaxConcern(Const.TAX.IR)}
+                      isChecked={this.state.taxConcern === Const.TAX.IR}
+                  />
+                  {/*<TaxTest
+                      title={I18n.t('translation.bfTax')}
+                      subTitle={I18n.t('translation.bfTaxSub')}
+                      taxConcern={Const.TAX.BF}
+                      onClick={() => this.selectTaxConcern(Const.TAX.BF)}
+                      isChecked={this.state.taxConcern === Const.TAX.BF}
+                  />
+                  <TaxTest
+                      title={I18n.t('translation.isTax')}
+                      subTitle={I18n.t('translation.isTaxSub')}
+                      taxConcern={Const.TAX.IS}
+                      onClick={() => this.selectTaxConcern(Const.TAX.IS)}
+                      isChecked={this.state.taxConcern === Const.TAX.IS}
+                  />*/}
+                  {this.state.taxConcern === Const.TAX.IR &&
+                  (
+                      <View style={styles.viewWithMMarg}>
+                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
+                          <Input
+                              value={this.state.ir}
+                              onChangeText={(text) => this.handleIRText(text)}
+                              isBig
+                          />
+                          <View style={styles.halfSpace} />
+                      </View>
+                  )
+                  }
+                  {this.state.taxConcern === Const.TAX.BF &&
+                  (
+                      <View style={styles.viewWithMMarg}>
+                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxIR')}</Text>
+                          <Input
+                              value={this.state.ir}
+                              onChangeText={(text) => this.handleIRText(text)}
+                              isBig
+                          />
+                          <View style={styles.halfSpace} />
+                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.bfTaxText')}</Text>
+                          <Input
+                              value={this.state.bf}
+                              onChangeText={(text) => this.handleBFText(text)}
+                              isBig={false}
+                          />
+                          <View style={styles.halfSpace} />
+                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.numberParts')}</Text>
+                          <Input
+                              value={this.state.nbParts}
+                              onChangeText={(text) => this.handleNbText(text)}
+                              isBig={false}
+                          />
+                          <View style={styles.halfSpace} />
+                      </View>
+                  )}
+                  {this.state.taxConcern === Const.TAX.IS &&
+                  (
+                      <View style={styles.viewWithMMarg}>
+                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.taxSocity')}</Text>
+                          <Input
+                              value={this.state.is}
+                              onChangeText={(text) => this.handleISText(text)}
+                              isBig
+                          />
+                          <View style={styles.halfSpace} />
+                      </View>
+                  )
+                  }
                   <View style={{height: 92}}>
                       <ConstanceButton
                           title={I18n.t('translation.launchSimulation')}
@@ -197,5 +266,12 @@ export default class Home extends React.Component {
 }
 
 Home.propTypes = {
-  navigation: PropTypes.object,
+  navigation: PropTypes.shape({
+      navigate: PropTypes.func,
+      state: PropTypes.shape({
+          params: PropTypes.shape({
+              laws: PropTypes.array,
+          })
+      })
+  })
 };

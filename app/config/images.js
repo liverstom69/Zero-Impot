@@ -1,4 +1,5 @@
 const images = {
+    splashLogo: require('../../assets/images/Icon.png'),
     backLogo: require('../../assets/images/back.png'),
     arrow: require('../../assets/images/arrow.png'),
     call: require('../../assets/images/call.png'),

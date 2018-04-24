@@ -17,6 +17,8 @@ export default class LawItem extends React.Component {
                         name={this.props.name}
                         value={this.props.value}
                         onPress={this.props.onPress}
+                        isTrashHidden={this.props.isTrashHidden}
+                        onPressTrash={this.props.onPressTrash}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.line} />
@@ -48,4 +50,6 @@ LawItem.propTypes = {
     value: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
     isLast: PropTypes.bool.isRequired,
+    isTrashHidden: PropTypes.bool.isRequired,
+    onPressTrash: PropTypes.func.isRequired,
 };

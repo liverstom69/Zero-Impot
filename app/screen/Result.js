@@ -1,5 +1,6 @@
 import React from 'react';
 import { FlatList, ScrollView, Text, View } from 'react-native';
+import PropTypes from "prop-types";
 import I18n from 'ex-react-native-i18n';
 
 import styles from '../config/styles';
@@ -36,11 +37,56 @@ const elem = [
 ];
 
 export default class Result extends React.Component {
+    state = {
+        isUpdate: false,
+        laws: [],
+    };
+
+    static propTypes = {
+        navigation: PropTypes.shape({
+            navigate: PropTypes.func,
+            state: PropTypes.shape({
+                params: PropTypes.shape({
+                    laws: PropTypes.array,
+                })
+            })
+        }),
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isUpdate: false,
+            laws: this.props.navigation.state.params.laws,
+        };
+
+        this.handleClick = this.handleClick.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+    }
+
+    handleClick(name) {
+        let laws = this.state.laws;
+        laws = laws.filter(law => law.name !== name);
+        this.setState({
+            laws,
+            isUpdate: true,
+        });
+    }
+
+    handleUpdate() { this.setState({ isUpdate: true }) }
+
   render() {
     return (
       <ScrollView style={styles.scrollView} bounces={false}>
         <View style={styles.viewWithMarg}>
-          <Text style={[styles.bigText, styles.greyBlackColor]}>{I18n.t('translation.resultCalculated')}</Text>
+          <Text style={[styles.bigText, styles.greyBlackColor]}>
+              {this.state.isUpdate === false ?
+                  I18n.t('translation.resultCalculated')
+                  :
+                  I18n.t('translation.resultReCalculated')
+              }
+          </Text>
           <View style={styles.halfSpace}/>
           <SavingResult
             image={images.smiley}
@@ -49,15 +95,17 @@ export default class Result extends React.Component {
           />
         </View>
         <FlatList
-          data={elem}
+          data={this.state.laws}
           renderItem={({ item, index }) => (
               <LawItem
                   navigation={this.props.navigation}
                   name={item.name}
                   economy={item.horizon}
                   value={item.investiment}
-                  isLast={index === elem.length - 1}
+                  isLast={index === this.state.laws.length - 1}
                   onPress={() => this.props.navigation.navigate("Law", { title: item.name })}
+                  isTrashHidden={this.state.laws.length <= 1}
+                  onPressTrash={this.handleClick}
               />
           )}
         />

@@ -8,7 +8,7 @@ import images from '../../config/images';
 
 export default class Input extends React.Component {
   renderInputStyle() : Array {
-    return this.props.isBig !== undefined && this.props.isBig === true && this.props.isPhone === false ?
+    return this.props.isBig !== undefined && this.props.isBig === true && (this.props.isPhone === undefined || this.props.isPhone === false) ?
       [ inputStyle.input, inputStyle.bigInput ]
 
     :
@@ -17,7 +17,7 @@ export default class Input extends React.Component {
 
   renderViewStyle() : Array {
     const background = this.props.value.length > 0 ? { backgroundColor: Const.COLOR.GREEN } : { backgroundColor : Const.COLOR.GREY };
-    return this.props.isBig !== undefined && this.props.isBig === true && this.props.isPhone === false ?
+    return this.props.isBig !== undefined && this.props.isBig === true && (this.props.isPhone === undefined || this.props.isPhone === false) ?
       [ inputStyle.view, inputStyle.bigView, background ]
       :
       [ inputStyle.view, inputStyle.smallView, background ];
@@ -29,6 +29,7 @@ export default class Input extends React.Component {
         <TextInput
           keyboardType={"numeric"}
           value={this.props.value}
+          underlineColorAndroid={"transparent"}
           onChangeText={(text) => this.props.onChangeText(text)}
           style={this.renderInputStyle()}
           editable={this.props.isEdit}
@@ -75,6 +76,7 @@ const inputStyle = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: "Catamaran-Regular",
     color: Const.COLOR.BLACKGREY,
+
   },
   bigInput: {
     height: 60,

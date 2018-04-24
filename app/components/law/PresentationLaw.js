@@ -42,9 +42,13 @@ export default class PresentationLaw extends React.Component {
                 <View style={styles.container}>
                     <View>
                         <View style={presentationStyle.lawView1}>
-                            <TouchableOpacity style={presentationStyle.trashView}>
-                                <Image style={presentationStyle.trashImg} source={images.trash} />
-                            </TouchableOpacity>
+                            {this.props.isTrashHidden === false && (
+                                <TouchableOpacity
+                                    onPress={() => this.props.onPressTrash(this.props.name)}
+                                    style={presentationStyle.trashView}>
+                                    <Image style={[presentationStyle.trashImg, ]} source={images.trash} />
+                                </TouchableOpacity>
+                            )}
                             <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{this.props.name}</Text>
                         </View>
                     </View>
@@ -74,7 +78,9 @@ export default class PresentationLaw extends React.Component {
 }
 
 PresentationLaw.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    isTrashHidden: PropTypes.bool.isRequired,
+    onPressTrash: PropTypes.func.isRequired,
 };

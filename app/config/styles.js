@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Catamaran-Bold'
   },
+    textNavBar: {
+        fontSize: 24,
+        fontFamily: 'Catamaran-Bold'
+    },
   mediumTextBold: {
     fontSize: 22,
     fontFamily: 'Catamaran-Bold',
@@ -67,6 +71,8 @@ const styles = StyleSheet.create({
   },
   backgroundWhite: {
     backgroundColor: 'white',
+      elevation: 0,
+      borderBottomWidth: 0.5,
   },
   scrollView: {
     backgroundColor: 'white',
@@ -105,7 +111,10 @@ const styles = StyleSheet.create({
   },
   alignCenter: {
     alignItems: 'center',
-  }
+  },
+    justifyCenter: {
+    justifyContent: "center",
+    }
 });
 
 export default styles;

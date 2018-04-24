@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from "react-native";
 import { StackNavigator } from 'react-navigation';
 
 import Header from '../components/public/Header';
@@ -12,20 +13,27 @@ import Law from "../screen/Law";
 import Appartment from "../screen/Appartment";
 import Article from "../screen/Article";
 import Contact from "../screen/Contact";
+import SplashData from "../screen/Splash";
 
 const MainScreen = StackNavigator({
+    Splash: {
+      screen: SplashData,
+        navigationOptions: {
+            header: null,
+        }
+    },
   Home: {
     screen: Home,
     navigationOptions: {
       headerTitle: <Header />,
-      headerLeft: null,
+      headerLeft: <View />,
+        headerRight: <View />,
     }
   },
   Result: {
     screen: Result,
     navigationOptions: {
       headerTitle: 'Résultats',
-      headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
     }
   },
     Law: {
@@ -33,7 +41,6 @@ const MainScreen = StackNavigator({
         navigationOptions: ({ navigation }) => {
           return {
               headerTitle: navigation.state.params.title,
-              headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
           }
         }
     },
@@ -42,7 +49,6 @@ const MainScreen = StackNavigator({
         navigationOptions: ({ navigation }) => {
             return {
                 headerTitle: navigation.state.params.title,
-                headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
             }
         }
     },
@@ -50,23 +56,23 @@ const MainScreen = StackNavigator({
       screen: Article,
         navigationOptions: {
             headerTitle: 'Article 217',
-            headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
         }
     },
     Contact: {
       screen: Contact,
         navigationOptions: {
             headerTitle: 'Contact',
-            headerTitleStyle: [ styles.textBold, styles.greyBlackColor ],
         }
     }
 }, {
-  initialRouteName: 'Contact',
+  initialRouteName: 'Splash',
   navigationOptions: ({ navigation }) => {
     return {
       headerStyle: styles.backgroundWhite,
       headerTintColor: Const.COLOR.BLACKGREY,
-      headerLeft: <HeaderLeft navigation={navigation} />
+      headerTitleStyle: [ styles.textBold, styles.greyBlackColor, styles.alignCenter ],
+      headerLeft: <HeaderLeft navigation={navigation} />,
+        headerRight: <View />
     }
   }
 });

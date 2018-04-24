@@ -2,9 +2,14 @@
 import React from 'react';
 import { Font } from 'expo';
 import I18n from 'ex-react-native-i18n';
+import { ApolloProvider, ApolloClient, createNetworkInterface } from 'react-apollo';
 
 import translation from './app/config/locale/translation-fr';
 import MainScreen from './app/navigation/MainScreen';
+
+const client = new ApolloClient({
+    networkInterface: createNetworkInterface({ uri: 'https://api.graph.cool/simple/v1/cj8j04ic004kh01306d1hnsa9'})
+});
 
 export default class App extends React.Component {
   state: {
@@ -37,7 +42,9 @@ export default class App extends React.Component {
 
   render() {
     if (!this.state.fontLoaded) return null;
-    return <MainScreen />;
+    return (
+        <ApolloProvider children={<MainScreen/>} client={client} />
+    );
   }
 }
 I18n.fallbacks = true;

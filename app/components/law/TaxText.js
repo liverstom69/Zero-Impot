@@ -18,9 +18,8 @@ const styleTax = StyleSheet.create({
     }
 });
 
-export default class TaxTest extends React.PureComponent {
+export default class TaxText extends React.PureComponent {
     render() {
-        console.log(this.props.isChecked);
         return (
             <View style={styleTax.viewStyle}>
                 <CheckBox
@@ -40,7 +39,7 @@ export default class TaxTest extends React.PureComponent {
     }
 }
 
-TaxTest.propTypes = {
+TaxText.propTypes = {
     title: PropTypes.string.isRequired,
     subTitle: PropTypes.string,
     taxConcern: PropTypes.number.isRequired,

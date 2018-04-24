@@ -64,6 +64,7 @@ export default class Contact extends React.Component {
                     <TextInput
                         value={""}
                         multiline
+                        underlineColorAndroid={"transparent"}
                         style={{ height: 150, borderColor: Const.COLOR.GREY2, borderWidth: 0.5, borderRadius: 5 }}
                     />
                     <View style={styles.halfSpace} />

@@ -7,7 +7,6 @@ import styles from '../../config/styles';
 
 export default class HeaderLeft extends React.Component {
   render() {
-    console.log(this.props.navigation);
     return (
       <TouchableOpacity
         style={styles.headerLeft}
