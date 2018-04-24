@@ -41,7 +41,7 @@ export default class LawSelectorInput extends React.Component {
     render() {
         const actionSheetValues = TaxLib.getActionSheetByLaw(
             this.props.law,
-            this.props.value)
+            this.props.basicInvest)
             .concat([I18n.t("translation.cancel")]);
         return (
             <TouchableOpacity
@@ -65,7 +65,13 @@ export default class LawSelectorInput extends React.Component {
                     options={actionSheetValues}
                     cancelButtonIndex={actionSheetValues.length - 1}
                     destructiveButtonIndex={actionSheetValues.indexOf(this.props.value)}
-                    onPress={(index) => { this.props.onPressActionSheet(actionSheetValues[index]) }}
+                    onPress={(index) => {
+                        if (index === actionSheetValues.length - 1) {
+                            this.props.onPressActionSheet(this.props.value);
+                        } else {
+                            this.props.onPressActionSheet(actionSheetValues[index])
+                        }
+                    }}
                 />
             </TouchableOpacity>
         )
@@ -77,4 +83,5 @@ LawSelectorInput.propTypes = {
     law: PropTypes.string.isRequired,
     basicValue: PropTypes.string.isRequired,
     onPressActionSheet: PropTypes.func.isRequired,
+    basicInvest: PropTypes.number.isRequired,
 };

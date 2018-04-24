@@ -12,31 +12,6 @@ import ConstanceButton from "../components/public/ConstanceButton";
 import TaxLib from "../lib/TaxLib";
 let moment = require('moment');
 
-const elem = [
-    {
-        key: '0',
-        name: 'Loi Pinel',
-        investiment: '300000',
-        horizon: {
-            key: '0',
-            duree: "6",
-            economy: '36000',
-            saving: '2000',
-        },
-    },
-    {
-        key: '1',
-        name: 'Loi Pinel Outremer',
-        investiment: '300000',
-        horizon: {
-            key: '0',
-            duree: "6",
-            economy: '36000',
-            saving: '2000',
-        },
-    },
-];
-
 export default class Result extends React.Component {
     state = {
         isUpdate: false,
@@ -96,6 +71,7 @@ export default class Result extends React.Component {
     }
 
   render() {
+        const taxAmount = this.props.navigation.state.params.taxAmount;
     return (
       <ScrollView style={styles.scrollView} bounces={false}>
         <View style={styles.viewWithMarg}>
@@ -109,7 +85,7 @@ export default class Result extends React.Component {
           <View style={styles.halfSpace}/>
           <SavingResult
             image={images.smiley}
-            value={TaxLib.getTaxMinByLaw(this.state.laws, this.props.navigation.state.params.taxAmount).toString()}
+            value={TaxLib.getTaxMinByLaw(this.state.laws, taxAmount).toString()}
             text={I18n.t('translation.taxYear').concat(moment().format("YYYY"))}
           />
         </View>
@@ -126,6 +102,7 @@ export default class Result extends React.Component {
                   isTrashHidden={this.state.laws.length <= 1}
                   onPressTrash={this.handleClick}
                   onPressActionSheet={this.handleClickActionSheet}
+                  basicInvest={TaxLib.getInvestmentByLaw(item.name, taxAmount)}
               />
           )}
         />

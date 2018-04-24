@@ -72,7 +72,7 @@ export default class Home extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          ir: '4000',
+          ir: '2650',
           is: '',
           bf: '',
           taxConcern: Const.TAX.IR,

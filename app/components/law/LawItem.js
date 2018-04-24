@@ -30,6 +30,7 @@ export default class LawItem extends React.Component {
                         onPressTrash={this.props.onPressTrash}
                         lawName={this.props.name}
                         onPressActionSheet={this.handleClickAS}
+                        basicInvest={this.props.basicInvest}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.line} />
@@ -64,4 +65,5 @@ LawItem.propTypes = {
     isTrashHidden: PropTypes.bool.isRequired,
     onPressTrash: PropTypes.func.isRequired,
     onPressActionSheet: PropTypes.func.isRequired,
+    basicInvest: PropTypes.number.isRequired,
 };

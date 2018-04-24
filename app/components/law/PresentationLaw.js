@@ -74,6 +74,7 @@ export default class PresentationLaw extends React.Component {
                             law={this.props.lawName}
                             basicValue={this.props.value}
                             onPressActionSheet={this.handleClickActionSheet}
+                            basicInvest={this.props.basicInvest}
                         />
                     </View>
                     <View style={presentationStyle.textView}>
@@ -95,4 +96,5 @@ PresentationLaw.propTypes = {
     isTrashHidden: PropTypes.bool.isRequired,
     onPressTrash: PropTypes.func.isRequired,
     onPressActionSheet: PropTypes.func.isRequired,
+    basicInvest: PropTypes.number.isRequired,
 };

@@ -6,6 +6,10 @@ import AlertLib from './AlertLib';
 import Const from "../config/Const";
 
 export default class TaxLib {
+    static onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+
   static checkNumber(number: String) {
     if (!(number.match('^[0-9]*$'))) {
       AlertLib.alertOK(I18n.t('translation.errorTaxNumber'));
@@ -77,16 +81,13 @@ export default class TaxLib {
   }
 
   static getPinelActionSheetValue(investment) {
-      const values = [
+      return [
           150000,
           200000,
           250000,
           300000,
           investment
-      ].sort((a, b) => a < b);
-      return values.map(value => {
-          return value.toString();
-      });
+      ];
   }
 
   // Pinel OutreMer
@@ -115,12 +116,18 @@ export default class TaxLib {
     // Communs
 
     static getActionSheetByLaw(lawName, investment) {
+        let values = [];
       switch (lawName) {
           case Const.LAW_NAME.PINEL:
-              return this.getPinelActionSheetValue(parseInt(investment));
+              values = this.getPinelActionSheetValue(parseInt(investment));
+              break;
           default:
               break;
       }
+        values.sort((a, b) => a < b).filter( this.onlyUnique );
+        return values.map(value => {
+            return value.toString();
+        });
     }
 
     static getLawData(laws, lawName, taxAmount) {
@@ -156,5 +163,14 @@ export default class TaxLib {
           default:
               break;
       }
+    }
+
+    static getInvestmentByLaw(lawName, taxAmount) {
+        switch (lawName) {
+            case Const.LAW_NAME.PINEL:
+                return this.getPinelInvestment(taxAmount);
+            default:
+                break;
+        }
     }
 }
