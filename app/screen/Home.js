@@ -11,7 +11,6 @@ import Input from '../components/public/Input';
 import ConstanceButton from '../components/public/ConstanceButton';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
-import TaxText from "../components/law/TaxText";
 
 let laws = [
     {

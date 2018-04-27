@@ -20,7 +20,8 @@ const Const = {
     LAW_NAME: {
         PINEL: "Pinel",
         PINEL_OUTREMER: "Pinel Outremer",
-    }
+    },
+    PERCENT: 20,
 };
 
 export default Const;

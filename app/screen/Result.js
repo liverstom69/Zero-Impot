@@ -93,7 +93,7 @@ export default class Result extends React.Component {
         console.log(this.state.laws);
         const taxAmount = this.props.navigation.state.params.taxAmount;
     return (
-      <ScrollView style={styles.scrollView} bounces={false}>
+      <ScrollView style={styles.scrollView}>
         <View style={styles.viewWithMarg}>
           <Text style={[styles.bigText, styles.greyBlackColor]}>
               {this.state.isUpdate === false ?
@@ -126,7 +126,6 @@ export default class Result extends React.Component {
               />
           )}
         />
-        <View style={styles.halfSpace}/>
       </ScrollView>
     )
   }

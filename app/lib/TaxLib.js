@@ -27,24 +27,36 @@ export default class TaxLib {
   // Pinel
 
   static getPinelPrograms(pinel, taxAmount) {
-      const percent = 20;
       const pinelAmount = this.getPinelInvestment(taxAmount);
-      const minPinelAmount = pinelAmount - ((percent / 100) * pinelAmount);
-      const maxPinelAmount = pinelAmount;
+      const minPinelAmount = pinelAmount;
+      const maxPinelAmount = pinelAmount + ((Const.PERCENT / 100) * pinelAmount);
       let programs = [];
       let isAlreadyIn = false;
       pinel.programs.map(program => {
           isAlreadyIn = false;
           program.apartments.map(appartment => {
-              if (isAlreadyIn === false &&
-                  appartment.price >= minPinelAmount &&
-                  appartment.price <= maxPinelAmount) {
-                  programs.push(program);
-                  isAlreadyIn = true
+              if (programs.length < 4) {
+                  if (isAlreadyIn === false &&
+                      appartment.price >= minPinelAmount &&
+                      appartment.price <= maxPinelAmount) {
+                      programs.push(program);
+                      isAlreadyIn = true
+                  }
               }
           });
       });
       return programs;
+  }
+
+  static getPinelAppartment(program, investment) {
+      const maxPinelAmount = investment + ((Const.PERCENT / 100) * investment);
+      let appartments = [];
+      program.apartments.map(appartment => {
+          if (appartment.price >= investment && appartment.price <= maxPinelAmount) {
+              appartments.push(appartment)
+          }
+      });
+      return appartments[this.getRandomArbitrary(0, appartments.length - 1)];
   }
 
   static getPinelHorizon(investment) {
@@ -101,14 +113,16 @@ export default class TaxLib {
       let isAlreadyIn = false;
       pinelOM.programs.map(program => {
           isAlreadyIn = false;
-          program.apartments.map(appartment => {
-              if (isAlreadyIn === false &&
-                  appartment.price >= minPinelOMAmount &&
-                  appartment.price <= maxPinelOMAmount) {
-                  isAlreadyIn = true;
-                  programs.push(program);
-              }
-          });
+          if (programs.length < 4) {
+              program.apartments.map(appartment => {
+                  if (isAlreadyIn === false &&
+                      appartment.price >= minPinelOMAmount &&
+                      appartment.price <= maxPinelOMAmount) {
+                      isAlreadyIn = true;
+                      programs.push(program);
+                  }
+              });
+          }
       });
       return programs;
     }
@@ -174,17 +188,29 @@ export default class TaxLib {
         }
     }
 
+    static getAppartmentByLaw(lawName, program, investment) {
+        switch (lawName) {
+            case Const.LAW_NAME.PINEL:
+                return this.getPinelAppartment(program, investment);
+            default:
+                break;
+        }
+    }
+
     static getRandomArbitrary(min, max) {
         return Math.round( Math.random() * (max - min) + min );
     }
 
-    static getAverageAppartment(appartments) {
-        let average = 0;
-        let number = 0;
-        appartments.map(appartment => {
-            average += appartment.rent;
-            number += 1;
-        });
-        return number === 0 ? 0 : Math.round(average / number);
+    static getGain(investiment) {
+        const minus = parseInt(investiment) * 0.6;
+        return (investiment - minus).toString();
+    }
+
+    static getEpargne(rent, investment, taxAmount, gain) {
+        const gainPerMonth = Math.round(gain / 108);
+        const backMoney = Math.round((investment + (investment * 0.2)) / 240);
+        const taxAmountPerMonth = Math.round(taxAmount / 12);
+        console.log(backMoney, gainPerMonth, rent, taxAmountPerMonth);
+        return (backMoney - rent - taxAmountPerMonth).toString();
     }
 }

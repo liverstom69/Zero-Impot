@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     navBarHome: {
         backgroundColor: 'white',
         elevation: 0,
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 0,
         position: 'absolute',
         zIndex: 100,
         top: 0,
