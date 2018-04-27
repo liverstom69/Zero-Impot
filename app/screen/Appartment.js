@@ -10,21 +10,22 @@ import ConstanceButton from "../components/public/ConstanceButton";
 
 export default class Appartment extends React.Component {
     render() {
+        const { imageUrl, description } = this.props.navigation.state.params;
         return (
             <ScrollView style={styles.backgroundWhite}>
                 <Image
                     style={{ height: 251, backgroundColor: Const.COLOR.GREY }}
                     resizeMode={"cover"}
+                    source={{ uri: imageUrl }}
                 />
                 <View style={styles.viewWithMarg}>
                     <Text style={[styles.blackColor, styles.semiBoldText]}>{ I18n.t("translation.appartmentDescription") }</Text>
                     <View style={styles.littleSpace} />
-                    <Text style={[styles.greyColor2, styles.textMedium]}>La résidence est parfaitement implantée à Montpellier, à proximité du quartier moderne d'Antigone au Sud de la ville et à quelques minutes à pied du centre historique de Montpellier, plus communément appelé l'Ecusson, la superbe place de la Comédie, et ses nombreux hôtels particuliers.</Text>
+                    <Text style={[styles.greyColor2, styles.textMedium]}>{ description }</Text>
                     <View style={styles.halfSpace} />
                     <ConstanceButton
                         title={I18n.t('translation.contactUs')}
                         color={Const.COLOR.BLUE}
-                        image={images.letter}
                         onPress={() => this.props.navigation.navigate("Article")}
                     />
                 </View>
@@ -32,3 +33,21 @@ export default class Appartment extends React.Component {
         )
     }
 }
+
+Appartment.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+        state: PropTypes.shape({
+            params: PropTypes.shape({
+                city: PropTypes.string.isRequired,
+                lawName: PropTypes.string.isRequired,
+                imageUrl: PropTypes.string.isRequired,
+                description: PropTypes.string.isRequired,
+                price: PropTypes.number.isRequired,
+                taxAmount: PropTypes.number.isRequired,
+                epargne: PropTypes.string.isRequired,
+                gain: PropTypes.number.isRequired,
+            }),
+        }),
+    }),
+};

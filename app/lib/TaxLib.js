@@ -209,8 +209,6 @@ export default class TaxLib {
     static getEpargne(rent, investment, taxAmount, gain) {
         const gainPerMonth = Math.round(gain / 108);
         const backMoney = Math.round((investment + (investment * 0.2)) / 240);
-        const taxAmountPerMonth = Math.round(taxAmount / 12);
-        console.log(backMoney, gainPerMonth, rent, taxAmountPerMonth);
-        return (backMoney - rent - taxAmountPerMonth).toString();
+        return (backMoney - rent - gainPerMonth).toString();
     }
 }

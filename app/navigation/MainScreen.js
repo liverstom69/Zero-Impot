@@ -49,7 +49,7 @@ const MainScreen = StackNavigator({
         screen: Appartment,
         navigationOptions: ({ navigation }) => {
             return {
-                headerTitle: navigation.state.params.title,
+                headerTitle: navigation.state.params.city,
             }
         }
     },

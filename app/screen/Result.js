@@ -4,11 +4,9 @@ import PropTypes from "prop-types";
 import I18n from 'ex-react-native-i18n';
 
 import styles from '../config/styles';
-import Const from '../config/Const';
 import images from '../config/images';
 import SavingResult from "../components/saving/SavingResult";
 import LawItem from "../components/law/LawItem";
-import ConstanceButton from "../components/public/ConstanceButton";
 import TaxLib from "../lib/TaxLib";
 import AlertLib from "../lib/AlertLib";
 let moment = require('moment');

@@ -12,7 +12,6 @@ import SavingResult from "../components/saving/SavingResult";
 import images from "../config/images";
 import ProgramItem from "../components/program/ProgramItem";
 import TaxLib from "../lib/TaxLib";
-import Input from '../components/public/Input';
 
 const selectorStyles = StyleSheet.create({
     container: {
@@ -164,7 +163,6 @@ export default class Law extends React.Component {
                     <ConstanceButton
                         title={I18n.t('translation.contactUs')}
                         color={Const.COLOR.BLUE}
-                        image={images.letter}
                         onPress={() => this.props.navigation.navigate("Article")}
                     />
                     <View style={styles.halfSpace} />

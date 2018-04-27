@@ -29,7 +29,16 @@ export default class ProgramItem extends React.Component {
                 <View style={styles.viewWithMarg}>
                     <TouchableOpacity
                         activeOpacity={Const.ACTIVE_OPACITY}
-                        onPress={() => this.props.navigate("Appartment", { title: this.props.program.city })}>
+                        onPress={() => this.props.navigate("Appartment",{
+                            lawName: this.props.law.name,
+                            city: this.props.program.city,
+                            imageUrl: this.props.program.image.url,
+                            description: this.props.program.description,
+                            price: appartment.price,
+                            taxAmount: this.props.taxAmount,
+                            epargne,
+                            gain: this.props.gain,
+                        })}>
                         <View style={[styles.containerSpacing, styles.alignCenter, { paddingTop: 10, paddingBottom: 5 }]}>
                             <View style={elemStyle.viewTitle}>
                                 <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.city}</Text>
