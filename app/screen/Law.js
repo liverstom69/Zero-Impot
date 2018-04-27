@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, View, Image, Text, FlatList, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
 import I18n from "ex-react-native-i18n";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import Input from "../components/public/Input";
 import ConstanceButton from "../components/public/ConstanceButton";
@@ -33,6 +34,7 @@ const data = [
 export default class Law extends React.Component {
     state: {
         epargne: String,
+        programs: Array,
     };
 
     constructor(props) {
@@ -40,6 +42,7 @@ export default class Law extends React.Component {
 
         this.state = {
             epargne: "",
+            programs: this.props.navigation.state.params.law.programs,
         };
 
         this.handleEpargne = this.handleEpargne.bind(this);
@@ -49,29 +52,14 @@ export default class Law extends React.Component {
 
     render() {
         return (
-            <ScrollView style={[styles.backgroundWhite]}>
+            <KeyboardAwareScrollView style={[styles.backgroundWhite]}>
                 <View style={[styles.viewWithMarg]}>
                     <View style={styles.littleSpace} />
-                    <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t("translation.initialText")}</Text>
-                    <View style={styles.halfSpace} />
-                    <Input
-                        value={this.state.epargne}
-                        onChangeText={(text) => this.handleEpargne(text)}
-                        isBig
-                    />
-                    <View style={styles.halfSpace} />
-                    <View style={styles.littleSpace} />
-                    <ConstanceButton
-                        title={I18n.t("translation.updateEpargne")}
-                        color={Const.COLOR.BLUE}
-                        onPress={() => console.log("button")}
-                    />
-                    <View style={styles.halfSpace} />
-                </View>
-                <View style={styles.line} />
-                <View style={[styles.viewWithMarg]}>
-                    <View style={styles.littleSpace} />
-                    <Text style={[styles.bigText, styles.blackColor]}>{I18n.t("translation.titleOperator")}</Text>
+                    <Text style={[styles.bigText, styles.blackColor]}>
+                        {I18n.t("translation.titleOperator1").concat(
+                            this.props.navigation.state.params.law.name,
+                            I18n.t("translation.titleOperator2"))}
+                    </Text>
                     <Text style={[styles.smallTextRegular, styles.blueColor, { paddingLeft: 7.5 }]}>{I18n.t("translation.subtitleOperator")}</Text>
                     <View style={styles.halfSpace} />
                     <View style={styles.halfSpace} />
@@ -90,26 +78,40 @@ export default class Law extends React.Component {
                     </View>
                 </View>
                 <FlatList
-                    data={data}
-                    renderItem={({ item }) => <ProgramItem navigate={this.props.navigation.navigate} program={item} />}
+                    data={this.state.programs}
+                    renderItem={({ item }) => (
+                        <ProgramItem
+                            navigate={this.props.navigation.navigate}
+                            program={item}
+                        />
+                    )}
                 />
                 <View style={[styles.viewWithMarg]}>
-                    <View style={styles.halfSpace} />
-                    <View style={styles.halfSpace} />
+                    <View style={styles.littleSpace} />
                     <SavingResult
                         value={"100000"}
                         text={I18n.t("translation.epargneGain")}
                     />
-                    <View style={styles.halfSpace} />
                     <View style={styles.littleSpace} />
+                    <View style={styles.littleSpace} />
+                    <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t("translation.initialText")}</Text>
+                    <View style={styles.halfSpace} />
+                    <Input
+                        value={this.state.epargne}
+                        onChangeText={(text) => this.handleEpargne(text)}
+                        isBig
+                    />
+                    <View style={styles.halfSpace} />
+                    <View style={styles.halfSpace} />
                     <ConstanceButton
                         title={I18n.t('translation.contactUs')}
                         color={Const.COLOR.BLUE}
                         image={images.letter}
-                        onPress={() => alert('tes')}
+                        onPress={() => this.props.navigation.navigate("Article")}
                     />
+                    <View style={styles.halfSpace} />
                 </View>
-            </ScrollView>
+            </KeyboardAwareScrollView>
         )
     }
 }
@@ -117,5 +119,15 @@ export default class Law extends React.Component {
 Law.propTypes = {
     navigation: PropTypes.shape({
         navigate: PropTypes.func,
+        state: PropTypes.shape({
+            params: PropTypes.shape({
+                law: PropTypes.shape({
+                    name: PropTypes.string,
+                    programs: PropTypes.array,
+                }),
+                basicLaws: PropTypes.array,
+                taxAmount: PropTypes.number,
+            })
+        })
     }),
 };

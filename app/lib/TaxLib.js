@@ -27,10 +27,10 @@ export default class TaxLib {
   // Pinel
 
   static getPinelPrograms(pinel, taxAmount) {
-      const percent = 5;
+      const percent = 20;
       const pinelAmount = this.getPinelInvestment(taxAmount);
       const minPinelAmount = pinelAmount - ((percent / 100) * pinelAmount);
-      const maxPinelAmount = pinelAmount + ((percent / 100) * pinelAmount);
+      const maxPinelAmount = pinelAmount;
       let programs = [];
       let isAlreadyIn = false;
       pinel.programs.map(program => {
@@ -172,5 +172,19 @@ export default class TaxLib {
             default:
                 break;
         }
+    }
+
+    static getRandomArbitrary(min, max) {
+        return Math.round( Math.random() * (max - min) + min );
+    }
+
+    static getAverageAppartment(appartments) {
+        let average = 0;
+        let number = 0;
+        appartments.map(appartment => {
+            average += appartment.rent;
+            number += 1;
+        });
+        return number === 0 ? 0 : Math.round(average / number);
     }
 }

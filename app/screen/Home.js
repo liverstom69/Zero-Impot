@@ -175,8 +175,8 @@ export default class Home extends React.Component {
   render() {
       return (
           <View style={styles.scrollView}>
-              <KeyboardAwareScrollView>
-                  <View style={styles.viewWithMarg}>
+              <KeyboardAwareScrollView centerContent>
+                  {/*<View style={styles.viewWithMarg}>
                       <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>{I18n.t('translation.taxQuestion')}</Text>
                   </View>
                   <TaxText
@@ -185,7 +185,7 @@ export default class Home extends React.Component {
                       onClick={() => this.selectTaxConcern(Const.TAX.IR)}
                       isChecked={this.state.taxConcern === Const.TAX.IR}
                   />
-                  {/*<TaxTest
+                  <TaxTest
                       title={I18n.t('translation.bfTax')}
                       subTitle={I18n.t('translation.bfTaxSub')}
                       taxConcern={Const.TAX.BF}
@@ -201,14 +201,17 @@ export default class Home extends React.Component {
                   />*/}
                   {this.state.taxConcern === Const.TAX.IR &&
                   (
-                      <View style={styles.viewWithMMarg}>
-                          <Text style={[, styles.textBold, styles.greyBlackColor]}>{I18n.t('translation.tax')}</Text>
-                          <Input
-                              value={this.state.ir}
-                              onChangeText={(text) => this.handleIRText(text)}
-                              isBig
-                          />
-                          <View style={styles.halfSpace} />
+                      <View>
+                          <View style={styles.viewWithMMarg}>
+                              <Text style={[, styles.textBold, styles.greyBlackColor, styles.textCenter]}>{I18n.t('translation.tax')}</Text>
+                          </View>
+                          <View style={styles.viewWithMMarg}>
+                              <Input
+                                  value={this.state.ir}
+                                  onChangeText={(text) => this.handleIRText(text)}
+                                  isBig
+                              />
+                          </View>
                       </View>
                   )
                   }

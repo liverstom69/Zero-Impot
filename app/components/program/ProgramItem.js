@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import styles from "../../config/styles";
 import images from "../../config/images";
 import Const from "../../config/Const";
+import TaxLib from "../../lib/TaxLib";
 
 const elemStyle = StyleSheet.create({
     viewTitle: {
@@ -15,6 +16,11 @@ const elemStyle = StyleSheet.create({
 });
 
 export default class ProgramItem extends React.Component {
+
+    componentDidMount() {
+        Image.prefetch(this.props.program.image.url);
+    }
+
     render() {
         return (
             <View>
@@ -22,10 +28,10 @@ export default class ProgramItem extends React.Component {
                     <TouchableOpacity activeOpacity={Const.ACTIVE_OPACITY} onPress={() => this.props.navigate("Appartment", { title: this.props.program.title })}>
                         <View style={[styles.containerSpacing, styles.alignCenter, { paddingTop: 10, paddingBottom: 5 }]}>
                             <View style={elemStyle.viewTitle}>
-                                <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.title}</Text>
+                                <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.city}</Text>
                             </View>
                             <View style={elemStyle.viewSubTitle}>
-                                <Text style={[styles.textMedium, styles.greyColor2]}>{this.props.program.rent}</Text>
+                                <Text style={[styles.textMedium, styles.greyColor2]}>{TaxLib.getAverageAppartment(this.props.program.apartments)}</Text>
                             </View>
                             <Image
                                 source={images.arrow}
@@ -42,6 +48,9 @@ export default class ProgramItem extends React.Component {
 ProgramItem.propTypes = {
     navigate: PropTypes.func.isRequired,
     program: PropTypes.shape({
+        image: PropTypes.shape({
+            url: PropTypes.string,
+        }),
         title: PropTypes.string,
         rent: PropTypes.string,
     }).isRequired,

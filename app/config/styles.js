@@ -69,6 +69,16 @@ const styles = StyleSheet.create({
   blackColor: {
     color: Const.COLOR.BLACK,
   },
+    navBarHome: {
+        backgroundColor: 'white',
+        elevation: 0,
+        borderBottomWidth: 0.5,
+        position: 'absolute',
+        zIndex: 100,
+        top: 0,
+        left: 0,
+        right: 0
+    },
   backgroundWhite: {
     backgroundColor: 'white',
       elevation: 0,
@@ -89,7 +99,7 @@ const styles = StyleSheet.create({
   },
     viewWithMMarg: {
         marginVertical: 5,
-        marginHorizontal: 10,
+        marginHorizontal: 15,
     },
   viewWithMarg: {
     marginVertical: 15,

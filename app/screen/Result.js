@@ -10,6 +10,7 @@ import SavingResult from "../components/saving/SavingResult";
 import LawItem from "../components/law/LawItem";
 import ConstanceButton from "../components/public/ConstanceButton";
 import TaxLib from "../lib/TaxLib";
+import AlertLib from "../lib/AlertLib";
 let moment = require('moment');
 
 export default class Result extends React.Component {
@@ -74,7 +75,22 @@ export default class Result extends React.Component {
         }
     }
 
+    handleClickLaw(law) {
+        if (law.programs.length === 0) {
+            AlertLib.alertOK("translation.errorSelection ");
+        } else {
+            const { taxAmount, basicLaws } = this.props.navigation.state.params;
+            this.props.navigation.navigate("Law", {
+                title: "Loi ".concat(law.name),
+                law: law,
+                basicLaws,
+                taxAmount,
+            });
+        }
+    }
+
   render() {
+        console.log(this.state.laws);
         const taxAmount = this.props.navigation.state.params.taxAmount;
     return (
       <ScrollView style={styles.scrollView} bounces={false}>
@@ -102,7 +118,7 @@ export default class Result extends React.Component {
                   economy={item.horizon}
                   value={item.investiment}
                   isLast={index === this.state.laws.length - 1}
-                  onPress={() => this.props.navigation.navigate("Law", { title: "Loi ".concat(item.name) })}
+                  onPress={() => this.handleClickLaw(item)}
                   isTrashHidden={this.state.laws.length <= 1}
                   onPressTrash={this.handleClick}
                   onPressActionSheet={this.handleClickActionSheet}
@@ -110,14 +126,6 @@ export default class Result extends React.Component {
               />
           )}
         />
-        <View style={styles.viewWithMarg}>
-          <ConstanceButton
-            title={I18n.t('translation.contactUs')}
-            color={Const.COLOR.BLUE}
-            image={images.letter}
-            onPress={() => alert('tes')}
-          />
-        </View>
         <View style={styles.halfSpace}/>
       </ScrollView>
     )

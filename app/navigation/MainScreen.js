@@ -25,6 +25,7 @@ const MainScreen = StackNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
+        headerStyle: styles.navBarHome,
       headerTitle: <Header />,
       headerLeft: <View />,
         headerRight: <View />,
