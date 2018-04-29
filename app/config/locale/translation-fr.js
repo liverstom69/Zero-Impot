@@ -84,6 +84,7 @@ const translation = {
     resumePhone: "Numéro de téléphone",
     resumeEmail: "Envoyer par email",
     resumeSms: "Envoyer par SMS",
+    resumeNotDefined: "Non définis",
 };
 
 export default translation;

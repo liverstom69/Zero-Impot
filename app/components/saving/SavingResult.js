@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import styles from '../../config/styles';
 import Const from '../../config/Const';
+import TaxLib from "../../lib/TaxLib";
 
 export default class SavingResult extends React.Component {
   render() {
@@ -18,7 +19,7 @@ export default class SavingResult extends React.Component {
           />
         </View>
         }
-        <Text style={savingStyle.value}>{this.props.value} €</Text>
+        <Text style={savingStyle.value}>{TaxLib.returnNumberFormat(this.props.value)} €</Text>
         <Text style={savingStyle.text}>{this.props.text}</Text>
         <View style={styles.halfSpace}/>
       </View>

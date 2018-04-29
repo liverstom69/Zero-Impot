@@ -138,7 +138,7 @@ export default class Law extends React.Component {
                         onPress={() => this.onPress()}>
                         <View style={[styles.container, selectorStyles.container]}>
                             <View style={selectorStyles.textView}>
-                                <Text style={[styles.semiBoldText, styles.blueColor]} >{ this.state.value } </Text>
+                                <Text style={[styles.semiBoldText, styles.blueColor]} >{ TaxLib.returnNumberFormat(this.state.value) } </Text>
                             </View>
                             <Image
                                 source={images.shape}
@@ -153,10 +153,10 @@ export default class Law extends React.Component {
                             ref={o => this.ActionSheet = o}
                             options={actionSheetValues}
                             cancelButtonIndex={actionSheetValues.length - 1}
-                            destructiveButtonIndex={actionSheetValues.indexOf(this.state.value)}
+                            destructiveButtonIndex={actionSheetValues.indexOf(TaxLib.returnNumberFormat(this.state.value))}
                             onPress={(index) => {
                                 if (index !== actionSheetValues.length - 1) {
-                                    this.handleClickActionSheet(actionSheetValues[index]);
+                                    this.handleClickActionSheet(TaxLib.deleteSpace(actionSheetValues[index]));
                                 }
                             }}
                         />
@@ -170,10 +170,10 @@ export default class Law extends React.Component {
                             city: "Non défini",
                             imageUrl: "",
                             description: "",
-                            price: "Non défini",
+                            price: -1,
                             taxAmount: taxAmount,
-                            epargne: "Non défini",
-                            gain: "Non défini",
+                            epargne: "",
+                            gain: 0,
                         })}
                     />
                     <View style={styles.halfSpace} />

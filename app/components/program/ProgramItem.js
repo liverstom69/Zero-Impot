@@ -34,7 +34,7 @@ export default class ProgramItem extends React.Component {
                             city: this.props.program.city,
                             imageUrl: this.props.program.image.url,
                             description: this.props.program.description,
-                            price: appartment.price,
+                            price: TaxLib.getAppartmentValue(appartment, this.props.law.name),
                             taxAmount: this.props.taxAmount,
                             epargne,
                             gain: this.props.gain,
@@ -44,7 +44,7 @@ export default class ProgramItem extends React.Component {
                                 <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.city}</Text>
                             </View>
                             <View style={elemStyle.viewSubTitle}>
-                                <Text style={[styles.textMedium, styles.greyColor2]}>{ epargne }</Text>
+                                <Text style={[styles.textMedium, styles.greyColor2]}>{ TaxLib.returnNumberFormat(epargne) }</Text>
                             </View>
                             <Image
                                 source={images.arrow}

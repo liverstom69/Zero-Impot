@@ -20,12 +20,14 @@ const Const = {
     LAW_NAME: {
         PINEL: "Pinel",
         PINEL_OUTREMER: "Pinel Outremer",
+        MALRAUX: "Malraux",
+        MONUMENT_HISTORIQUE: "Monument Historique",
     },
     PERCENT: 20,
     MAX_LAW: {
         PINEL: 6000,
         PINEL_OUTREMER: 11500,
-        MALRAUX: 500000,
+        MALRAUX: 300000,
     }
 };
 

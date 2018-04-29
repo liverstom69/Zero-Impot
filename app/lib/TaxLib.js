@@ -51,7 +51,7 @@ export default class TaxLib {
               }
           });
       });
-      return programs.length === 0 ? maxAppartment < pinelAmount ? [] : [pinelMaxProgram] : programs;
+      return programs.length === 0 ? [pinelMaxProgram] : programs;
   }
 
   static getPinelAppartment(program, investment) {
@@ -125,6 +125,7 @@ export default class TaxLib {
       let pinelOMMaxProgram = pinelOM.programs[0];
       let pinelMaxAppartment = pinelOMMaxProgram.apartments[0];
       let programs = [];
+      if (taxAmount < Const.MAX_LAW.PINEL + 1) { return programs }
       let isAlreadyIn = false;
       pinelOM.programs.map(program => {
           isAlreadyIn = false;
@@ -143,7 +144,7 @@ export default class TaxLib {
               }
           });
       });
-        return programs.length === 0 ? maxPinelOMAmount < pinelOMAmount ? [] : [pinelOMMaxProgram] : programs;
+        return programs.length === 0 ? [pinelOMMaxProgram] : programs;
     }
 
     static getPinelOMAppartment(program, investment) {
@@ -207,6 +208,97 @@ export default class TaxLib {
         ];
     }
 
+    // MALRAUX
+
+    static getMalrauxPrograms(malraux, taxAmount) {
+        const malrauxAmount = this.getMalrauxInvestment(taxAmount);
+        const maxMalrauxAmount = malrauxAmount + ((Const.PERCENT / 100) * malrauxAmount);
+        let malrauxMaxProgram = malraux.programs[0];
+        let malrauxMaxAppartment = malrauxMaxProgram.apartments[0];
+        let programs = [];
+        let isAlreadyIn = false;
+        if (taxAmount < Const.MAX_LAW.PINEL_OUTREMER + 1) { return programs }
+        malraux.programs.map(program => {
+            isAlreadyIn = false;
+            program.apartments.map(appartment => {
+                if (appartment.work > malrauxMaxAppartment.work) {
+                    malrauxMaxProgram = program;
+                    malrauxMaxAppartment = appartment;
+                }
+                if (program.length < 4) {
+                    if (isAlreadyIn === false &&
+                        appartment.work >= malrauxAmount &&
+                        appartment.work <= maxMalrauxAmount) {
+                        programs.push(program);
+                        isAlreadyIn = true;
+                    }
+                }
+            });
+        });
+        return programs.length === 0 ? [malrauxMaxProgram] : programs;
+    }
+
+    static getMalrauxAppartment(program, investment) {
+        const maxMalrauxAmount = investment + ((Const.PERCENT / 100) * investment);
+        let appartments = [];
+        let maxAppartment = program.apartments[0];
+        program.apartments.map(appartment => {
+            if (appartment.work > maxAppartment) {
+                maxAppartment = appartment;
+            }
+            if (appartment.work >= investment && appartment.work <= maxMalrauxAmount) {
+                appartments.push(appartment)
+            }
+        });
+        return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+    }
+
+    static getMalrauxHorizon(investment) {
+        const economy = investment * 0.3;
+        return {
+            key: '0',
+            duree: '4',
+            economy: economy.toString(),
+            saving: (economy / 4).toString(),
+        };
+    }
+
+    static getMalrauxInvestment(taxAmount) {
+        return Math.round(taxAmount * 12);
+    }
+
+    static getMalrauxTaxByInvestment(investment) {
+        const taxAmount = Math.round(investment / 12);
+        return taxAmount > Const.MAX_LAW.MALRAUX ? Const.MAX_LAW.MALRAUX : taxAmount;
+    }
+
+    static getMalrauxFinalAmount(taxAmount, investment) {
+        const value = taxAmount - this.getMalrauxInvestment(investment);
+        return value < 0 ? 0 : value;
+    }
+
+    static getMalraux(malrauxLaw, taxAmount) {
+        const investment = this.getMalrauxInvestment(taxAmount);
+        return {
+            name: Const.LAW_NAME.MALRAUX,
+            investiment: investment.toString(),
+            programs: this.getMalrauxPrograms(malrauxLaw, taxAmount),
+            horizon: this.getMalrauxHorizon(investment)
+        }
+    }
+
+    static getMalrauxActionSheetValue(investment) {
+        return [
+            150000,
+            200000,
+            250000,
+            300000,
+            350000,
+            400000,
+            investment
+        ];
+    }
+
     // Communs
 
     static getActionSheetByLaw(lawName, investment) {
@@ -218,12 +310,15 @@ export default class TaxLib {
           case Const.LAW_NAME.PINEL_OUTREMER:
               values = this.getPinelOMActionSheetValue(parseInt(investment));
               break;
+          case Const.LAW_NAME.MALRAUX:
+              values = this.getMalrauxActionSheetValue(parseInt(investment));
+              break;
           default:
               break;
       }
         values.sort((a, b) => a < b).filter( this.onlyUnique );
         return values.map(value => {
-            return value.toString();
+            return this.returnNumberFormat(value.toString());
         });
     }
 
@@ -234,6 +329,8 @@ export default class TaxLib {
               return this.getPinel(filterLaws, taxAmount);
           case Const.LAW_NAME.PINEL_OUTREMER:
               return this.getPinelOM(filterLaws, taxAmount);
+          case Const.LAW_NAME.MALRAUX:
+              return this.getMalraux(filterLaws, taxAmount);
           default:
               break;
       }
@@ -250,6 +347,9 @@ export default class TaxLib {
               case Const.LAW_NAME.PINEL_OUTREMER:
                   value = this.getPinelOMFinalAmount(taxAmount, parseInt(law.investiment));
                   break;
+              case Const.LAW_NAME.MALRAUX:
+                  value = this.getMalrauxFinalAmount(taxAmount, parseInt(law.investiment));
+                  break;
               default:
                   break;
           }
@@ -264,6 +364,8 @@ export default class TaxLib {
               return this.getPinelTaxByInvestment(investment);
           case Const.LAW_NAME.PINEL_OUTREMER:
               return this.getPinelOMTaxByInvestment(investment);
+          case Const.LAW_NAME.MALRAUX:
+              return this.getMalrauxTaxByInvestment(investment);
           default:
               break;
       }
@@ -275,6 +377,8 @@ export default class TaxLib {
                 return this.getPinelInvestment(taxAmount);
             case Const.LAW_NAME.PINEL_OUTREMER:
                 return this.getPinelOMInvestment(taxAmount);
+            case Const.LAW_NAME.MALRAUX:
+                return this.getMalrauxInvestment(taxAmount);
             default:
                 break;
         }
@@ -286,6 +390,8 @@ export default class TaxLib {
                 return this.getPinelAppartment(program, investment);
             case Const.LAW_NAME.PINEL_OUTREMER:
                 return this.getPinelOMAppartment(program, investment);
+            case Const.LAW_NAME.MALRAUX:
+                return this.getMalrauxAppartment(program, investment);
             default:
                 break;
         }
@@ -304,5 +410,41 @@ export default class TaxLib {
         const gainPerMonth = Math.round(gain / (duree * 12));
         const backMoney = Math.round((investment + (investment * 0.2)) / 240);
         return (backMoney - rent - gainPerMonth).toString();
+    }
+
+    static returnNumberFormat(number: string) {
+        let i = 0;
+        let numberFormated = "";
+        number = this.reverseString(number);
+        while (i < number.length) {
+            if (i > 0 && i % 3 === 0) {
+                numberFormated = numberFormated.concat(" ", number.charAt(i));
+            } else {
+                numberFormated = numberFormated.concat(number.charAt(i));
+            }
+            i = i + 1;
+        }
+        return this.reverseString(numberFormated);
+    }
+
+    static getAppartmentValue(appartment, lawName) {
+        switch (lawName) {
+            case Const.LAW_NAME.MALRAUX:
+                return appartment.work;
+            case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+                return appartment.work;
+            default:
+                return appartment.price;
+        }
+    }
+
+    // STR
+
+    static reverseString(str) {
+        return str.split("").reverse().join("");
+    }
+
+    static deleteSpace(str) {
+        return str.replace(/\s/g,'');
     }
 }

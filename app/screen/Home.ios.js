@@ -76,8 +76,9 @@ export default class Home extends React.Component {
 
   constructor(props) {
       super(props);
+      TaxLib.returnNumberFormat("145000");
       this.state = {
-          ir: '7000',
+          ir: '12000',
           is: '',
           bf: '',
           taxConcern: Const.TAX.IR,
@@ -132,6 +133,8 @@ export default class Home extends React.Component {
               const basicLaws = this.props.navigation.state.params.laws;
               laws[0] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL, ir);
               laws[1] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL_OUTREMER, ir);
+              laws[2] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.MALRAUX, ir);
+              laws.reverse();
               break;
           case Const.TAX.IS:
               if (this.state.is.length === 0) {

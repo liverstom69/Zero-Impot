@@ -49,7 +49,7 @@ export default class LawSelectorInput extends React.Component {
                 onPress={() => this.onPress()}>
                 <View style={[styles.container, selectorStyles.container]}>
                     <View style={selectorStyles.textView}>
-                        <Text style={[styles.semiBoldText, styles.blueColor]} >{ this.props.value } </Text>
+                        <Text style={[styles.semiBoldText, styles.blueColor]} >{ TaxLib.returnNumberFormat(this.props.value) } </Text>
                     </View>
                     <Image
                         source={images.shape}
@@ -64,12 +64,10 @@ export default class LawSelectorInput extends React.Component {
                     ref={o => this.ActionSheet = o}
                     options={actionSheetValues}
                     cancelButtonIndex={actionSheetValues.length - 1}
-                    destructiveButtonIndex={actionSheetValues.indexOf(this.props.value)}
+                    destructiveButtonIndex={actionSheetValues.indexOf(TaxLib.returnNumberFormat(this.props.value))}
                     onPress={(index) => {
-                        if (index === actionSheetValues.length - 1) {
-                            this.props.onPressActionSheet(this.props.value);
-                        } else {
-                            this.props.onPressActionSheet(actionSheetValues[index])
+                        if (index !== actionSheetValues.length - 1) {
+                            this.props.onPressActionSheet(TaxLib.deleteSpace(actionSheetValues[index]))
                         }
                     }}
                 />

@@ -19,28 +19,27 @@ export default class Contact extends React.Component {
         super(props);
 
         const { lawName, taxAmount, gain, epargne, city, price } = this.props.navigation.state.params;
-        const maxEconomy = TaxLib.getTaxByInvestmentByLaw(lawName, price) < taxAmount ?
-            TaxLib.getTaxByInvestmentByLaw(lawName, price) :
-            taxAmount;
+        const economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
+        const maxEconomy = economy < taxAmount ? economy : taxAmount;
         const data = [
             {
                 title: "Montant d'impôt",
-                value: taxAmount.toString(),
+                value: TaxLib.returnNumberFormat(taxAmount.toString()),
                 subTitles: [],
             },
             {
                 title: "Economie d'impôt",
-                value: maxEconomy.toString(),
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(maxEconomy.toString()),
                 subTitles: [],
             },
             {
                 title: "Gain impôt",
-                value: gain.toString(),
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(gain.toString()),
                 subTitles: [],
             },
             {
                 title: "Epargne",
-                value: epargne,
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(epargne),
                 subTitles: [],
             },
             {
