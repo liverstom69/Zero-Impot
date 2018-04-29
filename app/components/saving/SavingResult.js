@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, Platform} from 'react-native';
 import PropTypes from 'prop-types';
 
 import styles from '../../config/styles';
@@ -8,7 +8,7 @@ import Const from '../../config/Const';
 export default class SavingResult extends React.Component {
   render() {
     return (
-      <View style={[styles.alignCenter, savingStyle.view]}>
+      <View style={[styles.alignCenter, Platform.OS === "android" ? savingStyle.viewAndroid : savingStyle.view]}>
         <View style={styles.halfSpace}/>
         {this.props.image !== undefined &&
         <View>
@@ -27,6 +27,11 @@ export default class SavingResult extends React.Component {
 }
 
 const savingStyle = StyleSheet.create({
+    viewAndroid: {
+        paddingVertical: 10,
+        backgroundColor: "white",
+        elevation: 5,
+    },
   view: {
     paddingVertical: 10,
     shadowOpacity: 5,

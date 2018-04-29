@@ -30,11 +30,17 @@ export default class TaxLib {
       const pinelAmount = this.getPinelInvestment(taxAmount);
       const minPinelAmount = pinelAmount;
       const maxPinelAmount = pinelAmount + ((Const.PERCENT / 100) * pinelAmount);
+      let pinelMaxProgram = pinel.programs[0];
+      let maxAppartment = pinel.programs[0].apartments[0];
       let programs = [];
       let isAlreadyIn = false;
       pinel.programs.map(program => {
           isAlreadyIn = false;
           program.apartments.map(appartment => {
+              if (appartment.price > maxAppartment) {
+                  maxAppartment = appartment;
+                  pinelMaxProgram = program;
+              }
               if (programs.length < 4) {
                   if (isAlreadyIn === false &&
                       appartment.price >= minPinelAmount &&
@@ -45,18 +51,22 @@ export default class TaxLib {
               }
           });
       });
-      return programs;
+      return programs.length === 0 ? maxAppartment < pinelAmount ? [] : [pinelMaxProgram] : programs;
   }
 
   static getPinelAppartment(program, investment) {
       const maxPinelAmount = investment + ((Const.PERCENT / 100) * investment);
       let appartments = [];
+      let maxAppartment = program.apartments[0];
       program.apartments.map(appartment => {
+          if (appartment.price > maxAppartment) {
+              maxAppartment = appartment;
+          }
           if (appartment.price >= investment && appartment.price <= maxPinelAmount) {
               appartments.push(appartment)
           }
       });
-      return appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+      return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
   }
 
   static getPinelHorizon(investment) {
@@ -70,11 +80,14 @@ export default class TaxLib {
   }
 
   static getPinelInvestment(taxAmount) {
-      return taxAmount * 50;
+        const investment = Math.round(taxAmount * 50);
+        const maxInvestment = Math.round(Const.MAX_LAW.PINEL * 50);
+        return investment > maxInvestment ? maxInvestment : investment;
   }
 
   static getPinelTaxByInvestment(investment) {
-      return investment / 50;
+        const taxAmount = investment / 50;
+      return taxAmount > Const.MAX_LAW.PINEL ? Const.MAX_LAW.PINEL : taxAmount;
   }
 
   static getPinelFinalAmount(taxAmount, investment) {
@@ -105,26 +118,93 @@ export default class TaxLib {
   // Pinel OutreMer
 
     static getPinelOutremerPrograms(pinelOM, taxAmount) {
-      const percent = 5;
+      const percent = Const.PERCENT;
       const pinelOMAmount = taxAmount * 26.085;
-      const minPinelOMAmount = pinelOMAmount - ((percent / 100) * pinelOMAmount);
-      const maxPinelOMAmount = pinelOMAmount - ((percent / 100) * pinelOMAmount);
+      const minPinelOMAmount = pinelOMAmount;
+      const maxPinelOMAmount = pinelOMAmount + ((percent / 100) * pinelOMAmount);
+      let pinelOMMaxProgram = pinelOM.programs[0];
+      let pinelMaxAppartment = pinelOMMaxProgram.apartments[0];
       let programs = [];
       let isAlreadyIn = false;
       pinelOM.programs.map(program => {
           isAlreadyIn = false;
-          if (programs.length < 4) {
-              program.apartments.map(appartment => {
+          program.apartments.map(appartment => {
+              if (appartment.price > pinelMaxAppartment) {
+                  pinelMaxAppartment = appartment;
+                  pinelOMMaxProgram = program;
+              }
+              if (programs.length < 4) {
                   if (isAlreadyIn === false &&
                       appartment.price >= minPinelOMAmount &&
                       appartment.price <= maxPinelOMAmount) {
                       isAlreadyIn = true;
                       programs.push(program);
                   }
-              });
-          }
+              }
+          });
       });
-      return programs;
+        return programs.length === 0 ? maxPinelOMAmount < pinelOMAmount ? [] : [pinelOMMaxProgram] : programs;
+    }
+
+    static getPinelOMAppartment(program, investment) {
+        const maxPinelOM = investment + ((Const.PERCENT / 100) * investment);
+        let appartments = [];
+        let maxAppartment = program.apartments[0];
+        program.apartments.map(appartment => {
+            if (appartment.price > maxAppartment) {
+                maxAppartment = appartment;
+            }
+            if (appartment.price >= investment && appartment.price <= maxPinelOM) {
+                appartments.push(appartment)
+            }
+        });
+        return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+    }
+
+    static getPinelOMHorizon(investment) {
+        const economy = Math.round(investment * 0.23);
+        return {
+            key: '0',
+            duree: '6',
+            economy: economy.toString(),
+            saving: Math.round(economy / 6).toString(),
+        };
+    }
+
+    static getPinelOMInvestment(taxAmount) {
+        const investment = Math.round(taxAmount * 26.08);
+        const maxInvestment = Math.round(Const.MAX_LAW.PINEL_OUTREMER * 26.08);
+        return investment > maxInvestment ? maxInvestment : investment;
+    }
+
+    static getPinelOMTaxByInvestment(investment) {
+        const taxAmount = Math.round(investment / 26.08);
+        return taxAmount > Const.MAX_LAW.PINEL_OUTREMER ? Const.MAX_LAW.PINEL_OUTREMER : taxAmount;
+    }
+
+    static getPinelOMFinalAmount(taxAmount, investment) {
+        const value = taxAmount - this.getPinelOMTaxByInvestment(investment);
+         return value < 0 ? 0 : value;
+    }
+
+    static getPinelOM(pinelOMLaw, taxAmount) {
+        const investment = this.getPinelOMInvestment(taxAmount);
+        return {
+            name: Const.LAW_NAME.PINEL_OUTREMER,
+            investiment: investment.toString(),
+            programs: this.getPinelOutremerPrograms(pinelOMLaw, taxAmount),
+            horizon: this.getPinelOMHorizon(investment)
+        }
+    }
+
+    static getPinelOMActionSheetValue(investment) {
+        return [
+            150000,
+            200000,
+            250000,
+            300000,
+            investment
+        ];
     }
 
     // Communs
@@ -134,6 +214,9 @@ export default class TaxLib {
       switch (lawName) {
           case Const.LAW_NAME.PINEL:
               values = this.getPinelActionSheetValue(parseInt(investment));
+              break;
+          case Const.LAW_NAME.PINEL_OUTREMER:
+              values = this.getPinelOMActionSheetValue(parseInt(investment));
               break;
           default:
               break;
@@ -149,6 +232,8 @@ export default class TaxLib {
       switch (lawName) {
           case Const.LAW_NAME.PINEL:
               return this.getPinel(filterLaws, taxAmount);
+          case Const.LAW_NAME.PINEL_OUTREMER:
+              return this.getPinelOM(filterLaws, taxAmount);
           default:
               break;
       }
@@ -162,6 +247,9 @@ export default class TaxLib {
               case Const.LAW_NAME.PINEL:
                   value = this.getPinelFinalAmount(taxAmount, parseInt(law.investiment));
                   break;
+              case Const.LAW_NAME.PINEL_OUTREMER:
+                  value = this.getPinelOMFinalAmount(taxAmount, parseInt(law.investiment));
+                  break;
               default:
                   break;
           }
@@ -174,6 +262,8 @@ export default class TaxLib {
       switch (lawName) {
           case Const.LAW_NAME.PINEL:
               return this.getPinelTaxByInvestment(investment);
+          case Const.LAW_NAME.PINEL_OUTREMER:
+              return this.getPinelOMTaxByInvestment(investment);
           default:
               break;
       }
@@ -183,6 +273,8 @@ export default class TaxLib {
         switch (lawName) {
             case Const.LAW_NAME.PINEL:
                 return this.getPinelInvestment(taxAmount);
+            case Const.LAW_NAME.PINEL_OUTREMER:
+                return this.getPinelOMInvestment(taxAmount);
             default:
                 break;
         }
@@ -192,6 +284,8 @@ export default class TaxLib {
         switch (lawName) {
             case Const.LAW_NAME.PINEL:
                 return this.getPinelAppartment(program, investment);
+            case Const.LAW_NAME.PINEL_OUTREMER:
+                return this.getPinelOMAppartment(program, investment);
             default:
                 break;
         }
@@ -203,11 +297,11 @@ export default class TaxLib {
 
     static getGain(investiment) {
         const minus = parseInt(investiment) * 0.6;
-        return (investiment - minus).toString();
+        return Math.round(investiment - minus).toString();
     }
 
-    static getEpargne(rent, investment, taxAmount, gain) {
-        const gainPerMonth = Math.round(gain / 108);
+    static getEpargne(rent, investment, taxAmount, gain, duree) {
+        const gainPerMonth = Math.round(gain / (duree * 12));
         const backMoney = Math.round((investment + (investment * 0.2)) / 240);
         return (backMoney - rent - gainPerMonth).toString();
     }

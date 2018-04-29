@@ -73,7 +73,7 @@ const MainScreen = StackNavigator({
       headerTintColor: Const.COLOR.BLACKGREY,
       headerTitleStyle: [ styles.textBold, styles.greyBlackColor, styles.alignCenter ],
       headerLeft: <HeaderLeft navigation={navigation} />,
-        headerRight: <View />
+      headerRight: <View />
     }
   }
 });

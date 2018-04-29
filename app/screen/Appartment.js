@@ -26,7 +26,9 @@ export default class Appartment extends React.Component {
                     <ConstanceButton
                         title={I18n.t('translation.contactUs')}
                         color={Const.COLOR.BLUE}
-                        onPress={() => this.props.navigation.navigate("Article")}
+                        onPress={() => this.props.navigation.navigate("Contact", {
+                            ...this.props.navigation.state.params
+                        })}
                     />
                 </View>
             </ScrollView>

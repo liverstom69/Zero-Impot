@@ -82,6 +82,8 @@ export default class Law extends React.Component {
             law.name,
             TaxLib.getInvestmentByLaw(law.name, taxAmount))
             .concat([I18n.t("translation.cancel")]);
+        console.log(law);
+        console.log(this.state.programs);
         return (
             <KeyboardAwareScrollView style={[styles.backgroundWhite]}>
                 <View style={[styles.viewWithMarg]}>
@@ -125,7 +127,7 @@ export default class Law extends React.Component {
                     <View style={styles.littleSpace} />
                     <SavingResult
                         value={this.state.gain}
-                        text={I18n.t("translation.epargneGain")}
+                        text={I18n.t("translation.epargneGain") + law.horizon.duree + " " + I18n.t("translation.years")}
                     />
                     <View style={styles.littleSpace} />
                     <View style={styles.littleSpace} />
@@ -163,7 +165,16 @@ export default class Law extends React.Component {
                     <ConstanceButton
                         title={I18n.t('translation.contactUs')}
                         color={Const.COLOR.BLUE}
-                        onPress={() => this.props.navigation.navigate("Article")}
+                        onPress={() => this.props.navigation.navigate("Contact", {
+                            lawName: law.name,
+                            city: "Non défini",
+                            imageUrl: "",
+                            description: "",
+                            price: "Non défini",
+                            taxAmount: taxAmount,
+                            epargne: "Non défini",
+                            gain: "Non défini",
+                        })}
                     />
                     <View style={styles.halfSpace} />
                 </View>

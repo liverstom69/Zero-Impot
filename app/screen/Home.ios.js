@@ -1,6 +1,6 @@
 //@flow
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Animated, Image, Dimensions, Easing, Keyboard } from 'react-native';
 import PropTypes from 'prop-types';
 import I18n from 'ex-react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -11,6 +11,9 @@ import Input from '../components/public/Input';
 import ConstanceButton from '../components/public/ConstanceButton';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
+import images from "../config/images";
+
+const width = Dimensions.get("window").width;
 
 let laws = [
     {
@@ -30,7 +33,7 @@ let laws = [
         investiment: 0,
         horizon: {
             key: '0',
-            duree: '9',
+            duree: '6',
             economy: '0',
             saving: '0',
         }
@@ -41,7 +44,7 @@ let laws = [
         investiment: 0,
         horizon: {
             key: '0',
-            duree: '9',
+            duree: '4',
             economy: '0',
             saving: '0',
         }
@@ -52,7 +55,7 @@ let laws = [
         investiment: 0,
         horizon: {
             key: '0',
-            duree: '9',
+            duree: '15',
             economy: '0',
             saving: '0',
         }
@@ -66,16 +69,22 @@ export default class Home extends React.Component {
       bf: String,
       taxConcern: Number,
       nbParts: String,
+      isOpen: boolean,
+      isPacmanHidden: boolean,
+      leftPacmanPosition: any,
   };
 
   constructor(props) {
       super(props);
       this.state = {
-          ir: '2650',
+          ir: '7000',
           is: '',
           bf: '',
           taxConcern: Const.TAX.IR,
           nbParts: '',
+          isOpen: false,
+          isPacmanHidden: true,
+          leftPacmanPosition: new Animated.Value(0),
       };
       this.returnButtonColor = this.returnButtonColor.bind(this);
       this.onChangeValue = this.onChangeValue.bind(this);
@@ -120,7 +129,9 @@ export default class Home extends React.Component {
                   AlertLib.alertOK(I18n.t('translation.errorTaxValue'));
                   return;
               }
-              laws[0] = TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.PINEL, ir);
+              const basicLaws = this.props.navigation.state.params.laws;
+              laws[0] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL, ir);
+              laws[1] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL_OUTREMER, ir);
               break;
           case Const.TAX.IS:
               if (this.state.is.length === 0) {
@@ -149,10 +160,51 @@ export default class Home extends React.Component {
       if (laws.length === 0) {
           AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
       } else {
-          this.props.navigation.navigate('Result', {
-              laws,
-              basicLaws: this.props.navigation.state.params.laws,
-              taxAmount: ir,
+          this.setState({ isPacmanHidden: false });
+          const intervalPacman = setInterval(() => {
+              this.setState({ isOpen: !this.state.isOpen })
+          }, 500);
+          const widthCaractere = this.state.ir.length * 10;
+          const maxWidth = width - 150;
+          const finalWidth = widthCaractere > maxWidth ? maxWidth : widthCaractere;
+          Keyboard.dismiss();
+          let i = 0;
+          let j = 0;
+          const irLength = this.state.ir.length;
+          const intervalCar = setInterval(() => {
+              if (i <= irLength) {
+                  j = 0;
+                  let carac = "";
+                  while (j < i) {
+                      carac += " ";
+                      j += 1;
+                  }
+                  const ir = this.state.ir.slice(i, this.state.ir.length);
+                  this.setState({ ir: carac.concat(ir) });
+                  i = i + 1;
+              }
+          }, 350);
+          Animated.timing(
+              this.state.leftPacmanPosition,
+              {
+                  toValue: finalWidth,
+                  duration: 3000,
+                  easing: Easing.linear,
+              }
+          ).start(() => {
+              clearInterval(intervalPacman);
+              clearInterval(intervalCar);
+              this.setState({
+                  ir: "",
+                  isPacmanHidden: true,
+                  isOpen: false,
+                  leftPacmanPosition: new Animated.Value(0),
+              });
+              this.props.navigation.navigate('Result', {
+                  laws,
+                  basicLaws: this.props.navigation.state.params.laws,
+                  taxAmount: ir,
+              });
           });
       }
   }
@@ -210,6 +262,13 @@ export default class Home extends React.Component {
                                   onChangeText={(text) => this.handleIRText(text)}
                                   isBig
                               />
+                              <Animated.View style={{ position: "absolute", top: 10, left: this.state.leftPacmanPosition, alignSelf: "center", zIndex: 1, opacity: this.state.isPacmanHidden ? 0 : 1 }}>
+                                  <Image
+                                      style={{ width: 40, height: 40 }}
+                                      resizeMode={"contain"}
+                                      source={this.state.isOpen ? images.pacmanOpen : images.pacmanClose}
+                                  />
+                              </Animated.View>
                           </View>
                       </View>
                   )

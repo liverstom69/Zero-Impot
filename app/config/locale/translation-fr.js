@@ -63,7 +63,7 @@ const translation = {
     subtitleOperator: 'Avec financement 100% et zéro apport',
     epargneProgramTitle: 'Votre épargne pour ce programme\n',
     epargneProgramSubtitle: '(En fonction du loyer)',
-    epargneGain: 'Gain moyen à 9 ans',
+    epargneGain: 'Gain moyen à ',
     //Appartment
     appartmentDescription: "Description de la résidence",
     //Article

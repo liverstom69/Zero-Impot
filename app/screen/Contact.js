@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, FlatList, TextInput } from "react-native";
 import PropTypes from "prop-types";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Communications from 'react-native-communications';
 import I18n from "ex-react-native-i18n";
 
 import styles from "../config/styles";
@@ -10,68 +11,126 @@ import Const from "../config/Const";
 import Input from "../components/public/Input";
 import ConstanceButton from "../components/public/ConstanceButton";
 import images from "../config/images";
-
-const data = [
-    {
-        title: "Montant d'impôt",
-        value: "300000",
-        subTitles: [],
-    },
-    {
-        title: "Economie d'impôt",
-        value: "160000",
-        subTitles: [],
-    },
-    {
-        title: "Gain impôt",
-        value: "160000",
-        subTitles: [],
-    },
-    {
-        title: "Epargne",
-        value: "160000",
-        subTitles: [],
-    },
-    {
-        title: "Dispositif fiscal",
-        value: "160000",
-        subTitles: [],
-    },
-    {
-        title: "Ville/Programme choisi",
-        value: "160000",
-        subTitles: [],
-    }
-];
+import TaxLib from "../lib/TaxLib";
 
 export default class Contact extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        const { lawName, taxAmount, gain, epargne, city, price } = this.props.navigation.state.params;
+        const maxEconomy = TaxLib.getTaxByInvestmentByLaw(lawName, price) < taxAmount ?
+            TaxLib.getTaxByInvestmentByLaw(lawName, price) :
+            taxAmount;
+        const data = [
+            {
+                title: "Montant d'impôt",
+                value: taxAmount.toString(),
+                subTitles: [],
+            },
+            {
+                title: "Economie d'impôt",
+                value: maxEconomy.toString(),
+                subTitles: [],
+            },
+            {
+                title: "Gain impôt",
+                value: gain.toString(),
+                subTitles: [],
+            },
+            {
+                title: "Epargne",
+                value: epargne,
+                subTitles: [],
+            },
+            {
+                title: "Dispositif fiscal",
+                value: lawName,
+                subTitles: [],
+            },
+            {
+                title: "Ville/Programme choisi",
+                value: city,
+                subTitles: [],
+            }
+        ];
+        this.state = {
+            comment: "",
+            phoneNumber: "",
+            data
+        };
+
+        this.handleComment = this.handleComment.bind(this);
+        this.handlePhoneNumber = this.handlePhoneNumber.bind(this);
+        this.handleClickEmail = this.handleClickEmail.bind(this);
+        this.handleClickSMS = this.handleClickSMS.bind(this);
+    }
+
+    handleComment(comment) { this.setState({ comment }) }
+
+    handlePhoneNumber(phoneNumber) { this.setState({ phoneNumber }) }
+
+    handleClickEmail() {
+        Communications.email(["zeroimpot@support.com"], null, null, "ZERO IMPOT",
+            "Bonjour Zero Impôt,\n" +
+            "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
+            "Récapitulatif\n" +
+            "Montant d'impôt: " + this.state.data[0].value + "\n" +
+            "Economie d'impôt:" + this.state.data[1].value + "\n" +
+            "Gain impôt: " + this.state.data[2].value + "\n" +
+            "Epargne: " + this.state.data[3].value + "\n" +
+            "Dispositif fiscal: " + this.state.data[4].value + "\n" +
+            "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
+            "Commentaire: \n" + this.state.comment + "\n" +
+            "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
+            "Zero Impôt"
+        );
+    }
+
+    handleClickSMS() {
+        Communications.text("",
+            "Bonjour Zero Impôt,\n" +
+            "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
+            "Récapitulatif\n" +
+            "Montant d'impôt: " + this.state.data[0].value + "\n" +
+            "Economie d'impôt:" + this.state.data[1].value + "\n" +
+            "Gain impôt: " + this.state.data[2].value + "\n" +
+            "Epargne: " + this.state.data[3].value + "\n" +
+            "Dispositif fiscal: " + this.state.data[4].value + "\n" +
+            "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
+            "Commentaire: \n" + this.state.comment + "\n" +
+            "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
+            "Zero Impôt"
+        );
+    }
+
     render() {
         return (
             <KeyboardAwareScrollView style={styles.backgroundWhite}>
                 <View style={styles.viewWithMarg}>
                     <Text style={[styles.blueColor, styles.mediumTextBold]}>{ I18n.t('translation.resumeTitle') }</Text>
                     <FlatList
-                        data={data}
-                        renderItem={({ item, index }) => <ArticleItem key={index} article={item} isLast={index === data.length - 1} />}
+                        data={this.state.data}
+                        renderItem={({ item, index }) => <ArticleItem key={index} article={item} isLast={index === this.state.data.length - 1} />}
                     />
                 </View>
-                <View style={styles.halfSpace} />
                 <View style={styles.line} />
                 <View style={styles.halfSpace} />
                 <View style={styles.viewWithMarg}>
                     <Text style={[styles.blueColor, styles.mediumTextBold]}>{ I18n.t('translation.resumeComment') }</Text>
                     <View style={styles.halfSpace} />
                     <TextInput
-                        value={""}
+                        value={this.state.comment}
                         multiline
+                        onChangeText={text => this.handleComment(text)}
                         underlineColorAndroid={"transparent"}
                         style={{ height: 150, borderColor: Const.COLOR.GREY2, borderWidth: 0.5, borderRadius: 5 }}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.halfSpace} />
                     <Input
-                        value={""}
-                        onChangeText={() => console.log("t")}
+                        value={this.state.phoneNumber}
+                        onChangeText={text => this.handlePhoneNumber(text)}
                         isBig
                         isPhone={true}
                         placeholder={I18n.t('translation.resumePhone')}
@@ -82,7 +141,7 @@ export default class Contact extends React.Component {
                     <ConstanceButton
                         title={I18n.t('translation.resumeEmail')}
                         color={"white"}
-                        onPress={() => console.log("test")}
+                        onPress={() => this.handleClickEmail()}
                         image={images.letter}
                     />
                     <View style={styles.halfSpace} />
@@ -90,10 +149,28 @@ export default class Contact extends React.Component {
                         title={I18n.t('translation.resumeSms')}
                         color={Const.COLOR.BLUE}
                         image={images.phone}
-                        onPress={() => alert('tes')}
+                        onPress={() => this.handleClickSMS()}
                     />
                 </View>
             </KeyboardAwareScrollView>
         )
     }
 }
+
+Contact.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func,
+        state: PropTypes.shape({
+            params: PropTypes.shape({
+                city: PropTypes.string.isRequired,
+                lawName: PropTypes.string.isRequired,
+                imageUrl: PropTypes.string.isRequired,
+                description: PropTypes.string.isRequired,
+                price: PropTypes.number.isRequired,
+                taxAmount: PropTypes.number.isRequired,
+                epargne: PropTypes.string.isRequired,
+                gain: PropTypes.number.isRequired,
+            }),
+        }),
+    }),
+};

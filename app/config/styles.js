@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
   textCenter: {
     textAlign: 'center',
   },
+    navBarTitleView: {
+        flex: 1,
+        alignSelf: "stretch",
+        justifyContent: "center",
+    },
   blueColor: {
     color: Const.COLOR.BLUE,
   },
@@ -77,7 +82,7 @@ const styles = StyleSheet.create({
         zIndex: 100,
         top: 0,
         left: 0,
-        right: 0
+        right: 0,
     },
   backgroundWhite: {
     backgroundColor: 'white',
@@ -105,6 +110,9 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginHorizontal: 15,
   },
+    tinySpace: {
+        height: 5,
+    },
     littleSpace: {
         height: 7.5,
     },

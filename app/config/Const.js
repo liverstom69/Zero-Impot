@@ -22,6 +22,11 @@ const Const = {
         PINEL_OUTREMER: "Pinel Outremer",
     },
     PERCENT: 20,
+    MAX_LAW: {
+        PINEL: 6000,
+        PINEL_OUTREMER: 11500,
+        MALRAUX: 500000,
+    }
 };
 
 export default Const;
