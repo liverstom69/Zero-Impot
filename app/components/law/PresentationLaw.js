@@ -1,18 +1,22 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
+import { Ionicons } from '@expo/vector-icons';
 import I18n from 'ex-react-native-i18n';
 
 import styles from '../../config/styles';
 import images from '../../config/images';
 import Input from "../public/Input";
 import LawSelectorInput from "./LawSelectorInput";
+import AlertLib from "../../lib/AlertLib";
 
 const presentationStyle = StyleSheet.create({
     lawView1: {
         flex: 6,
         flexDirection: "row",
         paddingRight: 5,
+        justifyContent: "center",
+        alignItems: "center"
     },
     lawView2: {
         flex: 6,
@@ -45,6 +49,10 @@ export default class PresentationLaw extends React.Component {
 
     handleClickActionSheet(value) { this.props.onPressActionSheet(this.props.name, parseInt(value)) }
 
+    handleClick() {
+        AlertLib.alertOK("Loi " + this.props.lawName, this.props.description);
+    }
+
     render() {
         return (
             <View>
@@ -59,6 +67,16 @@ export default class PresentationLaw extends React.Component {
                                 </TouchableOpacity>
                             )}
                             <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>Loi {this.props.name}</Text>
+                            <TouchableOpacity
+                                onPress={() => this.handleClick()}
+                                style={[styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
+                                activeOpacity={0.8}>
+                                <Ionicons
+                                    name="ios-information-circle-outline"
+                                    size={22}
+                                    color="pink"
+                                />
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={presentationStyle.textView}>
@@ -79,7 +97,7 @@ export default class PresentationLaw extends React.Component {
                     </View>
                     <View style={presentationStyle.textView}>
                         <TouchableOpacity onPress={() => this.props.onPress()}>
-                            <Image source={images.arrow} />
+                            <Text style={[styles.smallTextMedium, styles.greyBlackColor]}>VOIR</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -97,4 +115,5 @@ PresentationLaw.propTypes = {
     onPressTrash: PropTypes.func.isRequired,
     onPressActionSheet: PropTypes.func.isRequired,
     basicInvest: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
 };

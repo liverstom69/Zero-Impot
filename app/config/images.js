@@ -5,6 +5,8 @@ const images = {
     call: require('../../assets/images/call.png'),
     letter: require('../../assets/images/letter.png'),
     logo: require('../../assets/images/logo.png'),
+    icon: require('../../assets/images/Icon.png'),
+    pacman: require('../../assets/images/pacman.gif'),
     pacmanClose: require('../../assets/images/pacmanClose.png'),
     pacmanOpen: require('../../assets/images/pacmanOpen.png'),
     phone: require('../../assets/images/phone.png'),

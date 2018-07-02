@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import I18n from 'ex-react-native-i18n';
 
@@ -31,6 +31,7 @@ export default class LawItem extends React.Component {
                         lawName={this.props.name}
                         onPressActionSheet={this.handleClickAS}
                         basicInvest={this.props.basicInvest}
+                        description={this.props.description}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.line} />
@@ -66,4 +67,5 @@ LawItem.propTypes = {
     onPressTrash: PropTypes.func.isRequired,
     onPressActionSheet: PropTypes.func.isRequired,
     basicInvest: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
 };

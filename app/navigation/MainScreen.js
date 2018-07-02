@@ -14,6 +14,7 @@ import Appartment from "../screen/Appartment";
 import Article from "../screen/Article";
 import Contact from "../screen/Contact";
 import SplashData from "../screen/Splash";
+import HeaderTitle from "../components/public/HeaderTitle";
 
 const MainScreen = StackNavigator({
     Splash: {
@@ -33,15 +34,19 @@ const MainScreen = StackNavigator({
   },
   Result: {
     screen: Result,
-    navigationOptions: {
-      headerTitle: 'Résultats',
-    }
+      navigationOptions: ({ navigation }) => {
+          return {
+              headerTitle: <HeaderTitle title={'Résultats'} />,
+              headerRight: <View />,
+          }
+      }
   },
     Law: {
       screen: Law,
         navigationOptions: ({ navigation }) => {
           return {
-              headerTitle: navigation.state.params.title,
+              headerTitle: <HeaderTitle title={navigation.state.params.title} />,
+              headerRight: <View />,
           }
         }
     },
@@ -49,20 +54,23 @@ const MainScreen = StackNavigator({
         screen: Appartment,
         navigationOptions: ({ navigation }) => {
             return {
-                headerTitle: navigation.state.params.city,
+                headerTitle: <HeaderTitle title={navigation.state.params.city} />,
+                headerRight: <View />,
             }
         }
     },
     Article: {
       screen: Article,
         navigationOptions: {
-            headerTitle: 'Article 217',
+            headerTitle: <HeaderTitle title={'Article 217'} />,
+            headerRight: <View />,
         }
     },
     Contact: {
       screen: Contact,
         navigationOptions: {
-            headerTitle: 'Contact',
+            headerTitle: <HeaderTitle title={'Contact'} />,
+            headerRight: <View />,
         }
     }
 }, {

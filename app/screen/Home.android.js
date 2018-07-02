@@ -14,52 +14,7 @@ import images from "../config/images";
 
 const width = Dimensions.get("window").width;
 
-let laws = [
-    {
-        name: 'Loi Pinel',
-        programs: [],
-        investiment: 0,
-        horizon: {
-            key: '0',
-            duree: '9',
-            economy: '0',
-            saving: '0',
-        }
-    },
-    {
-        name: 'Loi Pinel Outremer',
-        programs: [],
-        investiment: 0,
-        horizon: {
-            key: '0',
-            duree: '6',
-            economy: '0',
-            saving: '0',
-        }
-    },
-    {
-        name: 'Loi Malraux',
-        programs: [],
-        investiment: 0,
-        horizon: {
-            key: '0',
-            duree: '9',
-            economy: '0',
-            saving: '0',
-        }
-    },
-    {
-        name: 'Loi Monument Historique',
-        programs: [],
-        investiment: 0,
-        horizon: {
-            key: '0',
-            duree: '9',
-            economy: '0',
-            saving: '0',
-        }
-    }
-];
+let laws = TaxLib.getTaxLib();
 
 export default class Home extends React.Component {
     state: {
@@ -131,6 +86,9 @@ export default class Home extends React.Component {
                 const basicLaws = this.props.navigation.state.params.laws;
                 laws[0] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL, ir);
                 laws[1] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL_OUTREMER, ir);
+                laws[2] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.MALRAUX, ir);
+                laws[3] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE, ir);
+                laws.reverse();
                 break;
             case Const.TAX.IS:
                 if (this.state.is.length === 0) {
@@ -160,9 +118,6 @@ export default class Home extends React.Component {
             AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
         } else {
             this.setState({ isPacmanHidden: false });
-            const intervalPacman = setInterval(() => {
-                this.setState({ isOpen: !this.state.isOpen })
-            }, 500);
             const widthCaractere = this.state.ir.length * 10;
             const maxWidth = width - 150;
             const finalWidth = widthCaractere > maxWidth ? maxWidth : widthCaractere;
@@ -182,7 +137,7 @@ export default class Home extends React.Component {
                     this.setState({ ir: carac.concat(ir) });
                     i = i + 1;
                 }
-            }, 400);
+            }, 200);
             Animated.timing(
                 this.state.leftPacmanPosition,
                 {
@@ -191,7 +146,6 @@ export default class Home extends React.Component {
                     easing: Easing.linear,
                 }
             ).start(() => {
-                clearInterval(intervalPacman);
                 clearInterval(intervalCar);
                 this.setState({
                     ir: "",
@@ -236,19 +190,11 @@ export default class Home extends React.Component {
                       />
                       {this.state.isPacmanHidden === false && (
                           <Animated.View style={{ position: "absolute", bottom: -50, left: this.state.leftPacmanPosition, alignSelf: "center", zIndex: 1 }}>
-                              {this.state.isOpen === true ? (
-                                  <Image
-                                      style={{ width: 40, height: 40 }}
-                                      resizeMode={"contain"}
-                                      source={images.pacmanOpen}
-                                  />
-                              ) : (
-                                  <Image
-                                      style={{ width: 40, height: 40 }}
-                                      resizeMode={"contain"}
-                                      source={images.pacmanClose}
-                                  />
-                              )}
+                              <Image
+                                  style={{ width: 40, height: 40 }}
+                                  resizeMode={"contain"}
+                                  source={images.pacman}
+                              />
                           </Animated.View>
                       )}
                   </View>

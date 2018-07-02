@@ -18,12 +18,12 @@ export default class Contact extends React.Component {
     constructor(props) {
         super(props);
 
-        const { lawName, taxAmount, gain, epargne, city, price } = this.props.navigation.state.params;
+        const { lawName, lawDate, taxAmount, gain, epargne, city, price } = this.props.navigation.state.params;
         const economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
         const maxEconomy = economy < taxAmount ? economy : taxAmount;
         const data = [
             {
-                title: "Montant d'impôt",
+                title: "Votre impôt",
                 value: TaxLib.returnNumberFormat(taxAmount.toString()),
                 subTitles: [],
             },
@@ -33,12 +33,17 @@ export default class Contact extends React.Component {
                 subTitles: [],
             },
             {
-                title: "Gain impôt",
+                title: "Montant de l'opération",
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : price.toString(),
+                subTitles: [],
+            },
+            {
+                title: "Gain à ".concat(lawDate, " ans"),
                 value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(gain.toString()),
                 subTitles: [],
             },
             {
-                title: "Epargne",
+                title: "Votre apport mensuel",
                 value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(epargne),
                 subTitles: [],
             },
@@ -71,13 +76,13 @@ export default class Contact extends React.Component {
 
     handleClickEmail() {
         Communications.email(["zeroimpot@support.com"], null, null, "ZERO IMPOT",
-            "Bonjour Zero Impôt,\n" +
+            "Bonjour Zero Impôt,\n\n\n" +
             "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
             "Récapitulatif\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
             "Economie d'impôt:" + this.state.data[1].value + "\n" +
-            "Gain impôt: " + this.state.data[2].value + "\n" +
-            "Epargne: " + this.state.data[3].value + "\n" +
+            "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
+            "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
             "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
             "Commentaire: \n" + this.state.comment + "\n" +
@@ -87,14 +92,12 @@ export default class Contact extends React.Component {
     }
 
     handleClickSMS() {
-        Communications.text("",
-            "Bonjour Zero Impôt,\n" +
-            "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
-            "Récapitulatif\n" +
+        Communications.textWithoutEncoding("0661233060",
+            "Bonjour Zero Impôt,\n\n\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
             "Economie d'impôt:" + this.state.data[1].value + "\n" +
-            "Gain impôt: " + this.state.data[2].value + "\n" +
-            "Epargne: " + this.state.data[3].value + "\n" +
+            "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
+            "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
             "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
             "Commentaire: \n" + this.state.comment + "\n" +
@@ -163,6 +166,7 @@ Contact.propTypes = {
             params: PropTypes.shape({
                 city: PropTypes.string.isRequired,
                 lawName: PropTypes.string.isRequired,
+                lawDate: PropTypes.string.isRequired,
                 imageUrl: PropTypes.string.isRequired,
                 description: PropTypes.string.isRequired,
                 price: PropTypes.number.isRequired,

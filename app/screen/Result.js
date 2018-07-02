@@ -93,12 +93,8 @@ export default class Result extends React.Component {
     return (
       <ScrollView style={styles.scrollView}>
         <View style={styles.viewWithMarg}>
-          <Text style={[styles.bigText, styles.greyBlackColor]}>
-              {this.state.isUpdate === false ?
-                  I18n.t('translation.resultCalculated')
-                  :
-                  I18n.t('translation.resultReCalculated')
-              }
+          <Text style={[styles.bigText, styles.greyBlackColor, styles.textCenter]}>
+              {I18n.t('translation.resultCalculated')}
           </Text>
           <View style={styles.halfSpace}/>
           <SavingResult
@@ -121,6 +117,7 @@ export default class Result extends React.Component {
                   onPressTrash={this.handleClick}
                   onPressActionSheet={this.handleClickActionSheet}
                   basicInvest={TaxLib.getInvestmentByLaw(item.name, taxAmount)}
+                  description={item.description}
               />
           )}
         />

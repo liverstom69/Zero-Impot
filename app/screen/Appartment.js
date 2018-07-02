@@ -43,6 +43,7 @@ Appartment.propTypes = {
             params: PropTypes.shape({
                 city: PropTypes.string.isRequired,
                 lawName: PropTypes.string.isRequired,
+                lawDate: PropTypes.string.isRequired,
                 imageUrl: PropTypes.string.isRequired,
                 description: PropTypes.string.isRequired,
                 price: PropTypes.number.isRequired,

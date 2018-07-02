@@ -34,6 +34,7 @@ export default class TaxLib {
       let maxAppartment = pinel.programs[0].apartments[0];
       let programs = [];
       let isAlreadyIn = false;
+      if (taxAmount < 2500) { return programs }
       pinel.programs.map(program => {
           isAlreadyIn = false;
           program.apartments.map(appartment => {
@@ -100,6 +101,9 @@ export default class TaxLib {
       return {
           name: Const.LAW_NAME.PINEL,
           investiment: investment.toString(),
+          description: 'Ex pour 9 ans\n' +
+          'Cette loi permet une réduction d’impôt\n' +
+          'De 18% sur 9 ans. La loi Pinel peut être souscrite pour 6, 9 ou 12ans',
           programs: this.getPinelPrograms(pinelLaw, taxAmount),
           horizon: this.getPinelHorizon(investment)
       }
@@ -192,6 +196,9 @@ export default class TaxLib {
         const investment = this.getPinelOMInvestment(taxAmount);
         return {
             name: Const.LAW_NAME.PINEL_OUTREMER,
+            description: 'Ex pour 9 ans\n' +
+            'Cette loi permet une réduction d’impôt\n' +
+            'De 29% sur 9 ans. La loi Pinel Outremer peut être souscrite pour 6, 9 ou 12ans',
             investiment: investment.toString(),
             programs: this.getPinelOutremerPrograms(pinelOMLaw, taxAmount),
             horizon: this.getPinelOMHorizon(investment)
@@ -218,6 +225,7 @@ export default class TaxLib {
         let programs = [];
         let isAlreadyIn = false;
         if (taxAmount < Const.MAX_LAW.PINEL_OUTREMER + 1) { return programs }
+        console.log(malraux.programs);
         malraux.programs.map(program => {
             isAlreadyIn = false;
             program.apartments.map(appartment => {
@@ -264,7 +272,9 @@ export default class TaxLib {
     }
 
     static getMalrauxInvestment(taxAmount) {
-        return Math.round(taxAmount * 12);
+        const investment = Math.round(taxAmount * 12);
+        const maxMalraux = 400000;
+        return investment > maxMalraux ? maxMalraux : investment;
     }
 
     static getMalrauxTaxByInvestment(investment) {
@@ -281,6 +291,8 @@ export default class TaxLib {
         const investment = this.getMalrauxInvestment(taxAmount);
         return {
             name: Const.LAW_NAME.MALRAUX,
+            description: 'Cette loi permet une réduction d’impôt\n' +
+            'Jusqu’à 120 000€ sur 4 ans. La loi Malraux est souscrite pour 9 ans',
             investiment: investment.toString(),
             programs: this.getMalrauxPrograms(malrauxLaw, taxAmount),
             horizon: this.getMalrauxHorizon(investment)
@@ -299,6 +311,162 @@ export default class TaxLib {
         ];
     }
 
+    // Monument historique
+
+    static getFactorMHFromTax(taxAmount) {
+        if (taxAmount > 30000 && taxAmount <= 40000) {
+            return 6.0
+        } else if (taxAmount > 40000 && taxAmount <= 50000) {
+            return 5.5
+        } else if (taxAmount > 50000 && taxAmount <= 60000) {
+            return 5.0
+        } else if (taxAmount > 60000 && taxAmount <= 70000) {
+            return 4.5
+        } else if (taxAmount > 70000 && taxAmount <= 80000) {
+            return 4.4
+        } else if (taxAmount > 80000 && taxAmount <= 90000) {
+            return 4.3
+        } else if (taxAmount > 90000 && taxAmount <= 100000) {
+            return 4.2
+        } else if (taxAmount > 100000 && taxAmount <= 200000) {
+            return 4.0
+        } else if (taxAmount > 200000 && taxAmount <= 300000) {
+            return 2.5
+        } else if (taxAmount > 300000 && taxAmount <= 400000) {
+            return 2.2
+        } else if (taxAmount > 400000 && taxAmount <= 700000) {
+            return 2
+        } else if (taxAmount > 700000 && taxAmount <= 9) {
+            return 1.9
+        } else {
+            return 2
+        }
+    }
+
+    static getFactorMHFromWork(work) {
+        if (work > 180000 && work < 220000) {
+            return 6.0
+        } else if (work > 220000 && work < 250000) {
+            return 5.5
+        } else if (work > 250000 && work < 270000) {
+            return 5.0
+        } else if (work > 270000 && work < 308000) {
+            return 4.5
+        } else if (work > 308000 && work < 344000) {
+            return 4.4
+        } else if (work > 344000 && work < 378000) {
+            return 4.3
+        } else if (work > 378000 && work < 400000) {
+            return 4.2
+        } else if (work > 400000 && work < 500000) {
+            return 4.0
+        } else if (work > 500000 && work < 660000) {
+            return 2.5
+        } else if (work > 660000 && work < 800000) {
+            return 2.2
+        } else if (work > 800000 && work < 1330000) {
+            return 2
+        } else if (work > 1330000 && work < 1800000) {
+            return 1.9
+        } else {
+            return 2
+        }
+    }
+
+    static getMHPrograms(mh, taxAmount) {
+        const mhAmount = this.getMHInvestment(taxAmount);
+        const maxMHAmount = mhAmount + ((Const.PERCENT / 100) * mhAmount);
+        let mhMaxProgram = mh.programs[0];
+        let mhMaxAppartment = mhMaxProgram.apartments[0];
+        let programs = [];
+        let isAlreadyIn = false;
+        if (taxAmount < Const.MAX_LAW.MALRAUX + 1) { return programs }
+        mh.programs.map(program => {
+            isAlreadyIn = false;
+            program.apartments.map(appartment => {
+                if (appartment.work > mhMaxAppartment.work) {
+                    mhMaxProgram = program;
+                    mhMaxAppartment = appartment;
+                }
+                if (program.length < 4) {
+                    if (isAlreadyIn === false &&
+                        appartment.work >= mhAmount &&
+                        appartment.work <= maxMHAmount) {
+                        programs.push(program);
+                        isAlreadyIn = true;
+                    }
+                }
+            });
+        });
+        return programs.length === 0 ? [mhMaxProgram] : programs;
+    }
+
+    static getMHAppartment(program, investment) {
+        const maxMHAmount = investment + ((Const.PERCENT / 100) * investment);
+        let appartments = [];
+        let maxAppartment = program.apartments[0];
+        program.apartments.map(appartment => {
+            if (appartment.work > maxAppartment) {
+                maxAppartment = appartment;
+            }
+            if (appartment.work >= investment && appartment.work <= maxMHAmount) {
+                appartments.push(appartment)
+            }
+        });
+        return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+    }
+
+    static getMHHorizon(investment) {
+        const economy = investment * 0.41;
+        return {
+            key: '0',
+            duree: '1',
+            economy: Math.round(economy).toString(),
+            saving: Math.round(economy).toString(),
+        };
+    }
+
+    static getMHInvestment(taxAmount) {
+        return Math.round(taxAmount * this.getFactorMHFromTax(taxAmount));
+    }
+
+    static getMHTaxByInvestment(investment) {
+        return Math.round(investment / this.getFactorMHFromWork(investment));
+    }
+
+    static getMHFinalAmount(taxAmount, investment) {
+        const value = taxAmount - this.getMHInvestment(investment);
+        return value < 0 ? 0 : value;
+    }
+
+    static getMH(mhLaw, taxAmount) {
+        const investment = this.getMHInvestment(taxAmount);
+        return {
+            name: Const.LAW_NAME.MONUMENT_HISTORIQUE,
+            description: 'Cette loi permet une réduction d’impôt\n' +
+            'sans limite. Le régime Monument historique est souscrit pour 15 ans',
+            investiment: investment.toString(),
+            programs: this.getMHPrograms(mhLaw, taxAmount),
+            horizon: this.getMHHorizon(investment)
+        }
+    }
+
+    static getMHActionSheetValue(investment) {
+        return [
+            150000,
+            200000,
+            250000,
+            300000,
+            350000,
+            400000,
+            450000,
+            500000,
+            550000,
+            600000,
+            investment
+        ];
+    }
+
     // Communs
 
     static getActionSheetByLaw(lawName, investment) {
@@ -313,6 +481,8 @@ export default class TaxLib {
           case Const.LAW_NAME.MALRAUX:
               values = this.getMalrauxActionSheetValue(parseInt(investment));
               break;
+          case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+              values = this.getMHActionSheetValue(parseInt(investment));
           default:
               break;
       }
@@ -331,6 +501,8 @@ export default class TaxLib {
               return this.getPinelOM(filterLaws, taxAmount);
           case Const.LAW_NAME.MALRAUX:
               return this.getMalraux(filterLaws, taxAmount);
+          case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+              return this.getMH(filterLaws, taxAmount);
           default:
               break;
       }
@@ -350,6 +522,9 @@ export default class TaxLib {
               case Const.LAW_NAME.MALRAUX:
                   value = this.getMalrauxFinalAmount(taxAmount, parseInt(law.investiment));
                   break;
+              case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+                  value = this.getMHFinalAmount(taxAmount, parseInt(law.investiment));
+                  break;
               default:
                   break;
           }
@@ -366,6 +541,8 @@ export default class TaxLib {
               return this.getPinelOMTaxByInvestment(investment);
           case Const.LAW_NAME.MALRAUX:
               return this.getMalrauxTaxByInvestment(investment);
+          case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+              return this.getMHTaxByInvestment(investment);
           default:
               break;
       }
@@ -379,6 +556,8 @@ export default class TaxLib {
                 return this.getPinelOMInvestment(taxAmount);
             case Const.LAW_NAME.MALRAUX:
                 return this.getMalrauxInvestment(taxAmount);
+            case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+                return this.getMHInvestment(taxAmount);
             default:
                 break;
         }
@@ -392,6 +571,8 @@ export default class TaxLib {
                 return this.getPinelOMAppartment(program, investment);
             case Const.LAW_NAME.MALRAUX:
                 return this.getMalrauxAppartment(program, investment);
+            case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+                return this.getMHAppartment(program, investment);
             default:
                 break;
         }
@@ -408,7 +589,7 @@ export default class TaxLib {
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
         const gainPerMonth = Math.round(gain / (duree * 12));
-        const backMoney = Math.round((investment + (investment * 0.2)) / 240);
+        const backMoney = Math.round((investment + (investment * 0.3)) / 240);
         return (backMoney - rent - gainPerMonth).toString();
     }
 
@@ -446,5 +627,64 @@ export default class TaxLib {
 
     static deleteSpace(str) {
         return str.replace(/\s/g,'');
+    }
+
+    static getTaxLib() {
+        return [
+            {
+                name: 'Loi Pinel',
+                description: 'Ex pour 9 ans\n' +
+                'Cette loi permet une réduction d’impôt\n' +
+                'De 18% sur 9 ans. La loi Pinel peut être souscrite pour 6, 9 ou 12ans',
+                programs: [],
+                investiment: 0,
+                horizon: {
+                    key: '0',
+                    duree: '9',
+                    economy: '0',
+                    saving: '0',
+                }
+            },
+            {
+                name: 'Loi Pinel Outremer',
+                description: 'Ex pour 9 ans\n' +
+                'Cette loi permet une réduction d’impôt\n' +
+                'De 29% sur 9 ans. La loi Pinel Outremer peut être souscrite pour 6, 9 ou 12ans',
+                programs: [],
+                investiment: 0,
+                horizon: {
+                    key: '0',
+                    duree: '6',
+                    economy: '0',
+                    saving: '0',
+                }
+            },
+            {
+                name: 'Loi Malraux',
+                description: 'Cette loi permet une réduction d’impôt\n' +
+                'Jusqu’à 120 000€ sur 4 ans. La loi Malraux est souscrite pour 9 ans',
+                programs: [],
+                investiment: 0,
+                horizon: {
+                    key: '0',
+                    duree: '4',
+                    economy: '0',
+                    saving: '0',
+                }
+            },
+            {
+                name: 'Loi Monument Historique',
+                description: 'Cette loi permet une réduction d’impôt\n' +
+                'sans limite. Le régime Monument historique est souscrit pour 15 ans',
+                programs: [],
+                investiment: 0,
+                horizon: {
+                    key: '0',
+                    duree: '15',
+                    economy: '0',
+                    saving: '0',
+                }
+            }
+        ]
     }
 }

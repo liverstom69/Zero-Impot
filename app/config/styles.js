@@ -125,6 +125,8 @@ const styles = StyleSheet.create({
   },
   headerLeft: {
     position: 'absolute',
+      justifyContent: "center",
+      alignItems: "center",
     left: 10
   },
   alignCenter: {

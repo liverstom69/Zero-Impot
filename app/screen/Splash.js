@@ -35,7 +35,7 @@ class Splash extends React.PureComponent {
         return (
             <View style={[styles.scrollView, styles.alignCenter, styles.justifyCenter]}>
                 <Image
-                    source={images.splashLogo}
+                    source={images.icon}
                     style={splashStyle.image}
                 />
             </View>

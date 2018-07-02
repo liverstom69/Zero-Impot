@@ -1,6 +1,8 @@
 import React from "react";
 import {View, TouchableOpacity, Text, Image, StyleSheet} from "react-native";
 import PropTypes from "prop-types";
+import { Ionicons } from '@expo/vector-icons';
+
 import styles from "../../config/styles";
 import images from "../../config/images";
 import Const from "../../config/Const";
@@ -23,7 +25,7 @@ export default class ProgramItem extends React.Component {
 
     render() {
         const appartment = TaxLib.getAppartmentByLaw(this.props.law.name, this.props.program, this.props.investiment);
-        const epargne = TaxLib.getEpargne(appartment.rent, appartment.price, this.props.taxAmount, this.props.gain, this.props.law.horizon.duree);
+        const epargne = TaxLib.getEpargne(appartment.rent, appartment.price, this.props.taxAmount, this.props.economy, this.props.law.horizon.duree);
         return (
             <View>
                 <View style={styles.viewWithMarg}>
@@ -31,6 +33,7 @@ export default class ProgramItem extends React.Component {
                         activeOpacity={Const.ACTIVE_OPACITY}
                         onPress={() => this.props.navigate("Appartment",{
                             lawName: this.props.law.name,
+                            lawDate: this.props.law.horizon.duree,
                             city: this.props.program.city,
                             imageUrl: this.props.program.image.url,
                             description: this.props.program.description,
@@ -46,9 +49,9 @@ export default class ProgramItem extends React.Component {
                             <View style={elemStyle.viewSubTitle}>
                                 <Text style={[styles.textMedium, styles.greyColor2]}>{ TaxLib.returnNumberFormat(epargne) }</Text>
                             </View>
-                            <Image
-                                source={images.arrow}
-                            />
+                            <View>
+                                <Text style={[styles.smallTextMedium, styles.greyBlackColor]}>VOIR</Text>
+                            </View>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -63,6 +66,7 @@ ProgramItem.propTypes = {
     gain: PropTypes.number.isRequired,
     taxAmount: PropTypes.number.isRequired,
     investiment: PropTypes.number.isRequired,
+    economy: PropTypes.number.isRequired,
     law: PropTypes.shape({
         name: PropTypes.string,
         horizon: PropTypes.shape({
