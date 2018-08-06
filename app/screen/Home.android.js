@@ -118,7 +118,7 @@ export default class Home extends React.Component {
             AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
         } else {
             this.setState({ isPacmanHidden: false });
-            const widthCaractere = this.state.ir.length * 10;
+            const widthCaractere = this.state.ir.length * 4.5;
             const maxWidth = width - 150;
             const finalWidth = widthCaractere > maxWidth ? maxWidth : widthCaractere;
             Keyboard.dismiss();
@@ -137,7 +137,7 @@ export default class Home extends React.Component {
                     this.setState({ ir: carac.concat(ir) });
                     i = i + 1;
                 }
-            }, 200);
+            }, 3000 / (finalWidth * 1.1 / irLength));
             Animated.timing(
                 this.state.leftPacmanPosition,
                 {
