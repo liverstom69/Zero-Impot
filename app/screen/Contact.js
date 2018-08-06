@@ -18,8 +18,13 @@ export default class Contact extends React.Component {
     constructor(props) {
         super(props);
 
-        const { lawName, lawDate, taxAmount, gain, epargne, city, price } = this.props.navigation.state.params;
-        const economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
+        const { lawName, lawDate, taxAmount, gain, epargne, city, price, appartment } = this.props.navigation.state.params;
+        let economy;
+        if (lawName === Const.LAW_NAME.MALRAUX) {
+            economy = TaxLib.getTaxByInvestmentByLaw(lawName, appartment.work);
+        } else {
+            economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
+        }
         const maxEconomy = economy < taxAmount ? economy : taxAmount;
         const data = [
             {
@@ -29,7 +34,7 @@ export default class Contact extends React.Component {
             },
             {
                 title: "Economie d'impôt",
-                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(maxEconomy.toString()),
+                value: TaxLib.returnNumberFormat(maxEconomy.toString()),
                 subTitles: [],
             },
             {

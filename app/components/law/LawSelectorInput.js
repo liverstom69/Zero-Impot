@@ -41,7 +41,7 @@ export default class LawSelectorInput extends React.Component {
     render() {
         const actionSheetValues = TaxLib.getActionSheetByLaw(
             this.props.law,
-            this.props.basicInvest)
+            this.props.value)
             .concat([I18n.t("translation.cancel")]);
         return (
             <TouchableOpacity

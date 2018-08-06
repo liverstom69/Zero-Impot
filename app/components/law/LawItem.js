@@ -14,6 +14,7 @@ export default class LawItem extends React.Component {
         super(props);
 
         this.handleClickAS = this.handleClickAS.bind(this);
+        console.log(this.props);
     }
 
     handleClickAS(name, value) { this.props.onPressActionSheet(name, value) }
@@ -38,12 +39,12 @@ export default class LawItem extends React.Component {
                     <View style={styles.halfSpace} />
                     <Text style={[styles.semiBoldText, styles.greyBlackColor]}>{I18n.t('translation.economy')}</Text>
                     <View style={styles.littleSpace} />
-                    <EconomyLaw economy={this.props.economy} />
+                    <EconomyLaw name={this.props.name} economy={this.props.economy} />
                 </View>
                 {this.props.isLast === false && (
                     <View>
                         <LawDelimiter text={"OU"} />
-                        <View style={styles.halfSpace} />
+                        <View style={styles.tinySpace} />
                     </View>
                 )}
                 </View>

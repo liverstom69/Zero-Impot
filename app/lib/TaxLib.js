@@ -29,7 +29,7 @@ export default class TaxLib {
   static getPinelPrograms(pinel, taxAmount) {
       const pinelAmount = this.getPinelInvestment(taxAmount);
       const minPinelAmount = pinelAmount;
-      const maxPinelAmount = pinelAmount + ((Const.PERCENT / 100) * pinelAmount);
+      const maxPinelAmount = pinelAmount + ((Const.PERCENT_PINEL / 100) * pinelAmount);
       let pinelMaxProgram = pinel.programs[0];
       let maxAppartment = pinel.programs[0].apartments[0];
       let programs = [];
@@ -56,7 +56,7 @@ export default class TaxLib {
   }
 
   static getPinelAppartment(program, investment) {
-      const maxPinelAmount = investment + ((Const.PERCENT / 100) * investment);
+      const maxPinelAmount = investment + ((Const.PERCENT_PINEL / 100) * investment);
       let appartments = [];
       let maxAppartment = program.apartments[0];
       program.apartments.map(appartment => {
@@ -81,8 +81,8 @@ export default class TaxLib {
   }
 
   static getPinelInvestment(taxAmount) {
-        const investment = Math.round(taxAmount * 50);
-        const maxInvestment = Math.round(Const.MAX_LAW.PINEL * 50);
+        const investment = Math.ceil(taxAmount * 50);
+        const maxInvestment = Math.ceil(Const.MAX_LAW.PINEL * 50);
         return investment > maxInvestment ? maxInvestment : investment;
   }
 
@@ -122,8 +122,8 @@ export default class TaxLib {
   // Pinel OutreMer
 
     static getPinelOutremerPrograms(pinelOM, taxAmount) {
-      const percent = Const.PERCENT;
-      const pinelOMAmount = taxAmount * 26.085;
+      const percent = Const.PERCENT_PINEL;
+      const pinelOMAmount = taxAmount * Const.FACTOR.PINEL_OUTREMER;
       const minPinelOMAmount = pinelOMAmount;
       const maxPinelOMAmount = pinelOMAmount + ((percent / 100) * pinelOMAmount);
       let pinelOMMaxProgram = pinelOM.programs[0];
@@ -152,7 +152,7 @@ export default class TaxLib {
     }
 
     static getPinelOMAppartment(program, investment) {
-        const maxPinelOM = investment + ((Const.PERCENT / 100) * investment);
+        const maxPinelOM = investment + ((Const.PERCENT_PINEL / 100) * investment);
         let appartments = [];
         let maxAppartment = program.apartments[0];
         program.apartments.map(appartment => {
@@ -177,13 +177,13 @@ export default class TaxLib {
     }
 
     static getPinelOMInvestment(taxAmount) {
-        const investment = Math.round(taxAmount * 26.08);
-        const maxInvestment = Math.round(Const.MAX_LAW.PINEL_OUTREMER * 26.08);
+        const investment = Math.ceil(taxAmount * Const.FACTOR.PINEL_OUTREMER);
+        const maxInvestment = Math.ceil(Const.MAX_LAW.PINEL_OUTREMER * Const.FACTOR.PINEL_OUTREMER);
         return investment > maxInvestment ? maxInvestment : investment;
     }
 
     static getPinelOMTaxByInvestment(investment) {
-        const taxAmount = Math.round(investment / 26.08);
+        const taxAmount = Math.ceil(investment / Const.FACTOR.PINEL_OUTREMER);
         return taxAmount > Const.MAX_LAW.PINEL_OUTREMER ? Const.MAX_LAW.PINEL_OUTREMER : taxAmount;
     }
 
@@ -219,7 +219,7 @@ export default class TaxLib {
 
     static getMalrauxPrograms(malraux, taxAmount) {
         const malrauxAmount = this.getMalrauxInvestment(taxAmount);
-        const maxMalrauxAmount = malrauxAmount + ((Const.PERCENT / 100) * malrauxAmount);
+        const maxMalrauxAmount = malrauxAmount + ((Const.PERCENT_MMH / 100) * malrauxAmount);
         let malrauxMaxProgram = malraux.programs[0];
         let malrauxMaxAppartment = malrauxMaxProgram.apartments[0];
         let programs = [];
@@ -246,8 +246,46 @@ export default class TaxLib {
         return programs.length === 0 ? [malrauxMaxProgram] : programs;
     }
 
+    static getMalrauxNearPrograms(malraux, investment) {
+        let programs = [];
+        let isAlreadyIn = false;
+        console.log(investment);
+        malraux.programs.map(program => {
+            isAlreadyIn = false;
+            program.apartments.map(appartment => {
+                if (isAlreadyIn === false && investment <= appartment.price && appartment.price <= (investment + (investment * 0.2))) {
+                    if (programs.length < 4) {
+                        programs.push(program);
+                        isAlreadyIn = true;
+                    }
+                }
+            })
+        });
+        return programs.length === 0 ? [malraux.programs[0]] : programs;
+    }
+
+    static getMalrauxNearAmount(programs, investment) {
+        console.log(programs);
+        let appartment = programs[0].apartments[0];
+        programs.map(program => {
+            program.apartments.map(appart => {
+                if (investment <= appart.price && appart.price <= (investment + (investment * 0.2))) {
+                    if (investment <= appartment.price && appartment.price <= (investment + (investment * 0.2))) {
+                        if (appart.price <= appartment.price || appart.work >= appartment.work) {
+                            appartment = appart;
+                        }
+                    } else {
+                        appartment = appart;
+                    }
+                }
+            });
+        });
+        console.log(appartment);
+        return appartment;
+    }
+
     static getMalrauxAppartment(program, investment) {
-        const maxMalrauxAmount = investment + ((Const.PERCENT / 100) * investment);
+        const maxMalrauxAmount = investment + ((Const.PERCENT_MMH / 100) * investment);
         let appartments = [];
         let maxAppartment = program.apartments[0];
         program.apartments.map(appartment => {
@@ -262,53 +300,91 @@ export default class TaxLib {
     }
 
     static getMalrauxHorizon(investment) {
-        const economy = investment * 0.3;
+        const economy = Math.round(investment * 0.3);
         return {
             key: '0',
             duree: '4',
             economy: economy.toString(),
-            saving: (economy / 4).toString(),
+            saving: Math.ceil(economy / 4).toString(),
         };
     }
 
     static getMalrauxInvestment(taxAmount) {
-        const investment = Math.round(taxAmount * 12);
+        const investment = Math.ceil(taxAmount * 12);
         const maxMalraux = 400000;
         return investment > maxMalraux ? maxMalraux : investment;
     }
 
     static getMalrauxTaxByInvestment(investment) {
-        const taxAmount = Math.round(investment / 12);
+        const taxAmount = Math.ceil(investment / 12);
         return taxAmount > Const.MAX_LAW.MALRAUX ? Const.MAX_LAW.MALRAUX : taxAmount;
     }
 
-    static getMalrauxFinalAmount(taxAmount, investment) {
-        const value = taxAmount - this.getMalrauxInvestment(investment);
+    static getMalrauxFinalAmount(taxAmount, investment, isFirstTime = true) {
+        const reduc = isFirstTime === true ? this.getMalrauxInvestment(investment) : this.getMalrauxTaxByInvestment(investment);
+        const value = taxAmount - reduc;
         return value < 0 ? 0 : value;
     }
 
-    static getMalraux(malrauxLaw, taxAmount) {
+    static getMalrauxObject(law, value) {
+        const appartment = this.getMalrauxNearAmount(law.programs, value);
+        return {
+            name: Const.LAW_NAME.MALRAUX,
+            description: 'Cette loi permet une réduction d’impôt\n' +
+            'Jusqu’à 120 000€ sur 4 ans. La loi Malraux est souscrite pour 9 ans',
+            investiment: value.toString(),
+            programs: law.programs,
+            horizon: this.getMalrauxHorizon(appartment.work),
+            appartment
+        }
+    }
+
+    static getMalraux(malrauxLaw, taxAmount, isFirstTime = true) {
+        let programs;
+        if (isFirstTime === true) {
+            programs = this.getMalrauxPrograms(malrauxLaw, taxAmount);
+        } else {
+            programs = this.getMalrauxNearPrograms(malrauxLaw, taxAmount);
+        }
+        if (programs.length > 0) {
+            let appartment;
+            if (isFirstTime === true) {
+                 appartment = this.getMalrauxAppartment(programs[0], this.getMalrauxInvestment(taxAmount));
+            } else {
+                appartment = this.getMalrauxNearAmount(programs, taxAmount)
+            }
+            return {
+                name: Const.LAW_NAME.MALRAUX,
+                description: 'Cette loi permet une réduction d’impôt\n' +
+                'Jusqu’à 120 000€ sur 4 ans. La loi Malraux est souscrite pour 9 ans',
+                investiment: appartment.price.toString(),
+                programs,
+                horizon: this.getMalrauxHorizon(appartment.work),
+                appartment
+            }
+        }
         const investment = this.getMalrauxInvestment(taxAmount);
         return {
             name: Const.LAW_NAME.MALRAUX,
             description: 'Cette loi permet une réduction d’impôt\n' +
             'Jusqu’à 120 000€ sur 4 ans. La loi Malraux est souscrite pour 9 ans',
             investiment: investment.toString(),
-            programs: this.getMalrauxPrograms(malrauxLaw, taxAmount),
+            programs,
             horizon: this.getMalrauxHorizon(investment)
         }
     }
 
     static getMalrauxActionSheetValue(investment) {
-        return [
-            150000,
+        let actionSheetValues = [
             200000,
             250000,
             300000,
             350000,
             400000,
-            investment
-        ];
+            450000,
+        ].filter(inv => inv !== investment);
+        actionSheetValues.push(investment);
+        return actionSheetValues;
     }
 
     // Monument historique
@@ -375,7 +451,7 @@ export default class TaxLib {
 
     static getMHPrograms(mh, taxAmount) {
         const mhAmount = this.getMHInvestment(taxAmount);
-        const maxMHAmount = mhAmount + ((Const.PERCENT / 100) * mhAmount);
+        const maxMHAmount = mhAmount + ((Const.PERCENT_MMH / 100) * mhAmount);
         let mhMaxProgram = mh.programs[0];
         let mhMaxAppartment = mhMaxProgram.apartments[0];
         let programs = [];
@@ -402,7 +478,7 @@ export default class TaxLib {
     }
 
     static getMHAppartment(program, investment) {
-        const maxMHAmount = investment + ((Const.PERCENT / 100) * investment);
+        const maxMHAmount = investment + ((Const.PERCENT_MMH / 100) * investment);
         let appartments = [];
         let maxAppartment = program.apartments[0];
         program.apartments.map(appartment => {
@@ -420,18 +496,18 @@ export default class TaxLib {
         const economy = investment * 0.41;
         return {
             key: '0',
-            duree: '1',
-            economy: Math.round(economy).toString(),
-            saving: Math.round(economy).toString(),
+            duree: '15',
+            economy: Math.ceil(economy / 15 / 10 * 10).toString(),
+            saving: Math.ceil(economy / 15 / 10 * 10).toString(),
         };
     }
 
     static getMHInvestment(taxAmount) {
-        return Math.round(taxAmount * this.getFactorMHFromTax(taxAmount));
+        return Math.ceil(taxAmount * this.getFactorMHFromTax(taxAmount));
     }
 
     static getMHTaxByInvestment(investment) {
-        return Math.round(investment / this.getFactorMHFromWork(investment));
+        return Math.ceil(investment / this.getFactorMHFromWork(investment));
     }
 
     static getMHFinalAmount(taxAmount, investment) {
@@ -520,7 +596,7 @@ export default class TaxLib {
                   value = this.getPinelOMFinalAmount(taxAmount, parseInt(law.investiment));
                   break;
               case Const.LAW_NAME.MALRAUX:
-                  value = this.getMalrauxFinalAmount(taxAmount, parseInt(law.investiment));
+                  value = this.getMalrauxFinalAmount(taxAmount, law.appartment.work, false);
                   break;
               case Const.LAW_NAME.MONUMENT_HISTORIQUE:
                   value = this.getMHFinalAmount(taxAmount, parseInt(law.investiment));
@@ -570,7 +646,7 @@ export default class TaxLib {
             case Const.LAW_NAME.PINEL_OUTREMER:
                 return this.getPinelOMAppartment(program, investment);
             case Const.LAW_NAME.MALRAUX:
-                return this.getMalrauxAppartment(program, investment);
+                return this.getMalrauxNearAmount([program], investment);
             case Const.LAW_NAME.MONUMENT_HISTORIQUE:
                 return this.getMHAppartment(program, investment);
             default:
@@ -579,17 +655,17 @@ export default class TaxLib {
     }
 
     static getRandomArbitrary(min, max) {
-        return Math.round( Math.random() * (max - min) + min );
+        return Math.ceil( Math.random() * (max - min) + min );
     }
 
     static getGain(investiment) {
         const minus = parseInt(investiment) * 0.6;
-        return Math.round(investiment - minus).toString();
+        return Math.ceil(investiment - minus).toString();
     }
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
-        const gainPerMonth = Math.round(gain / (duree * 12));
-        const backMoney = Math.round((investment + (investment * 0.3)) / 240);
+        const gainPerMonth = Math.ceil(gain / (duree * 12));
+        const backMoney = Math.ceil((investment + (investment * 0.3)) / 240);
         return (backMoney - rent - gainPerMonth).toString();
     }
 
@@ -606,17 +682,6 @@ export default class TaxLib {
             i = i + 1;
         }
         return this.reverseString(numberFormated);
-    }
-
-    static getAppartmentValue(appartment, lawName) {
-        switch (lawName) {
-            case Const.LAW_NAME.MALRAUX:
-                return appartment.work;
-            case Const.LAW_NAME.MONUMENT_HISTORIQUE:
-                return appartment.work;
-            default:
-                return appartment.price;
-        }
     }
 
     // STR

@@ -32,7 +32,7 @@ export default class Home extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-          ir: '20000',
+          ir: '',
           is: '',
           bf: '',
           taxConcern: Const.TAX.IR,
@@ -50,6 +50,8 @@ export default class Home extends React.Component {
       this.handleISText = this.handleISText.bind(this);
       this.handleBFText = this.handleBFText.bind(this);
       this.handleNbText = this.handleNbText.bind(this);
+
+      TaxLib.getMalrauxNearAmount(TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX, 20000).programs, 400000);
   }
 
   returnButtonColor() : String {

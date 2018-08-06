@@ -49,7 +49,10 @@ export default class Law extends React.Component {
         super(props);
 
         const { law } = this.props.navigation.state.params;
-        const investiment = law.investiment.toString();
+        let investiment = law.investiment.toString();
+        if (law.name === Const.LAW_NAME.MALRAUX) {
+            investiment = law.appartment.price.toString();
+        }
         this.state = {
             epargne: "",
             programs: this.props.navigation.state.params.law.programs,
@@ -68,7 +71,12 @@ export default class Law extends React.Component {
 
     handleClickActionSheet(value) {
         const { law, basicLaws } = this.props.navigation.state.params;
-        let finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, parseInt(value)));
+        let finalLaw;
+        if (law.name === Const.LAW_NAME.MALRAUX) {
+            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MALRAUX), value, false), value);
+        } else {
+            finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, parseInt(value)));
+        }
         this.setState({
             programs: finalLaw.programs,
             value,

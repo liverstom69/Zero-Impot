@@ -9,6 +9,7 @@ import SavingResult from "../components/saving/SavingResult";
 import LawItem from "../components/law/LawItem";
 import TaxLib from "../lib/TaxLib";
 import AlertLib from "../lib/AlertLib";
+import Const from "../config/Const";
 let moment = require('moment');
 
 export default class Result extends React.Component {
@@ -58,9 +59,14 @@ export default class Result extends React.Component {
         let isUpdate = false;
         let laws = this.state.laws.map(law => {
             if (law.name === name && parseInt(law.investiment) !== value) {
-                law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
-                    name,
-                    TaxLib.getTaxByInvestmentByLaw(name, value));
+                if (law.name === Const.LAW_NAME.MALRAUX) {
+                    law = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, Const.LAW_NAME.MALRAUX), value, false), value);
+                } else {
+                    law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
+                        name,
+                        TaxLib.getTaxByInvestmentByLaw(name, value));
+                }
+                console.log(law);
                 isUpdate = true;
             }
             return law;
@@ -100,7 +106,7 @@ export default class Result extends React.Component {
           <SavingResult
             image={images.smiley}
             value={TaxLib.getTaxMinByLaw(this.state.laws, taxAmount).toString()}
-            text={I18n.t('translation.taxYear').concat(moment().format("YYYY"))}
+            text={I18n.t('translation.taxYear').concat(moment().add(1, "year").format("YYYY"))}
           />
         </View>
         <FlatList

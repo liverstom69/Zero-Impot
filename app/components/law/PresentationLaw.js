@@ -79,9 +79,6 @@ export default class PresentationLaw extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={presentationStyle.textView}>
-                        <Text style={[styles.smallTextMedium, styles.blueColor]}>{I18n.t('translation.zeroApport')}</Text>
-                    </View>
                 </View>
                 <Text style={[styles.smallTextRegular, styles.greyColor2]}>{I18n.t('translation.investiment')}</Text>
                 <View style={styles.container}>

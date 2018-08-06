@@ -18,7 +18,7 @@ export default class SavingResult extends React.Component {
   render() {
     return (
       <View style={[styles.alignCenter, Platform.OS === "android" ? savingStyle.viewAndroid : savingStyle.view]}>
-        <View style={styles.halfSpace}/>
+          <View style={styles.tinySpace}/>
         {this.props.image !== undefined &&
         <View>
           <Image
@@ -45,7 +45,7 @@ export default class SavingResult extends React.Component {
                   </TouchableOpacity>
               )}
           </View>
-        <View style={styles.halfSpace}/>
+        <View style={styles.tinySpace}/>
       </View>
     )
   }
@@ -53,12 +53,12 @@ export default class SavingResult extends React.Component {
 
 const savingStyle = StyleSheet.create({
     viewAndroid: {
-        paddingVertical: 10,
+        paddingVertical: 7.5,
         backgroundColor: "white",
         elevation: 5,
     },
   view: {
-    paddingVertical: 10,
+    paddingVertical: 7.5,
     shadowOpacity: 5,
     shadowRadius: 5,
     shadowColor: Const.COLOR.GREY2,
@@ -68,7 +68,7 @@ const savingStyle = StyleSheet.create({
     zIndex: 10
   },
   value: {
-    fontSize: 38,
+    fontSize: 30,
     fontFamily: 'Catamaran-Medium',
     color: Const.COLOR.BLUE,
   },

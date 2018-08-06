@@ -23,11 +23,17 @@ const Const = {
         MALRAUX: "Malraux",
         MONUMENT_HISTORIQUE: "Monument historique",
     },
-    PERCENT: 20,
+    PERCENT_PINEL: 20,
+    PERCENT_MMH: 20,
     MAX_LAW: {
         PINEL: 6000,
         PINEL_OUTREMER: 11500,
         MALRAUX: 30000,
+    },
+    FACTOR: {
+        PINEL: 50,
+        PINEL_OUTREMER: 26.0869565,
+        MALRAUX: 12,
     }
 };
 
