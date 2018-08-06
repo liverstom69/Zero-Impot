@@ -14,7 +14,6 @@ export default class LawItem extends React.Component {
         super(props);
 
         this.handleClickAS = this.handleClickAS.bind(this);
-        console.log(this.props);
     }
 
     handleClickAS(name, value) { this.props.onPressActionSheet(name, value) }

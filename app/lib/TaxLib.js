@@ -192,15 +192,23 @@ export default class TaxLib {
          return value < 0 ? 0 : value;
     }
 
-    static getPinelOM(pinelOMLaw, taxAmount) {
-        const investment = this.getPinelOMInvestment(taxAmount);
+    static getPinelOM(pinelOMLaw, taxAmount, isFirstTime = true) {
+        let investment;
+        let finalAmount;
+        if (isFirstTime === true) {
+            investment = this.getPinelOMInvestment(taxAmount);
+             finalAmount = taxAmount;
+        } else {
+            investment = taxAmount;
+            finalAmount = this.getPinelOMTaxByInvestment(investment);
+        }
         return {
             name: Const.LAW_NAME.PINEL_OUTREMER,
             description: 'Ex pour 9 ans\n' +
             'Cette loi permet une réduction d’impôt\n' +
             'De 29% sur 9 ans. La loi Pinel Outremer peut être souscrite pour 6, 9 ou 12ans',
             investiment: investment.toString(),
-            programs: this.getPinelOutremerPrograms(pinelOMLaw, taxAmount),
+            programs: this.getPinelOutremerPrograms(pinelOMLaw, finalAmount),
             horizon: this.getPinelOMHorizon(investment)
         }
     }
@@ -265,7 +273,6 @@ export default class TaxLib {
     }
 
     static getMalrauxNearAmount(programs, investment) {
-        console.log(programs);
         let appartment = programs[0].apartments[0];
         programs.map(program => {
             program.apartments.map(appart => {
@@ -280,7 +287,6 @@ export default class TaxLib {
                 }
             });
         });
-        console.log(appartment);
         return appartment;
     }
 
@@ -382,6 +388,7 @@ export default class TaxLib {
             350000,
             400000,
             450000,
+            500000,
         ].filter(inv => inv !== investment);
         actionSheetValues.push(investment);
         return actionSheetValues;
@@ -497,17 +504,19 @@ export default class TaxLib {
         return {
             key: '0',
             duree: '15',
-            economy: Math.ceil(economy / 15 / 10 * 10).toString(),
-            saving: Math.ceil(economy / 15 / 10 * 10).toString(),
+            economy: Math.ceil(economy).toString(),
+            saving: Math.ceil(economy).toString(),
         };
     }
 
     static getMHInvestment(taxAmount) {
-        return Math.ceil(taxAmount * this.getFactorMHFromTax(taxAmount));
+        const investment = taxAmount * this.getFactorMHFromTax(taxAmount);
+        return Math.ceil(investment + investment * 0.36);
     }
 
     static getMHTaxByInvestment(investment) {
-        return Math.ceil(investment / this.getFactorMHFromWork(investment));
+        const finalInvestment = investment - investment * 0.36;
+        return Math.ceil(finalInvestment / this.getFactorMHFromWork(finalInvestment));
     }
 
     static getMHFinalAmount(taxAmount, investment) {
@@ -515,20 +524,28 @@ export default class TaxLib {
         return value < 0 ? 0 : value;
     }
 
-    static getMH(mhLaw, taxAmount) {
-        const investment = this.getMHInvestment(taxAmount);
+    static getMH(mhLaw, taxAmount, isFirstTime = true) {
+        let investment;
+        let value;
+        if (isFirstTime === true) {
+            investment = this.getMHInvestment(taxAmount);
+            value = taxAmount;
+        } else {
+            investment = taxAmount;
+            value = this.getMHTaxByInvestment(taxAmount);
+        }
         return {
             name: Const.LAW_NAME.MONUMENT_HISTORIQUE,
             description: 'Cette loi permet une réduction d’impôt\n' +
             'sans limite. Le régime Monument historique est souscrit pour 15 ans',
             investiment: investment.toString(),
-            programs: this.getMHPrograms(mhLaw, taxAmount),
+            programs: this.getMHPrograms(mhLaw, value),
             horizon: this.getMHHorizon(investment)
         }
     }
 
     static getMHActionSheetValue(investment) {
-        return [
+        let actionSheetValues = [
             150000,
             200000,
             250000,
@@ -541,6 +558,15 @@ export default class TaxLib {
             600000,
             investment
         ];
+        let isAlreadySorted = false;
+        while (isAlreadySorted === false) {
+            isAlreadySorted = true;
+            if (actionSheetValues !== actionSheetValues.sort((a, b) => a < b)) {
+                actionSheetValues = actionSheetValues.sort((a, b) => a < b);
+                isAlreadySorted = false;
+            }
+        }
+        return actionSheetValues;
     }
 
     // Communs
@@ -562,7 +588,7 @@ export default class TaxLib {
           default:
               break;
       }
-        values.sort((a, b) => a < b).filter( this.onlyUnique );
+        values = values.sort((a, b) => a < b).filter( this.onlyUnique );
         return values.map(value => {
             return this.returnNumberFormat(value.toString());
         });

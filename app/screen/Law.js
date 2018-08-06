@@ -74,6 +74,10 @@ export default class Law extends React.Component {
         let finalLaw;
         if (law.name === Const.LAW_NAME.MALRAUX) {
             finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MALRAUX), value, false), value);
+        } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
+            finalLaw = TaxLib.getMH(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE), value, false);
+        } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
+            finalLaw = TaxLib.getPinelOM(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.PINEL_OUTREMER), value, false);
         } else {
             finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, parseInt(value)));
         }

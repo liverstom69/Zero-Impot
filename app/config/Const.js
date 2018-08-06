@@ -32,7 +32,7 @@ const Const = {
     },
     FACTOR: {
         PINEL: 50,
-        PINEL_OUTREMER: 26.0869565,
+        PINEL_OUTREMER: 26.0869565217,
         MALRAUX: 12,
     }
 };
