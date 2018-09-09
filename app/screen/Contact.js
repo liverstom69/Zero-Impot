@@ -39,7 +39,7 @@ export default class Contact extends React.Component {
             },
             {
                 title: "Montant de l'opération",
-                value: price === -1 ? I18n.t("translation.resumeNotDefined") : price.toString(),
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(price.toString()),
                 subTitles: [],
             },
             {

@@ -60,14 +60,16 @@ export default class TaxLib {
       let appartments = [];
       let maxAppartment = program.apartments[0];
       program.apartments.map(appartment => {
-          if (appartment.price > maxAppartment) {
-              maxAppartment = appartment;
+          if (appartment.price >= investment) {
+              if (appartment.price <= maxAppartment.price || maxAppartment.price < investment) {
+                  maxAppartment = appartment;
+              }
           }
           if (appartment.price >= investment && appartment.price <= maxPinelAmount) {
               appartments.push(appartment)
           }
       });
-      return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+      return maxAppartment;
   }
 
   static getPinelHorizon(investment) {
@@ -156,14 +158,14 @@ export default class TaxLib {
         let appartments = [];
         let maxAppartment = program.apartments[0];
         program.apartments.map(appartment => {
-            if (appartment.price > maxAppartment) {
+            if (appartment.price <= maxAppartment.price || maxAppartment.price < investment) {
                 maxAppartment = appartment;
             }
             if (appartment.price >= investment && appartment.price <= maxPinelOM) {
                 appartments.push(appartment)
             }
         });
-        return appartments.length === 0 ? maxAppartment : appartments[this.getRandomArbitrary(0, appartments.length - 1)];
+        return maxAppartment;
     }
 
     static getPinelOMHorizon(investment) {
@@ -309,9 +311,9 @@ export default class TaxLib {
         const economy = Math.round(investment * 0.3);
         return {
             key: '0',
-            duree: '4',
+            duree: '9',
             economy: economy.toString(),
-            saving: Math.ceil(economy / 4).toString(),
+            saving: Math.ceil(economy / 9).toString(),
         };
     }
 

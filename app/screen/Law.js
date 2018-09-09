@@ -72,14 +72,15 @@ export default class Law extends React.Component {
     handleClickActionSheet(value) {
         const { law, basicLaws } = this.props.navigation.state.params;
         let finalLaw;
+        let intValue = parseInt(value);
         if (law.name === Const.LAW_NAME.MALRAUX) {
-            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MALRAUX), value, false), value);
+            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MALRAUX), intValue, false), intValue);
         } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
-            finalLaw = TaxLib.getMH(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE), value, false);
+            finalLaw = TaxLib.getMH(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE), intValue, false);
         } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
-            finalLaw = TaxLib.getPinelOM(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.PINEL_OUTREMER), value, false);
+            finalLaw = TaxLib.getPinelOM(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.PINEL_OUTREMER), intValue, false);
         } else {
-            finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, parseInt(value)));
+            finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, intValue));
         }
         this.setState({
             programs: finalLaw.programs,
