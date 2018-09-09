@@ -137,12 +137,12 @@ export default class Home extends React.Component {
                     this.setState({ ir: carac.concat(ir) });
                     i = i + 1;
                 }
-            }, 3000 / (finalWidth * 1.1 / irLength));
+            }, 2000 / (finalWidth * 1.1 / irLength));
             Animated.timing(
                 this.state.leftPacmanPosition,
                 {
                     toValue: finalWidth,
-                    duration: 3000,
+                    duration: 2000,
                     easing: Easing.linear,
                 }
             ).start(() => {

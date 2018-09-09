@@ -85,11 +85,11 @@ export default class Contact extends React.Component {
             "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
             "Récapitulatif\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
-            "Economie d'impôt:" + this.state.data[1].value + "\n" +
+            "Economie d'impôt: " + this.state.data[1].value + "\n" +
             "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
             "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
-            "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
+            "Ville/Programme choisi: " + this.state.data[5].value + "\n\n\n" +
             "Commentaire: \n" + this.state.comment + "\n" +
             "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
             "Zero Impôt"
@@ -100,11 +100,11 @@ export default class Contact extends React.Component {
         Communications.textWithoutEncoding("0661233060",
             "Bonjour Zero Impôt,\n\n\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
-            "Economie d'impôt:" + this.state.data[1].value + "\n" +
+            "Economie d'impôt: " + this.state.data[1].value + "\n" +
             "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
             "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
-            "Ville/Programme choisi" + this.state.data[5].value + "\n\n\n" +
+            "Ville/Programme choisi: " + this.state.data[5].value + "\n\n\n" +
             "Commentaire: \n" + this.state.comment + "\n" +
             "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
             "Zero Impôt"

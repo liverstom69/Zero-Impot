@@ -698,6 +698,7 @@ export default class TaxLib {
     static returnNumberFormat(number: string) {
         let i = 0;
         let numberFormated = "";
+        if (number.length <= 4) { return number }
         number = this.reverseString(number);
         while (i < number.length) {
             if (i > 0 && i % 3 === 0) {
