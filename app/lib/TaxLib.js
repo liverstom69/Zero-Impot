@@ -5,6 +5,8 @@ import I18n from 'ex-react-native-i18n';
 import AlertLib from './AlertLib';
 import Const from "../config/Const";
 
+const numberOfElement = 3;
+
 export default class TaxLib {
     static onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -42,7 +44,7 @@ export default class TaxLib {
                   maxAppartment = appartment;
                   pinelMaxProgram = program;
               }
-              if (programs.length < 4) {
+              if (programs.length < numberOfElement) {
                   if (isAlreadyIn === false &&
                       appartment.price >= minPinelAmount &&
                       appartment.price <= maxPinelAmount) {
@@ -140,7 +142,7 @@ export default class TaxLib {
                   pinelMaxAppartment = appartment;
                   pinelOMMaxProgram = program;
               }
-              if (programs.length < 4) {
+              if (programs.length < numberOfElement) {
                   if (isAlreadyIn === false &&
                       appartment.price >= minPinelOMAmount &&
                       appartment.price <= maxPinelOMAmount) {
@@ -169,12 +171,12 @@ export default class TaxLib {
     }
 
     static getPinelOMHorizon(investment) {
-        const economy = Math.round(investment * 0.23);
+        const economy = Math.round(investment * 0.29);
         return {
             key: '0',
-            duree: '6',
+            duree: '9',
             economy: economy.toString(),
-            saving: Math.round(economy / 6).toString(),
+            saving: Math.round(economy / 9).toString(),
         };
     }
 
@@ -199,7 +201,7 @@ export default class TaxLib {
         let finalAmount;
         if (isFirstTime === true) {
             investment = this.getPinelOMInvestment(taxAmount);
-             finalAmount = taxAmount;
+            finalAmount = taxAmount;
         } else {
             investment = taxAmount;
             finalAmount = this.getPinelOMTaxByInvestment(investment);
@@ -243,7 +245,7 @@ export default class TaxLib {
                     malrauxMaxProgram = program;
                     malrauxMaxAppartment = appartment;
                 }
-                if (program.length < 4) {
+                if (program.length < numberOfElement) {
                     if (isAlreadyIn === false &&
                         appartment.work >= malrauxAmount &&
                         appartment.work <= maxMalrauxAmount) {
@@ -264,7 +266,7 @@ export default class TaxLib {
             isAlreadyIn = false;
             program.apartments.map(appartment => {
                 if (isAlreadyIn === false && investment <= appartment.price && appartment.price <= (investment + (investment * 0.2))) {
-                    if (programs.length < 4) {
+                    if (programs.length < numberOfElement) {
                         programs.push(program);
                         isAlreadyIn = true;
                     }
@@ -350,7 +352,7 @@ export default class TaxLib {
     static getMalraux(malrauxLaw, taxAmount, isFirstTime = true) {
         let programs;
         if (isFirstTime === true) {
-            programs = this.getMalrauxPrograms(malrauxLaw, taxAmount);
+            programs = this.getMalrauxNearPrograms(malrauxLaw, taxAmount);
         } else {
             programs = this.getMalrauxNearPrograms(malrauxLaw, taxAmount);
         }
@@ -473,7 +475,7 @@ export default class TaxLib {
                     mhMaxProgram = program;
                     mhMaxAppartment = appartment;
                 }
-                if (program.length < 4) {
+                if (program.length < numberOfElement) {
                     if (isAlreadyIn === false &&
                         appartment.work >= mhAmount &&
                         appartment.work <= maxMHAmount) {
@@ -688,19 +690,37 @@ export default class TaxLib {
 
     static getGain(investiment) {
         const minus = parseInt(investiment) * 0.6;
-        return Math.ceil(investiment - minus).toString();
+        console.log("***GAIN***");
+        console.log("invest", investiment);
+        console.log("minus", minus);
+        console.log("***");
+        const gain = investiment - minus;
+        const finalGain = gain - gain * 0.1;
+        return Math.ceil(finalGain).toString();
     }
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
+        console.log("***");
+        console.log("rent", rent);
+        console.log("investment", investment);
+        console.log("Montant d'impot", taxAmount);
+        console.log("Gain", gain);
+        console.log("Duree", duree);
         const gainPerMonth = Math.ceil(gain / (duree * 12));
+        console.log("Gain par mois", gainPerMonth);
         const backMoney = Math.ceil((investment + (investment * 0.3)) / 240);
-        return (backMoney - rent - gainPerMonth).toString();
+        console.log("Remboursement", backMoney);
+        console.log("Epargne", backMoney - rent - gainPerMonth);
+        console.log("***");
+        let epargne = backMoney - rent - gainPerMonth;
+        const finalEpargne = epargne + epargne * 0.2;
+        return Math.ceil(finalEpargne).toString();
     }
 
     static returnNumberFormat(number: string) {
         let i = 0;
         let numberFormated = "";
-        if (number.length <= 4) { return number }
+        if (number.length <= numberOfElement) { return number }
         number = this.reverseString(number);
         while (i < number.length) {
             if (i > 0 && i % 3 === 0) {

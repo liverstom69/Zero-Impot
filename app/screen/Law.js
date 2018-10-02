@@ -54,6 +54,7 @@ export default class Law extends React.Component {
             investiment = law.appartment.price.toString();
         }
         this.state = {
+            law,
             epargne: "",
             programs: this.props.navigation.state.params.law.programs,
             value: investiment,
@@ -83,9 +84,10 @@ export default class Law extends React.Component {
             finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, intValue));
         }
         this.setState({
+            law: finalLaw,
             programs: finalLaw.programs,
             value,
-            gain: TaxLib.getGain(value),
+            gain: TaxLib.getGain(finalLaw.investiment),
         });
     }
 
@@ -97,7 +99,9 @@ export default class Law extends React.Component {
     handleEpargne(epargne) { this.setState({ epargne }) }
 
     render() {
-        const { law, taxAmount } = this.props.navigation.state.params;
+        const { taxAmount } = this.props.navigation.state.params;
+        console.log(this.props.navigation.state.params);
+        const { law } = this.state;
         const actionSheetValues = TaxLib.getActionSheetByLaw(
             law.name,
             TaxLib.getInvestmentByLaw(law.name, taxAmount))
@@ -150,7 +154,13 @@ export default class Law extends React.Component {
                     </View>
                 </View>
                 <FlatList
-                    data={this.state.programs}
+                    data={this.state.programs.sort((a, b) => {
+                        const appartmentA = TaxLib.getAppartmentByLaw(law.name, a, TaxLib.getInvestmentByLaw(law.name, taxAmount));
+                        const appartmentB = TaxLib.getAppartmentByLaw(law.name, b, TaxLib.getInvestmentByLaw(law.name, taxAmount));
+                        const epargneA = TaxLib.getEpargne(appartmentB.rent, appartmentA.price, taxAmount, law.horizon.economy, law.horizon.duree);
+                        const epargneB = TaxLib.getEpargne(appartmentB.rent, appartmentB.price, taxAmount, law.horizon.economy, law.horizon.duree);
+                        return epargneA < epargneB;
+                    })}
                     renderItem={({ item }) => (
                         <ProgramItem
                             navigate={this.props.navigation.navigate}

@@ -11,8 +11,8 @@ export default class EconomyLaw extends React.Component {
   render() {
     return (
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
-          {this.props.name === Const.LAW_NAME.MONUMENT_HISTORIQUE && <Text style={[styles.textMedium, styles.blackColor]}>{TaxLib.returnNumberFormat(this.props.economy.economy)}€</Text>}
-          {this.props.name !== Const.LAW_NAME.MALRAUX && this.props.name !== Const.LAW_NAME.MONUMENT_HISTORIQUE && <Text style={[styles.textMedium, styles.blackColor]}>{TaxLib.returnNumberFormat(this.props.economy.saving)}€ / {I18n.t('translation.year')}</Text>}
+          {(this.props.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) && <Text style={[styles.textMedium, styles.blackColor]}>{TaxLib.returnNumberFormat(this.props.economy.economy)}€</Text>}
+          {this.props.name !== Const.LAW_NAME.MALRAUX && this.props.name !== Const.LAW_NAME.MONUMENT_HISTORIQUE && this.props.name !== Const.LAW_NAME.PINEL_OUTREMER && <Text style={[styles.textMedium, styles.blackColor]}>{TaxLib.returnNumberFormat(this.props.economy.saving)}€ / {I18n.t('translation.year')}</Text>}
           {this.props.name !== Const.LAW_NAME.MONUMENT_HISTORIQUE && <Text style={[styles.textMedium, styles.blackColor]}>{I18n.t('translation.on')} {this.props.economy.duree} {I18n.t('translation.years')} {TaxLib.returnNumberFormat(this.props.economy.economy)}€</Text>}
       </View>
     )

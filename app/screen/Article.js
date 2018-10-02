@@ -42,7 +42,7 @@ const data = [
         subTitles: [],
     },
     {
-        title: "Gain à ".concat("6", " ans"),
+        title: "Capital à ".concat("6", " ans"),
         value: "160000",
         subTitles: [],
     }

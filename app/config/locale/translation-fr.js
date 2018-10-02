@@ -71,7 +71,7 @@ const translation = {
     articleConservator: "Conservation 6 ans minimum",
     articleEconomy: "Economie d'impôt",
     articleRent: "Revenu locatif",
-    articleGain: "Gain à ",
+    articleGain: "Capital à ",
     articleDef: "* L'article 217 duodecies vous permet de déduire 100% de la valeur du bien de votre résultat net imposable",
     articleOperation: "Opération financée à 100% sans apport",
     //Resume

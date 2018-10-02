@@ -25,6 +25,7 @@ export default class ProgramItem extends React.Component {
 
     render() {
         const appartment = TaxLib.getAppartmentByLaw(this.props.law.name, this.props.program, this.props.investiment);
+        console.log(this.props.program.city);
         const epargne = TaxLib.getEpargne(appartment.rent, appartment.price, this.props.taxAmount, this.props.economy, this.props.law.horizon.duree);
         return (
             <View>
@@ -41,7 +42,7 @@ export default class ProgramItem extends React.Component {
                             price: appartment.price,
                             taxAmount: this.props.taxAmount,
                             epargne,
-                            gain: this.props.gain,
+                            gain: TaxLib.getGain(appartment.price),
                         })}>
                         <View style={[styles.containerSpacing, styles.alignCenter, { paddingTop: 10, paddingBottom: 5 }]}>
                             <View style={elemStyle.viewTitle}>

@@ -17,6 +17,8 @@ const width = Dimensions.get("window").width;
 
 let laws = TaxLib.getTaxLib();
 
+const duration = 1500;
+
 export default class Home extends React.Component {
   state: {
       ir: String,
@@ -52,6 +54,7 @@ export default class Home extends React.Component {
       this.handleNbText = this.handleNbText.bind(this);
 
       TaxLib.getMalrauxNearAmount(TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX, 20000).programs, 400000);
+      console.log(TaxLib.getProgramFromLaw(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX));
   }
 
   returnButtonColor() : String {
@@ -140,12 +143,12 @@ export default class Home extends React.Component {
                   this.setState({ ir: carac.concat(ir) });
                   i = i + 1;
               }
-          }, 2000 / (finalWidth * 1.1 / irLength));
+          }, duration / (finalWidth * 1.1 / irLength));
           Animated.timing(
               this.state.leftPacmanPosition,
               {
                   toValue: finalWidth,
-                  duration: 2000,
+                  duration: duration,
                   easing: Easing.linear,
               }
           ).start(() => {

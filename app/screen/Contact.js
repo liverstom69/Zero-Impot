@@ -43,7 +43,7 @@ export default class Contact extends React.Component {
                 subTitles: [],
             },
             {
-                title: "Gain à ".concat(lawDate, " ans"),
+                title: "Capital à ".concat(lawDate, " ans"),
                 value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(gain.toString()),
                 subTitles: [],
             },
@@ -86,7 +86,7 @@ export default class Contact extends React.Component {
             "Récapitulatif\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
             "Economie d'impôt: " + this.state.data[1].value + "\n" +
-            "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
+            "Capital à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
             "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
             "Ville/Programme choisi: " + this.state.data[5].value + "\n\n\n" +
@@ -101,7 +101,7 @@ export default class Contact extends React.Component {
             "Bonjour Zero Impôt,\n\n\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
             "Economie d'impôt: " + this.state.data[1].value + "\n" +
-            "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
+            "Capital à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[2].value + "\n" +
             "Apport mensuel: " + this.state.data[3].value + "\n" +
             "Dispositif fiscal: " + this.state.data[4].value + "\n" +
             "Ville/Programme choisi: " + this.state.data[5].value + "\n\n\n" +
