@@ -29,6 +29,7 @@ export default class Input extends React.Component {
         <TextInput
           keyboardType={"numeric"}
           value={this.props.value}
+          returnKeyType={"done"}
           underlineColorAndroid={"transparent"}
           onChangeText={(text) => this.props.onChangeText(text)}
           style={this.renderInputStyle()}
