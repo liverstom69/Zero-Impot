@@ -34,7 +34,7 @@ export default class Contact extends React.Component {
             },
             {
                 title: "Economie d'impôt",
-                value: TaxLib.returnNumberFormat(maxEconomy.toString()),
+                value: TaxLib.returnNumberFormat((maxEconomy * parseInt(this.props.navigation.state.params.lawDate)).toString()),
                 subTitles: [],
             },
             {
