@@ -70,7 +70,6 @@ export default class Result extends React.Component {
                         name,
                         TaxLib.getTaxByInvestmentByLaw(name, value));
                 }
-                console.log(law);
                 isUpdate = true;
             }
             return law;
