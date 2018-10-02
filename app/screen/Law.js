@@ -56,7 +56,7 @@ export default class Law extends React.Component {
         this.state = {
             law,
             epargne: "",
-            programs: this.props.navigation.state.params.law.programs,
+            programs: this.filterPrograms(this.props.navigation.state.params.law.programs.sort((a, b) => this.compare(a, b, law, parseInt(investiment)))),
             value: investiment,
             gain: TaxLib.getGain(investiment)
         };
@@ -85,7 +85,7 @@ export default class Law extends React.Component {
         }
         this.setState({
             law: finalLaw,
-            programs: finalLaw.programs,
+            programs: this.filterPrograms(finalLaw.programs.sort((a, b) => this.compare(a, b, finalLaw, intValue))),
             value,
             gain: TaxLib.getGain(finalLaw.investiment),
         });
@@ -98,6 +98,26 @@ export default class Law extends React.Component {
 
     handleEpargne(epargne) { this.setState({ epargne }) }
 
+    compare(a,b, law, investment) {
+        const { taxAmount } = this.props.navigation.state.params;
+        const appartmentA = TaxLib.getAppartmentByLaw(law.name, a, investment);
+        const appartmentB = TaxLib.getAppartmentByLaw(law.name, b, investment);
+        console.log(a.city, appartmentA.price);
+        console.log(b.city, appartmentB.price);
+        const epargneA = TaxLib.getEpargne(appartmentA.rent, appartmentA.price, taxAmount, parseInt(law.horizon.economy), law.horizon.duree);
+        const epargneB = TaxLib.getEpargne(appartmentB.rent, appartmentB.price, taxAmount, parseInt(law.horizon.economy), law.horizon.duree);
+        return parseInt(epargneA) > parseInt(epargneB);
+    }
+
+    filterPrograms(array) {
+        const maxNumber = 3;
+        let finalArray = [];
+        while (finalArray.length < maxNumber && finalArray.length < array.length) {
+            finalArray.push(array[finalArray.length]);
+        }
+        return finalArray;
+    }
+
     render() {
         const { taxAmount } = this.props.navigation.state.params;
         console.log(this.props.navigation.state.params);
@@ -106,7 +126,6 @@ export default class Law extends React.Component {
             law.name,
             TaxLib.getInvestmentByLaw(law.name, taxAmount))
             .concat([I18n.t("translation.cancel")]);
-        console.log(law);
         return (
             <KeyboardAwareScrollView style={[styles.backgroundWhite]}>
                 <View style={[styles.viewWithMarg, styles.alignCenter]}>
@@ -154,13 +173,7 @@ export default class Law extends React.Component {
                     </View>
                 </View>
                 <FlatList
-                    data={this.state.programs.sort((a, b) => {
-                        const appartmentA = TaxLib.getAppartmentByLaw(law.name, a, TaxLib.getInvestmentByLaw(law.name, taxAmount));
-                        const appartmentB = TaxLib.getAppartmentByLaw(law.name, b, TaxLib.getInvestmentByLaw(law.name, taxAmount));
-                        const epargneA = TaxLib.getEpargne(appartmentB.rent, appartmentA.price, taxAmount, law.horizon.economy, law.horizon.duree);
-                        const epargneB = TaxLib.getEpargne(appartmentB.rent, appartmentB.price, taxAmount, law.horizon.economy, law.horizon.duree);
-                        return epargneA < epargneB;
-                    })}
+                    data={this.state.programs}
                     renderItem={({ item }) => (
                         <ProgramItem
                             navigate={this.props.navigation.navigate}

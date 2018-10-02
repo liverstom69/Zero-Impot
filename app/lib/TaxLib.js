@@ -44,13 +44,11 @@ export default class TaxLib {
                   maxAppartment = appartment;
                   pinelMaxProgram = program;
               }
-              if (programs.length < numberOfElement) {
-                  if (isAlreadyIn === false &&
-                      appartment.price >= minPinelAmount &&
-                      appartment.price <= maxPinelAmount) {
-                      programs.push(program);
-                      isAlreadyIn = true
-                  }
+              if (isAlreadyIn === false &&
+                  appartment.price >= minPinelAmount &&
+                  appartment.price <= maxPinelAmount) {
+                  programs.push(program);
+                  isAlreadyIn = true
               }
           });
       });
@@ -142,13 +140,11 @@ export default class TaxLib {
                   pinelMaxAppartment = appartment;
                   pinelOMMaxProgram = program;
               }
-              if (programs.length < numberOfElement) {
-                  if (isAlreadyIn === false &&
-                      appartment.price >= minPinelOMAmount &&
-                      appartment.price <= maxPinelOMAmount) {
-                      isAlreadyIn = true;
-                      programs.push(program);
-                  }
+              if (isAlreadyIn === false &&
+                  appartment.price >= minPinelOMAmount &&
+                  appartment.price <= maxPinelOMAmount) {
+                  isAlreadyIn = true;
+                  programs.push(program);
               }
           });
       });
@@ -245,13 +241,11 @@ export default class TaxLib {
                     malrauxMaxProgram = program;
                     malrauxMaxAppartment = appartment;
                 }
-                if (program.length < numberOfElement) {
-                    if (isAlreadyIn === false &&
-                        appartment.work >= malrauxAmount &&
-                        appartment.work <= maxMalrauxAmount) {
-                        programs.push(program);
-                        isAlreadyIn = true;
-                    }
+                if (isAlreadyIn === false &&
+                    appartment.work >= malrauxAmount &&
+                    appartment.work <= maxMalrauxAmount) {
+                    programs.push(program);
+                    isAlreadyIn = true;
                 }
             });
         });
@@ -475,13 +469,11 @@ export default class TaxLib {
                     mhMaxProgram = program;
                     mhMaxAppartment = appartment;
                 }
-                if (program.length < numberOfElement) {
-                    if (isAlreadyIn === false &&
-                        appartment.work >= mhAmount &&
-                        appartment.work <= maxMHAmount) {
-                        programs.push(program);
-                        isAlreadyIn = true;
-                    }
+                if (isAlreadyIn === false &&
+                    appartment.work >= mhAmount &&
+                    appartment.work <= maxMHAmount) {
+                    programs.push(program);
+                    isAlreadyIn = true;
                 }
             });
         });
@@ -690,10 +682,10 @@ export default class TaxLib {
 
     static getGain(investiment) {
         const minus = parseInt(investiment) * 0.6;
-        console.log("***GAIN***");
+        /*console.log("***GAIN***");
         console.log("invest", investiment);
         console.log("minus", minus);
-        console.log("***");
+        console.log("***");*/
         const gain = investiment - minus;
         const finalGain = gain - gain * 0.1;
         return Math.ceil(finalGain).toString();
