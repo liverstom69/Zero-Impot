@@ -94,6 +94,9 @@ export default class Home extends React.Component {
               laws[1] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.PINEL_OUTREMER, ir);
               laws[2] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.MALRAUX, ir);
               laws[3] = TaxLib.getLawData(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE, ir);
+              if (ir > Const.MAX_LAW.MALRAUX && laws[3].programs.length === 0) {
+                  laws = [];
+              }
               laws.reverse();
               break;
           case Const.TAX.IS:

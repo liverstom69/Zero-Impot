@@ -481,7 +481,7 @@ export default class TaxLib {
                 }
             });
         });
-        return programs.length === 0 ? [mhMaxProgram] : programs;
+        return programs.length === 0 ? [] : programs;
     }
 
     static getMHAppartment(program, investment) {
