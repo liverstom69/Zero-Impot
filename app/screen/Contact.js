@@ -20,12 +20,15 @@ export default class Contact extends React.Component {
 
         const { lawName, lawDate, taxAmount, gain, epargne, city, price, appartment } = this.props.navigation.state.params;
         let economy;
-        if (lawName === Const.LAW_NAME.MALRAUX) {
+        if (lawName === Const.LAW_NAME.MALRAUX || lawName === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
             economy = TaxLib.getTaxByInvestmentByLaw(lawName, appartment.work);
         } else {
             economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
         }
-        const maxEconomy = economy < taxAmount ? economy : taxAmount;
+        let maxEconomy = economy < taxAmount ? economy : taxAmount;
+        if (lawName === Const.LAW_NAME.PINEL || lawName === Const.LAW_NAME.PINEL_OUTREMER) {
+            maxEconomy *= parseInt(lawDate);
+        }
         const data = [
             {
                 title: "Votre impôt",
@@ -34,7 +37,7 @@ export default class Contact extends React.Component {
             },
             {
                 title: "Economie d'impôt",
-                value: TaxLib.returnNumberFormat((maxEconomy * parseInt(this.props.navigation.state.params.lawDate)).toString()),
+                value: TaxLib.returnNumberFormat((maxEconomy).toString()),
                 subTitles: [],
             },
             {
@@ -137,7 +140,7 @@ export default class Contact extends React.Component {
                         multiline
                         onChangeText={text => this.handleComment(text)}
                         underlineColorAndroid={"transparent"}
-                        style={{ height: 150, borderColor: Const.COLOR.GREY2, borderWidth: 0.5, borderRadius: 5 }}
+                        style={{ textAlignVertical: "top", height: 150, borderColor: Const.COLOR.GREY2, borderWidth: 0.5, borderRadius: 5 }}
                     />
                     <View style={styles.halfSpace} />
                     <View style={styles.halfSpace} />

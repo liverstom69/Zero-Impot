@@ -345,17 +345,21 @@ export default class TaxLib {
 
     static getMalraux(malrauxLaw, taxAmount, isFirstTime = true) {
         let programs;
+        let finalTaxAmount = taxAmount;
+        if (taxAmount > Const.MAX_LAW.MALRAUX) {
+            finalTaxAmount = Const.MAX_LAW.MALRAUX;
+        }
         if (isFirstTime === true) {
-            programs = this.getMalrauxNearPrograms(malrauxLaw, taxAmount);
+            programs = this.getMalrauxPrograms(malrauxLaw, finalTaxAmount);
         } else {
-            programs = this.getMalrauxNearPrograms(malrauxLaw, taxAmount);
+            programs = this.getMalrauxNearPrograms(malrauxLaw, finalTaxAmount);
         }
         if (programs.length > 0) {
             let appartment;
             if (isFirstTime === true) {
-                 appartment = this.getMalrauxAppartment(programs[0], this.getMalrauxInvestment(taxAmount));
+                 appartment = this.getMalrauxAppartment(programs[0], this.getMalrauxInvestment(finalTaxAmount));
             } else {
-                appartment = this.getMalrauxNearAmount(programs, taxAmount)
+                appartment = this.getMalrauxNearAmount(programs, finalTaxAmount)
             }
             return {
                 name: Const.LAW_NAME.MALRAUX,
