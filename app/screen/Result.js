@@ -59,12 +59,13 @@ export default class Result extends React.Component {
         let isUpdate = false;
         let laws = this.state.laws.map(law => {
             if (law.name === name && parseInt(law.investiment) !== value) {
+                let programs = TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, law.name);
                 if (law.name === Const.LAW_NAME.MALRAUX) {
-                    law = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, Const.LAW_NAME.MALRAUX), value, false), value);
+                    law = TaxLib.getMalrauxObject(TaxLib.getMalraux(programs, TaxLib.getTaxByInvestmentByLaw(name, value), true), value);
                 } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
-                    law = TaxLib.getMH(TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE), value, false);
+                    law = TaxLib.getMH(programs, value, false);
                 } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
-                    law = TaxLib.getPinelOM(TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, Const.LAW_NAME.PINEL_OUTREMER), value, false);
+                    law = TaxLib.getPinelOM(programs, value, false);
                 } else {
                     law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
                         name,

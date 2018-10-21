@@ -24,9 +24,8 @@ export default class ProgramItem extends React.Component {
     }
 
     render() {
-        const appartment = TaxLib.getAppartmentByLaw(this.props.law.name, this.props.program, this.props.investiment);
-        console.log(this.props.program.city);
-        const epargne = TaxLib.getEpargne(appartment.rent, appartment.price, this.props.taxAmount, this.props.economy, this.props.law.horizon.duree);
+        const appartment = this.props.appartment;
+        const epargne = TaxLib.getEpargneByLaw(appartment.rent, appartment.price, this.props.taxAmount, this.props.economy, this.props.law.horizon.duree, this.props.law.name);
         return (
             <View>
                 <View style={styles.viewWithMarg}>
@@ -65,7 +64,7 @@ export default class ProgramItem extends React.Component {
 
 ProgramItem.propTypes = {
     navigate: PropTypes.func.isRequired,
-    gain: PropTypes.number.isRequired,
+    appartment: PropTypes.object.isRequired,
     taxAmount: PropTypes.number.isRequired,
     investiment: PropTypes.number.isRequired,
     economy: PropTypes.number.isRequired,

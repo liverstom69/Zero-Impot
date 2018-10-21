@@ -30,6 +30,11 @@ const Const = {
         PINEL_OUTREMER: 11500,
         MALRAUX: 30000,
     },
+    MAX_LAW_VALUE: {
+        PINEL: 300000,
+        PINEL_OUTEMER: 300000,
+        MALRAUX: 400000,
+    },
     FACTOR: {
         PINEL: 50,
         PINEL_OUTREMER: 26.0869565217,

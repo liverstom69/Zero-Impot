@@ -54,7 +54,6 @@ export default class Home extends React.Component {
       this.handleNbText = this.handleNbText.bind(this);
 
       TaxLib.getMalrauxNearAmount(TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX, 20000).programs, 400000);
-      console.log(TaxLib.getProgramFromLaw(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX));
   }
 
   returnButtonColor() : String {

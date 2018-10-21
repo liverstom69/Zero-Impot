@@ -26,9 +26,7 @@ export default class Contact extends React.Component {
             economy = TaxLib.getTaxByInvestmentByLaw(lawName, price);
         }
         let maxEconomy = economy < taxAmount ? economy : taxAmount;
-        if (lawName === Const.LAW_NAME.PINEL || lawName === Const.LAW_NAME.PINEL_OUTREMER) {
-            maxEconomy *= parseInt(lawDate);
-        }
+        console.log(TaxLib.getGlobalEconomy(lawName, appartment));
         const data = [
             {
                 title: "Votre impôt",
@@ -38,6 +36,11 @@ export default class Contact extends React.Component {
             {
                 title: "Economie d'impôt",
                 value: TaxLib.returnNumberFormat((maxEconomy).toString()),
+                subTitles: [],
+            },
+            {
+                title: "Economie globale",
+                value: TaxLib.returnNumberFormat(TaxLib.getGlobalEconomy(lawName, appartment)),
                 subTitles: [],
             },
             {

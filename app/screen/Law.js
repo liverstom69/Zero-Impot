@@ -50,15 +50,13 @@ export default class Law extends React.Component {
 
         const { law } = this.props.navigation.state.params;
         let investiment = law.investiment.toString();
-        if (law.name === Const.LAW_NAME.MALRAUX) {
-            investiment = law.appartment.price.toString();
-        }
+        console.log(law.investiment);
         this.state = {
             law,
             epargne: "",
             programs: this.filterPrograms(this.props.navigation.state.params.law.programs.sort((a, b) => this.compare(a, b, law, parseInt(investiment)))),
             value: investiment,
-            gain: TaxLib.getGain(investiment)
+            gain: TaxLib.getGain(TaxLib.getGainByLaw(law.name, law))
         };
 
         this.handleEpargne = this.handleEpargne.bind(this);
@@ -74,12 +72,13 @@ export default class Law extends React.Component {
         const { law, basicLaws } = this.props.navigation.state.params;
         let finalLaw;
         let intValue = parseInt(value);
+        let programs = TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, law.name);
         if (law.name === Const.LAW_NAME.MALRAUX) {
-            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MALRAUX), intValue, false), intValue);
+            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(programs, TaxLib.getTaxByInvestmentByLaw(law.name, intValue), true), intValue);
         } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
-            finalLaw = TaxLib.getMH(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.MONUMENT_HISTORIQUE), intValue, false);
+            finalLaw = TaxLib.getMH(programs, intValue, false);
         } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
-            finalLaw = TaxLib.getPinelOM(TaxLib.getProgramFromLaw(basicLaws, Const.LAW_NAME.PINEL_OUTREMER), intValue, false);
+            finalLaw = TaxLib.getPinelOM(programs, intValue, false);
         } else {
             finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, intValue));
         }
@@ -87,7 +86,7 @@ export default class Law extends React.Component {
             law: finalLaw,
             programs: this.filterPrograms(finalLaw.programs.sort((a, b) => this.compare(a, b, finalLaw, intValue))),
             value,
-            gain: TaxLib.getGain(finalLaw.investiment),
+            gain: TaxLib.getGain(TaxLib.getGainByLaw(finalLaw.name, finalLaw)),
         });
     }
 
@@ -102,10 +101,8 @@ export default class Law extends React.Component {
         const { taxAmount } = this.props.navigation.state.params;
         const appartmentA = TaxLib.getAppartmentByLaw(law.name, a, investment);
         const appartmentB = TaxLib.getAppartmentByLaw(law.name, b, investment);
-        console.log(a.city, appartmentA.price);
-        console.log(b.city, appartmentB.price);
-        const epargneA = TaxLib.getEpargne(appartmentA.rent, appartmentA.price, taxAmount, parseInt(law.horizon.economy), law.horizon.duree);
-        const epargneB = TaxLib.getEpargne(appartmentB.rent, appartmentB.price, taxAmount, parseInt(law.horizon.economy), law.horizon.duree);
+        const epargneA = TaxLib.getEpargneByLaw(appartmentA.rent, appartmentA.price, taxAmount, parseInt(TaxLib.getGlobalEconomy(law.name, appartmentA)), law.horizon.duree, law.name);
+        const epargneB = TaxLib.getEpargneByLaw(appartmentB.rent, appartmentB.price, taxAmount, parseInt(TaxLib.getGlobalEconomy(law.name, appartmentB)), law.horizon.duree, law.name);
         return parseInt(epargneA) > parseInt(epargneB);
     }
 
@@ -120,7 +117,6 @@ export default class Law extends React.Component {
 
     render() {
         const { taxAmount } = this.props.navigation.state.params;
-        console.log(this.props.navigation.state.params);
         const { law } = this.state;
         const actionSheetValues = TaxLib.getActionSheetByLaw(
             law.name,
@@ -174,17 +170,21 @@ export default class Law extends React.Component {
                 </View>
                 <FlatList
                     data={this.state.programs}
-                    renderItem={({ item }) => (
-                        <ProgramItem
-                            navigate={this.props.navigation.navigate}
-                            program={item}
-                            investiment={parseInt(this.state.value)}
-                            law={law}
-                            economy={parseInt(law.horizon.economy)}
-                            gain={parseInt(this.state.gain)}
-                            taxAmount={taxAmount}
-                        />
-                    )}
+                    renderItem={({ item }) => {
+                        const apartment = TaxLib.getAppartmentByLaw(law.name, item, parseInt(this.state.value));
+                        console.log(apartment);
+                        return (
+                            <ProgramItem
+                                navigate={this.props.navigation.navigate}
+                                program={item}
+                                appartment={apartment}
+                                investiment={parseInt(this.state.value)}
+                                law={law}
+                                economy={parseInt(TaxLib.getGlobalEconomy(law.name, apartment))}
+                                taxAmount={taxAmount}
+                            />
+                        )
+                    }}
                 />
                 <View style={[styles.viewWithMarg]}>
                     <View style={styles.littleSpace} />
