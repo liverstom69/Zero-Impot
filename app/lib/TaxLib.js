@@ -182,7 +182,7 @@ export default class TaxLib {
         console.log("***GAIN***");
         console.log("investiment", investiment);
         console.log("***");
-        const gain = investiment * 0.4;
+        const gain = investiment * 0.5;
         return Math.ceil(gain).toString();
     }
 
