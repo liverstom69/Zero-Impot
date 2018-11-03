@@ -3,7 +3,7 @@ import TaxLib from "./TaxLib";
 
 export default class PinelLib {
     static getPrograms(pinel, taxAmount) {
-        const pinelAmount = this.getPinelInvestment(taxAmount);
+        const pinelAmount = this.getInvestment(taxAmount);
         const minPinelAmount = pinelAmount;
         const maxPinelAmount = pinelAmount + ((Const.PERCENT_PINEL / 100) * pinelAmount);
         let pinelMaxProgram = pinel.programs[0];
@@ -96,7 +96,8 @@ export default class PinelLib {
     }
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
-        const epargne = TaxLib.getBasicEpargne(rent, investment, taxAmount, gain, duree);
-        return epargne + epargne * 0.5;
+        const adjustInvest = investment + (investment * 0.55);
+        const finalInvest = adjustInvest > Const.MAX_LAW.PINEL ? Const.MAX_LAW.PINEL : adjustInvest;
+        return TaxLib.getBasicEpargne(rent, finalInvest, taxAmount, gain, duree);
     }
 }

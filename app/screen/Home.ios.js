@@ -12,6 +12,7 @@ import ConstanceButton from '../components/public/ConstanceButton';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
 import images from "../config/images";
+import MalrauxLib from "../lib/MalrauxLib";
 
 const width = Dimensions.get("window").width;
 
@@ -53,7 +54,7 @@ export default class Home extends React.Component {
       this.handleBFText = this.handleBFText.bind(this);
       this.handleNbText = this.handleNbText.bind(this);
 
-      TaxLib.getMalrauxNearAmount(TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX, 20000).programs, 400000);
+      MalrauxLib.getNearAmount(TaxLib.getLawData(this.props.navigation.state.params.laws, Const.LAW_NAME.MALRAUX, 20000).programs, 400000);
   }
 
   returnButtonColor() : String {

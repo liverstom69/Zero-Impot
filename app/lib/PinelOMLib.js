@@ -87,7 +87,7 @@ export default class PinelOMLib {
             'Cette loi permet une réduction d’impôt\n' +
             'De 29% sur 9 ans. La loi Pinel Outremer peut être souscrite pour 6, 9 ou 12ans',
             investiment: investment.toString(),
-            programs: this.getObject(pinelOMLaw, finalAmount, isFirstTime),
+            programs: this.getPrograms(pinelOMLaw, finalAmount, isFirstTime),
             horizon: this.getHorizon(investment)
         }
     }
@@ -103,7 +103,8 @@ export default class PinelOMLib {
     }
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
-        const epargne = TaxLib.getBasicEpargne(rent, investment, taxAmount, gain, duree);
-        return epargne + epargne * 0.5;
+        const adjustInvest = investment + (investment * 0.55);
+        const finalInvest = adjustInvest > Const.MAX_LAW.PINEL ? Const.MAX_LAW.PINEL_OUTREMER : adjustInvest;
+        return TaxLib.getBasicEpargne(rent, finalInvest, taxAmount, gain, duree);
     }
 }

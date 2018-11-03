@@ -41,7 +41,7 @@ export default class ProgramItem extends React.Component {
                             price: appartment.price,
                             taxAmount: this.props.taxAmount,
                             epargne,
-                            gain: TaxLib.getGain(appartment.price),
+                            gain: TaxLib.getGlobalGain(appartment, this.props.law.name),
                         })}>
                         <View style={[styles.containerSpacing, styles.alignCenter, { paddingTop: 10, paddingBottom: 5 }]}>
                             <View style={elemStyle.viewTitle}>

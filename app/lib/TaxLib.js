@@ -69,6 +69,17 @@ export default class TaxLib {
       }
     }
 
+    static getGlobalGain(appartment, lawName) {
+        switch (lawName) {
+            case Const.LAW_NAME.PINEL:
+            case Const.LAW_NAME.PINEL_OUTREMER:
+                return TaxLib.getGain(appartment.price);
+            case Const.LAW_NAME.MALRAUX:
+            case Const.LAW_NAME.MONUMENT_HISTORIQUE:
+                return TaxLib.getGain(appartment.work);
+        }
+    }
+
     static getTaxMinByLaw(laws, taxAmount) {
       let min = taxAmount;
       laws.map(law => {
@@ -154,7 +165,7 @@ export default class TaxLib {
         switch (lawName) {
             case Const.LAW_NAME.PINEL:
                 maxEconomy =  parseInt(PinelLib.getHorizon(Const.MAX_LAW_VALUE.PINEL).economy);
-                appartmentEconomy = parseInt(PinelOMLib.getHorizon(appartment.price).economy);
+                appartmentEconomy = parseInt(PinelLib.getHorizon(appartment.price).economy);
                 break;
             case Const.LAW_NAME.PINEL_OUTREMER:
                 maxEconomy = parseInt(PinelOMLib.getHorizon(Const.MAX_LAW_VALUE.PINEL_OUTEMER).economy);
@@ -182,11 +193,12 @@ export default class TaxLib {
         console.log("***GAIN***");
         console.log("investiment", investiment);
         console.log("***");
-        const gain = investiment * 0.5;
+        const gain = investiment * 0.55;
         return Math.ceil(gain).toString();
     }
 
-    static getBasicEpargne(rent, investment, taxAmount, gain, duree) {
+    static getBasicEpargne(rent, investment, taxAmount, gainString, duree) {
+        let gain = parseInt(gainString);
         console.log("***");
         console.log("rent", rent);
         console.log("investment", investment);
@@ -195,8 +207,8 @@ export default class TaxLib {
         console.log("Duree", duree);
         const gainPerMonth = Math.round(gain / (duree * 12));
         console.log("Gain par mois", gainPerMonth);
-        const backMoney = Math.round((investment + (investment * 0.2)) / 240);
-        console.log("Total investment", (investment + (investment * 0.2)));
+        const backMoney = Math.round((investment) / 240);
+        console.log("Total investment", investment);
         console.log("Remboursement", backMoney);
         console.log("Epargne", backMoney - rent - gainPerMonth);
         console.log("***");
@@ -206,6 +218,8 @@ export default class TaxLib {
 
     static getEpargneByLaw(rent, investment, taxAmount, gain, duree, lawName) {
         let finalEpargne;
+        console.log(gain);
+        const basicFinalInvest = investment + investment * 0.2;
         switch (lawName) {
             case Const.LAW_NAME.PINEL:
                 finalEpargne = PinelLib.getEpargne(rent, investment, taxAmount, gain, duree);
@@ -214,10 +228,10 @@ export default class TaxLib {
                 finalEpargne = PinelOMLib.getEpargne(rent, investment, taxAmount, gain, duree);
                 break;
             case Const.LAW_NAME.MALRAUX:
-                finalEpargne = MalrauxLib.getEpargne(rent, investment, taxAmount, gain, duree);
+                finalEpargne = MalrauxLib.getEpargne(rent, basicFinalInvest, taxAmount, gain, duree);
                 break;
             case Const.LAW_NAME.MONUMENT_HISTORIQUE:
-                finalEpargne = MHLib.getEpargne(rent, investment, taxAmount, gain, duree);
+                finalEpargne = MHLib.getEpargne(rent, basicFinalInvest, taxAmount, gain, duree);
                 break;
             default:
                 finalEpargne = 0;
