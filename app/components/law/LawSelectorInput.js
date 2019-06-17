@@ -19,7 +19,7 @@ const selectorStyles = StyleSheet.create({
     euroStyle: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: Const.COLOR.GREEN,
+        backgroundColor: Const.COLOR.GREY,
     },
     textView: {
         flex: 7,

@@ -14,9 +14,9 @@ export default class Input extends React.Component {
     :
       [ inputStyle.input, inputStyle.smallInput ];
   }
-
+O
   renderViewStyle() : Array {
-    const background = this.props.value.length > 0 ? { backgroundColor: Const.COLOR.GREEN } : { backgroundColor : Const.COLOR.GREY };
+    const background = { backgroundColor : Const.COLOR.GREY };
     return this.props.isBig !== undefined && this.props.isBig === true && (this.props.isPhone === undefined || this.props.isPhone === false) ?
       [ inputStyle.view, inputStyle.bigView, background ]
       :

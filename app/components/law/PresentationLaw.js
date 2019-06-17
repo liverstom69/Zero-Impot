@@ -9,6 +9,7 @@ import images from '../../config/images';
 import Input from "../public/Input";
 import LawSelectorInput from "./LawSelectorInput";
 import AlertLib from "../../lib/AlertLib";
+import Const from "../../config/Const";
 
 const presentationStyle = StyleSheet.create({
     lawView1: {
@@ -35,8 +36,8 @@ const presentationStyle = StyleSheet.create({
     trashView: {
         alignItems: "center",
         justifyContent: "center",
-        marginRight: 10,
-    }
+        marginLeft: 5,
+    },
 });
 
 export default class PresentationLaw extends React.Component {
@@ -59,6 +60,13 @@ export default class PresentationLaw extends React.Component {
                 <View style={styles.container}>
                     <View>
                         <View style={presentationStyle.lawView1}>
+                            <TouchableOpacity
+                                onPress={() => this.handleClick()}
+                                style={[styles.justifyCenter, styles.alignCenter, styles.infoTextView, { marginRight: 5 }]}
+                                activeOpacity={0.8}>
+                                <Text style={styles.infoText}>info</Text>
+                            </TouchableOpacity>
+                            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>Loi {this.props.name}</Text>
                             {this.props.isTrashHidden === false && (
                                 <TouchableOpacity
                                     onPress={() => this.props.onPressTrash(this.props.name)}
@@ -66,17 +74,6 @@ export default class PresentationLaw extends React.Component {
                                     <Image style={[presentationStyle.trashImg, ]} source={images.trash} />
                                 </TouchableOpacity>
                             )}
-                            <Text style={[styles.mediumTextBold, styles.greyBlackColor]}>Loi {this.props.name}</Text>
-                            <TouchableOpacity
-                                onPress={() => this.handleClick()}
-                                style={[styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
-                                activeOpacity={0.8}>
-                                <Ionicons
-                                    name="ios-information-circle-outline"
-                                    size={22}
-                                    color="pink"
-                                />
-                            </TouchableOpacity>
                         </View>
                     </View>
                 </View>

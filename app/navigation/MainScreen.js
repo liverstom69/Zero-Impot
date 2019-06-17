@@ -15,6 +15,8 @@ import Article from "../screen/Article";
 import Contact from "../screen/Contact";
 import SplashData from "../screen/Splash";
 import HeaderTitle from "../components/public/HeaderTitle";
+import HeaderRight from "../components/public/HeaderRight";
+
 
 const MainScreen = StackNavigator({
     Splash: {
@@ -27,9 +29,9 @@ const MainScreen = StackNavigator({
     screen: Home,
     navigationOptions: {
         headerStyle: styles.navBarHome,
-      headerTitle: <Header />,
-      headerLeft: <View />,
-        headerRight: <View />,
+        headerTitle: <Header/>,
+        headerLeft: <View/>,
+        headerRight: <View/>,
     }
   },
   Result: {
@@ -37,7 +39,7 @@ const MainScreen = StackNavigator({
       navigationOptions: ({ navigation }) => {
           return {
               headerTitle: <HeaderTitle title={'Résultats'} />,
-              headerRight: <View />,
+              headerRight: <HeaderRight props={navigation}/>,
           }
       }
   },
@@ -46,7 +48,7 @@ const MainScreen = StackNavigator({
         navigationOptions: ({ navigation }) => {
           return {
               headerTitle: <HeaderTitle title={navigation.state.params.title} />,
-              headerRight: <View />,
+              headerRight: <HeaderRight props={navigation}/>,
           }
         }
     },
@@ -55,22 +57,26 @@ const MainScreen = StackNavigator({
         navigationOptions: ({ navigation }) => {
             return {
                 headerTitle: <HeaderTitle title={navigation.state.params.city} />,
-                headerRight: <View />,
+                headerRight: <HeaderRight props={navigation}/>,
             }
         }
     },
     Article: {
       screen: Article,
-        navigationOptions: {
-            headerTitle: <HeaderTitle title={'Article 217'} />,
-            headerRight: <View />,
+        navigationOptions: ({ navigation }) => {
+            return {
+                headerTitle: <HeaderTitle title={'Article 217'}/>,
+                headerRight: <HeaderRight props={navigation}/>,
+            }
         }
     },
     Contact: {
       screen: Contact,
-        navigationOptions: {
-            headerTitle: <HeaderTitle title={'Contact'} />,
-            headerRight: <View />,
+        navigationOptions: ({ navigation }) => {
+            return {
+                headerTitle: <HeaderTitle title={'Contact'}/>,
+                headerRight: <HeaderRight props={navigation}/>,
+            }
         }
     }
 }, {

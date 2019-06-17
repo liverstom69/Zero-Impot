@@ -34,6 +34,7 @@ export default class Home extends React.Component {
 
   constructor(props) {
       super(props);
+      console.log(this.props);
       this.state = {
           ir: '',
           is: '',
@@ -123,6 +124,10 @@ export default class Home extends React.Component {
               break;
       }
       laws = laws.filter(law => law.programs.length > 0);
+      if (laws.length > 2) {
+          const pinelLaw = laws.pop();
+          laws.splice(1, 0, pinelLaw);
+      }
       if (laws.length === 0) {
           AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
       } else {

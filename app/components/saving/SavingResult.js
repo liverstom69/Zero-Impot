@@ -35,13 +35,9 @@ export default class SavingResult extends React.Component {
               {this.props.description !== undefined && (
                   <TouchableOpacity
                       onPress={() => this.handleClick()}
-                      style={[styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
+                      style={[styles.infoTextView, styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
                       activeOpacity={this.props.description === undefined ? 1 : 0.8}>
-                      <Ionicons
-                          name="ios-information-circle-outline"
-                          size={22}
-                          color="pink"
-                      />
+                      <Text style={styles.infoText}>info</Text>
                   </TouchableOpacity>
               )}
           </View>

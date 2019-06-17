@@ -47,10 +47,10 @@ export default class ProgramItem extends React.Component {
                             <View style={elemStyle.viewTitle}>
                                 <Text style={[styles.textMedium, styles.greyBlackColor]}>{this.props.program.city}</Text>
                             </View>
-                            <View style={elemStyle.viewSubTitle}>
+                            <View style={[elemStyle.viewSubTitle, styles.alignCenter, styles.justifyCenter]}>
                                 <Text style={[styles.textMedium, styles.greyColor2]}>{ TaxLib.returnNumberFormat(epargne) }</Text>
                             </View>
-                            <View>
+                            <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                                 <Text style={[styles.smallTextMedium, styles.greyBlackColor]}>VOIR</Text>
                             </View>
                         </View>

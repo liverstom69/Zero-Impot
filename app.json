@@ -1,14 +1,30 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0",
-    "icon": "./assets/images/Icon.png",
+    "sdkVersion": "33.0.0",
+    "icon": "./assets/images/icon.png",
     "version": "1.0.0",
     "slug": "zeroimpot",
     "ios": {
       "bundleIdentifier": "com.constancepatrimoine.zeroimpot"
     },
     "android": {
-      "package": "com.constancepatrimoine.zeroimpot"
-    }
+      "package": "com.constancepatrimoine.zeroimpot",
+      "versionCode": 4,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_PHONE_STATE",
+        "READ_CONTACTS",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.htc.launcher.permission.UPDATE_SHORTCUT"
+      ]
+    },
+    "name": "ZeroImpot",
+    "description": "",
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }

@@ -12,7 +12,10 @@ export default class ConstanceButton extends React.Component {
     let buttonS;
     switch (this.props.color) {
       case Const.COLOR.BLUE:
-        buttonS = buttonStyle.blueView;
+          buttonS = buttonStyle.blueView;
+          break;
+      case Const.COLOR.GREEN:
+        buttonS = buttonStyle.greenView;
         break;
       case Const.COLOR.GREY:
         buttonS = buttonStyle.greyView;
@@ -28,14 +31,14 @@ export default class ConstanceButton extends React.Component {
 
   renderTextStyle() : Object {
     return this.props.color === 'white' ?
-      styles.blueColor
+      styles.greenColor
       :
       styles.whiteColor;
   }
 
   renderIconStyle() : Object {
     return this.props.color === 'white' ?
-      [ buttonStyle.icon, buttonStyle.blueIcon]
+      [ buttonStyle.icon, buttonStyle.greenIcon]
       :
       [ buttonStyle.icon, buttonStyle.whiteIcon ];
   }
@@ -76,6 +79,13 @@ const buttonStyle = StyleSheet.create({
         borderRadius: 2,
         justifyContent: 'center',
     },
+    greenView: {
+        backgroundColor: Const.COLOR.GREEN,
+        shadowOpacity: 0.75,
+        shadowRadius: 5,
+        shadowColor: Const.COLOR.GREEN,
+        shadowOffset: { height: 5, width: 0 },
+    },
     blueView: {
       backgroundColor: Const.COLOR.BLUE,
       shadowOpacity: 0.75,
@@ -87,12 +97,15 @@ const buttonStyle = StyleSheet.create({
         backgroundColor: Const.COLOR.GREY
     },
     whiteView: {
-        borderColor: Const.COLOR.BLUE,
+        borderColor: Const.COLOR.GREEN,
         borderWidth: 1,
     },
     icon: {
         position: 'absolute',
         left: 10,
+    },
+    greenIcon: {
+        tintColor: Const.COLOR.GREEN,
     },
     blueIcon: {
         tintColor: Const.COLOR.BLUE,
@@ -101,7 +114,7 @@ const buttonStyle = StyleSheet.create({
         tintColor: 'white',
     },
     textView: {
-        flex: 1,
+        alignSelf: 'stretch',
         alignItems: 'center',
         justifyContent: 'center'
     },

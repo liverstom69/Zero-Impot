@@ -39,7 +39,7 @@ export default class Contact extends React.Component {
                 subTitles: [],
             },
             {
-                title: "Economie globale",
+                title: "Economie d'impôt totale",
                 value: TaxLib.returnNumberFormat(TaxLib.getGlobalEconomy(lawName, appartment)),
                 subTitles: [],
             },
@@ -49,8 +49,8 @@ export default class Contact extends React.Component {
                 subTitles: [],
             },
             {
-                title: "Capital à ".concat(lawDate, " ans"),
-                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(gain.toString()),
+                title: "Votre gain à ".concat(lawDate, " ans"),
+                value: price === -1 ? I18n.t("translation.resumeNotDefined") : TaxLib.returnNumberFormat(Math.round(gain).toString()),
                 subTitles: [],
             },
             {
@@ -87,37 +87,30 @@ export default class Contact extends React.Component {
 
     handleClickEmail() {
         Communications.email(["zeroimpot@support.com"], null, null, "ZERO IMPOT",
-            "Bonjour Zero Impôt,\n\n\n" +
+            this.getMessageString()
+        );
+    }
+
+    getMessageString() {
+        return "Bonjour Zero Impôt,\n\n\n" +
             "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
             "Récapitulatif\n" +
             "Montant d'impôt: " + this.state.data[0].value + "\n" +
             "Economie d'impôt: " + this.state.data[1].value + "\n" +
-            "Montant de l'opération: " + this.state.data[2].value + "\n" +
-            "Capital à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[3].value + "\n" +
-            "Apport mensuel: " + this.state.data[4].value + "\n" +
-            "Dispositif fiscal: " + this.state.data[5].value + "\n" +
-            "Ville/Programme choisi: " + this.state.data[6].value + "\n\n\n" +
+            "Economie d'impôt totale: " + this.state.data[2].value + "\n" +
+            "Montant de l'opération: " + this.state.data[3].value + "\n" +
+            "Gain à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[4].value + "\n" +
+            "Apport mensuel: " + this.state.data[5].value + "\n" +
+            "Dispositif fiscal: " + this.state.data[6].value + "\n" +
+            "Ville/Programme choisi: " + this.state.data[7].value + "\n\n\n" +
             "Commentaire: \n" + this.state.comment + "\n" +
             "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
             "Zero Impôt"
-        );
     }
 
     handleClickSMS() {
         Communications.textWithoutEncoding("0661233060",
-            "Bonjour Zero Impôt,\n\n\n" +
-            "Merci de nous contacter pour plus de précisions en fonction de ma situation.\n\n" +
-            "Récapitulatif\n" +
-            "Montant d'impôt: " + this.state.data[0].value + "\n" +
-            "Economie d'impôt: " + this.state.data[1].value + "\n" +
-            "Montant de l'opération: " + this.state.data[2].value + "\n" +
-            "Capital à " + this.props.navigation.state.params.lawDate + " ans: " + this.state.data[3].value + "\n" +
-            "Apport mensuel: " + this.state.data[4].value + "\n" +
-            "Dispositif fiscal: " + this.state.data[5].value + "\n" +
-            "Ville/Programme choisi: " + this.state.data[6].value + "\n\n\n" +
-            "Commentaire: \n" + this.state.comment + "\n" +
-            "Numéro de téléphone: " + this.state.phoneNumber + "\n\n" +
-            "Zero Impôt"
+            this.getMessageString()
         );
     }
 
@@ -166,7 +159,7 @@ export default class Contact extends React.Component {
                     <View style={styles.halfSpace} />
                     <ConstanceButton
                         title={I18n.t('translation.resumeSms')}
-                        color={Const.COLOR.BLUE}
+                        color={Const.COLOR.GREEN}
                         image={images.phone}
                         onPress={() => this.handleClickSMS()}
                     />

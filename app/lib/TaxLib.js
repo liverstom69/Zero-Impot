@@ -9,8 +9,6 @@ import PinelOMLib from "./PinelOMLib";
 import MalrauxLib from "./MalrauxLib";
 import MHLib from "./MHLib";
 
-const numberOfElement = 3;
-
 export default class TaxLib {
     static onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
@@ -55,6 +53,7 @@ export default class TaxLib {
 
     static getLawData(laws, lawName, taxAmount) {
       const filterLaws = TaxLib.getProgramFromLaw(laws, lawName);
+      console.log('Filter Law', filterLaws, lawName);
       switch (lawName) {
           case Const.LAW_NAME.PINEL:
               return PinelLib.getObject(filterLaws, taxAmount);
@@ -75,8 +74,9 @@ export default class TaxLib {
             case Const.LAW_NAME.PINEL_OUTREMER:
                 return TaxLib.getGain(appartment.price);
             case Const.LAW_NAME.MALRAUX:
+              return TaxLib.getGain(appartment.work);
             case Const.LAW_NAME.MONUMENT_HISTORIQUE:
-                return TaxLib.getGain(appartment.work);
+                return MHLib.getGain(appartment.work);
         }
     }
 
@@ -193,7 +193,7 @@ export default class TaxLib {
         console.log("***GAIN***");
         console.log("investiment", investiment);
         console.log("***");
-        const gain = investiment * 0.55;
+        const gain = investiment * 0.4;
         return Math.ceil(gain).toString();
     }
 
@@ -243,7 +243,7 @@ export default class TaxLib {
     static returnNumberFormat(number: string) {
         let i = 0;
         let numberFormated = "";
-        if (number.length <= numberOfElement) { return number }
+        if (number.length <= Const.NUMBER_OF_ELEMENTS) { return number }
         number = this.reverseString(number);
         while (i < number.length) {
             if (i > 0 && i % 3 === 0) {

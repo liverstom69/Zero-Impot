@@ -8,6 +8,7 @@ import styles from '../config/styles';
 import Const from '../config/Const';
 import Input from '../components/public/Input';
 import ConstanceButton from '../components/public/ConstanceButton';
+import SmsButton from '../components/public/SmsButton';
 import TaxLib from '../lib/TaxLib';
 import AlertLib from "../lib/AlertLib";
 import images from "../config/images";
@@ -119,6 +120,10 @@ export default class Home extends React.Component {
                 break;
         }
         laws = laws.filter(law => law.programs.length > 0);
+        if (laws.length > 2) {
+            const pinelLaw = laws.pop();
+            laws.splice(1, 0, pinelLaw);
+        }
         if (laws.length === 0) {
             AlertLib.alertOK(I18n.t('translation.errorAnyLaws'));
         } else {
@@ -211,6 +216,7 @@ export default class Home extends React.Component {
                           onPress={this.onClickButton}
                       />
                   </View>
+                  <SmsButton />
               </View>
           </View>
       );

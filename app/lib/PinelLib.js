@@ -97,7 +97,7 @@ export default class PinelLib {
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
         const adjustInvest = investment + (investment * 0.55);
-        const finalInvest = adjustInvest > Const.MAX_LAW.PINEL ? Const.MAX_LAW.PINEL : adjustInvest;
-        return TaxLib.getBasicEpargne(rent, finalInvest, taxAmount, gain, duree);
+        const finalInvest = adjustInvest > Const.MAX_LAW_VALUE.PINEL ? Const.MAX_LAW_VALUE.PINEL : adjustInvest;
+        return TaxLib.getBasicEpargne(rent, adjustInvest, taxAmount, gain, duree);
     }
 }

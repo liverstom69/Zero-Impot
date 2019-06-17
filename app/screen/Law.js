@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import ActionSheet from 'react-native-actionsheet';
 
 import ConstanceButton from "../components/public/ConstanceButton";
+import SmsButton from '../components/public/SmsButton';
 import Const from "../config/Const";
 import styles from "../config/styles";
 import SavingResult from "../components/saving/SavingResult";
@@ -14,6 +15,10 @@ import images from "../config/images";
 import ProgramItem from "../components/program/ProgramItem";
 import TaxLib from "../lib/TaxLib";
 import AlertLib from "../lib/AlertLib";
+import MHLib from "../lib/MHLib";
+import MalrauxLib from "../lib/MalrauxLib";
+import PinelLib from "../lib/PinelLib";
+import PinelOMLib from "../lib/PinelOMLib";
 
 const selectorStyles = StyleSheet.create({
     container: {
@@ -24,7 +29,7 @@ const selectorStyles = StyleSheet.create({
     euroStyle: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: Const.COLOR.GREEN,
+        backgroundColor: Const.COLOR.GREY,
     },
     textView: {
         flex: 7,
@@ -34,7 +39,7 @@ const selectorStyles = StyleSheet.create({
     icon: {
         flex: 1,
         alignSelf: "center",
-    }
+    },
 });
 
 export default class Law extends React.Component {
@@ -74,11 +79,11 @@ export default class Law extends React.Component {
         let intValue = parseInt(value);
         let programs = TaxLib.getProgramFromLaw(this.props.navigation.state.params.basicLaws, law.name);
         if (law.name === Const.LAW_NAME.MALRAUX) {
-            finalLaw = TaxLib.getMalrauxObject(TaxLib.getMalraux(programs, TaxLib.getTaxByInvestmentByLaw(law.name, intValue), true), intValue);
+            finalLaw = MHLib.getSpecificObject(MalrauxLib.getObject(programs, TaxLib.getTaxByInvestmentByLaw(law.name, intValue), true), intValue);
         } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
-            finalLaw = TaxLib.getMH(programs, intValue, false);
+            finalLaw = MHLib.getSpecificObject(MHLib.getObject(programs, TaxLib.getTaxByInvestmentByLaw(law.name, intValue), true), intValue);
         } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
-            finalLaw = TaxLib.getPinelOM(programs, intValue, false);
+            finalLaw = PinelOMLib.getObject(programs, intValue, false);
         } else {
             finalLaw = TaxLib.getLawData(basicLaws, law.name, TaxLib.getTaxByInvestmentByLaw(law.name, intValue));
         }
@@ -92,7 +97,7 @@ export default class Law extends React.Component {
 
     handleClickInfo() {
         AlertLib.alertOK("Apport mensuel", "Votre apport mensuel est le différentiel entre\n" +
-            "le loyer + le gain d’impôt – le rbt du prêt");
+            "le loyer + le gain d’impôt – le remboursement du prêt");
     }
 
     handleEpargne(epargne) { this.setState({ epargne }) }
@@ -122,6 +127,7 @@ export default class Law extends React.Component {
             law.name,
             TaxLib.getInvestmentByLaw(law.name, taxAmount))
             .concat([I18n.t("translation.cancel")]);
+        const cityText = law.name === Const.LAW_NAME.PINEL_OUTREMER ? "DOM TOM" : "Les villes";
         return (
             <KeyboardAwareScrollView style={[styles.backgroundWhite]}>
                 <View style={[styles.viewWithMarg, styles.alignCenter]}>
@@ -131,42 +137,33 @@ export default class Law extends React.Component {
                             this.props.navigation.state.params.law.name,
                             I18n.t("translation.titleOperator2"))}
                     </Text>
-                    <Text style={[styles.smallTextRegular, styles.blueColor, styles.textCenter]}>{I18n.t("translation.subtitleOperator")}</Text>
-                    <View style={styles.halfSpace} />
+                    <Text style={[styles.smallTextRegular, styles.blackColor, styles.textCenter]}>{I18n.t("translation.subtitleOperator")}</Text>
                     <View style={styles.halfSpace} />
                     <View style={[styles.container, styles.justifyCenter, styles.alignCenter]}>
-                        <View>
-                            <Text style={styles.textCenter}>
-                                <Text style={[styles.semiBoldText, styles.blackColor]}>{I18n.t("translation.epargneProgramTitle")}</Text>
-                                <Text style={[styles.smallTextRegular, styles.blueColor]}>{I18n.t("translation.epargneProgramSubtitle")}</Text>
-                            </Text>
-                        </View>
+                        <Text style={[styles.textCenter, styles.semiBoldText, styles.blackColor]}>{I18n.t("translation.epargneProgramTitle")}</Text>
                     </View>
                 </View>
                 <View style={[styles.alignCenter, { marginHorizontal: 15, flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ flex: 3, flexDirection: "row", alignItems: "center" }}>
-                        <Text style={[styles.smallTextRegular, styles.blueColor, { flex: 1 }]}>Les villes</Text>
+                    <View style={{ flex: 4, flexDirection: "row", alignItems: "flex-end", justifyContent: 'flex-start', alignSelf: 'stretch' }}>
+                        <Text style={[styles.smallTextRegular, styles.blueColor, { flex: 1 }]}>{ cityText }</Text>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 2, alignSelf: 'stretch', justifyContent: 'flex-start' }}>
                         <Image
                             source={images.pig}
-                            style={{ alignSelf: "center", marginHorizontal: 10 }}
+                            style={{ alignSelf: "center" }}
                             resizeMode={"contain"}
                         />
+                        <View style={[{ flexDirection: "row" }, styles.alignCenter, styles.justifyCenter]}>
+                            <Text style={[styles.smallTextRegular, styles.blueColor]}>Apport mensuel</Text>
+                            <TouchableOpacity
+                                onPress={() => this.handleClickInfo()}
+                                style={[styles.infoTextView, styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
+                                activeOpacity={0.8}>
+                                <Text style={styles.infoText}>info</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={[{ flex: 3, flexDirection: "row" }, styles.alignCenter, styles.justifyCenter]}>
-                        <Text style={[styles.smallTextRegular, styles.blueColor]}>Apport mensuel</Text>
-                        <TouchableOpacity
-                            onPress={() => this.handleClickInfo()}
-                            style={[styles.justifyCenter, styles.alignCenter, { marginLeft: 5 }]}
-                            activeOpacity={0.8}>
-                            <Ionicons
-                                name="ios-information-circle-outline"
-                                size={22}
-                                color="pink"
-                            />
-                        </TouchableOpacity>
-                    </View>
+                    <View style={[{ flex: 1, flexDirection: "row", alignSelf: 'stretch' }]} />
                 </View>
                 <FlatList
                     data={this.state.programs}
@@ -191,7 +188,7 @@ export default class Law extends React.Component {
                     <SavingResult
                         value={this.state.gain}
                         text={I18n.t("translation.epargneGain") + law.horizon.duree + " " + I18n.t("translation.years")}
-                        titleDescription={"Gain moyen à ".concat(law.horizon.duree, " ans")}
+                        titleDescription={"Votre capital à ".concat(law.horizon.duree, " ans")}
                         description={"Le gain moyen est le capital constitué en cas de vente à ".concat(law.horizon.duree, " ans\ndiminué du capital restant dû à la banque")}
                     />
                     <View style={styles.littleSpace} />
@@ -228,6 +225,7 @@ export default class Law extends React.Component {
                     </TouchableOpacity>
                     <View style={styles.halfSpace} />
                 </View>
+                <SmsButton />
             </KeyboardAwareScrollView>
         )
     }

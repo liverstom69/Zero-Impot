@@ -63,7 +63,8 @@ export default class MHLib {
     }
 
     static getPrograms(mh, taxAmount) {
-        const mhAmount = this.getInvestment(taxAmount);
+        console.log('MH', mh);
+        const mhAmount = MHLib.getInvestment(taxAmount);
         const maxMHAmount = mhAmount + ((Const.PERCENT_MMH / 100) * mhAmount);
         let mhMaxProgram = mh.programs[0];
         let mhMaxAppartment = mhMaxProgram.apartments[0];
@@ -87,6 +88,41 @@ export default class MHLib {
         });
         return programs.length === 0 ? [] : programs;
     }
+
+    static getNearPrograms(mh, investment) {
+        let programs = [];
+        let isAlreadyIn = false;
+        mh.programs.map(program => {
+            isAlreadyIn = false;
+            program.apartments.map(appartment => {
+                if (!isAlreadyIn && investment <= appartment.price && appartment.price <= (investment * Const.PERCENT_MMH)) {
+                    if (programs.length < Const.NUMBER_OF_ELEMENTS) {
+                        programs.push(program);
+                        isAlreadyIn = true;
+                    }
+                }
+            })
+        });
+        return programs.length === 0 ? [mh.programs[0]] : programs;
+    }
+
+  static getNearAmount(programs, investment) {
+    let appartment = programs[0].apartments[0];
+    programs.map(program => {
+      program.apartments.map(appart => {
+        if (investment <= appart.price && appart.price <= (investment + (investment * Const.PERCENT_MMH))) {
+          if (investment <= appartment.price && appartment.price <= (investment + (investment * Const.PERCENT_MMH))) {
+            if (appart.price <= appartment.price || appart.work >= appartment.work) {
+              appartment = appart;
+            }
+          } else {
+            appartment = appart;
+          }
+        }
+      });
+    });
+    return appartment;
+  }
 
     static getAppartment(program, investment) {
         const maxMHAmount = investment + ((Const.PERCENT_MMH / 100) * investment);
@@ -114,37 +150,65 @@ export default class MHLib {
     }
 
     static getInvestment(taxAmount) {
-        const investment = taxAmount * this.getFactorFromTax(taxAmount);
+        const investment = taxAmount * MHLib.getFactorFromTax(taxAmount);
         return Math.ceil(investment + investment * 0.36);
     }
 
     static getTaxByInvestment(investment) {
         const finalInvestment = investment - investment * 0.36;
-        return Math.ceil(finalInvestment / this.getFactorFromWork(finalInvestment));
+        return Math.ceil(finalInvestment / MHLib.getFactorFromWork(finalInvestment));
+    }
+
+    static getSpecificObject(law, value) {
+        const appartment = MHLib.getNearAmount(law.programs, value);
+        return {
+            name: Const.LAW_NAME.MONUMENT_HISTORIQUE,
+            description: 'Cette loi permet une réduction d’impôt\n' +
+            'sans limite. Le régime Monument historique est souscrit pour 15 ans',
+            investiment: value.toString(),
+            programs: law.programs,
+            horizon: MHLib.getHorizon(appartment.work),
+            appartment
+        }
     }
 
     static getFinalAmount(taxAmount, investment) {
-        const value = taxAmount - this.getInvestment(investment);
+        const value = taxAmount - MHLib.getInvestment(investment);
         return value < 0 ? 0 : value;
     }
 
     static getObject(mhLaw, taxAmount, isFirstTime = true) {
-        let investment;
-        let value;
+        let programs;
         if (isFirstTime === true) {
-            investment = this.getInvestment(taxAmount);
-            value = taxAmount;
+            programs = MHLib.getPrograms(mhLaw, taxAmount);
         } else {
-            investment = taxAmount;
-            value = this.getTaxByInvestment(taxAmount);
+            programs = MHLib.getNearPrograms(mhLaw, taxAmount);
         }
+        if (programs.length > 0) {
+            let appartment;
+            if (isFirstTime === true) {
+                appartment = MHLib.getAppartment(programs[0], MHLib.getInvestment(taxAmount));
+            } else {
+                appartment = MHLib.getNearAmount(programs, taxAmount)
+            }
+            return {
+                name: Const.LAW_NAME.MONUMENT_HISTORIQUE,
+                description: 'Cette loi permet une réduction d’impôt\n' +
+                'sans limite. Le régime Monument historique est souscrit pour 15 ans',
+                investiment: appartment.price.toString(),
+                programs,
+                horizon: MHLib.getHorizon(appartment.work),
+                appartment
+            }
+        }
+        const investment = MHLib.getInvestment(taxAmount);
         return {
             name: Const.LAW_NAME.MONUMENT_HISTORIQUE,
             description: 'Cette loi permet une réduction d’impôt\n' +
             'sans limite. Le régime Monument historique est souscrit pour 15 ans',
             investiment: investment.toString(),
-            programs: this.getPrograms(mhLaw, value),
-            horizon: this.getHorizon(investment)
+            programs,
+            horizon: MHLib.getHorizon(investment)
         }
     }
 
@@ -175,5 +239,9 @@ export default class MHLib {
 
     static getEpargne(rent, investment, taxAmount, gain, duree) {
         return TaxLib.getBasicEpargne(rent, investment, taxAmount, gain, duree)
+    }
+
+    static getGain(work) {
+        return work * 0.65;
     }
 }

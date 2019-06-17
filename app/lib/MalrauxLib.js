@@ -38,7 +38,7 @@ export default class MalrauxLib {
             isAlreadyIn = false;
             program.apartments.map(appartment => {
                 if (isAlreadyIn === false && investment <= appartment.price && appartment.price <= (investment + (investment * 0.2))) {
-                    if (programs.length < numberOfElement) {
+                    if (programs.length < Const.NUMBER_OF_ELEMENTS) {
                         programs.push(program);
                         isAlreadyIn = true;
                     }

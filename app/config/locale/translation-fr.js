@@ -9,7 +9,7 @@ const translation = {
     numberParts: "Nombre de parts",
     customer: 'Particulier',
     socity: 'Société (IS)',
-    launchSimulation: 'Annuler mon impôt',
+    launchSimulation: 'Lancer ma simulation',
     errorTaxValue: 'Le montant de l\'impôt doit être au-dessus de 2500€.',
     errorTaxLenght: 'Vous devez rentrer le montant de votre impôt.',
     errorTaxNumber: 'Le montant de l\'impôt doit être entier.',
@@ -58,12 +58,12 @@ const translation = {
     errorSelection : "Avec la configuration choisie, nous n'avons plus de programmes à vous proposer",
     initialText: 'Pour changer votre épargne, changez votre montant d\'opération.',
     updateEpargne: 'Modifier mon épargne',
-    titleOperator1: 'Les meilleurs opérations ',
+    titleOperator1: 'Les meilleures opérations ',
     titleOperator2: ' actuellement',
     subtitleOperator: 'Financement bancaire 100%',
     epargneProgramTitle: 'Votre épargne pour ce programme\n',
     epargneProgramSubtitle: '(En fonction du loyer)',
-    epargneGain: 'Gain moyen à ',
+    epargneGain: 'Capital consituté à ',
     //Appartment
     appartmentDescription: "Description de la résidence",
     //Article

@@ -74,6 +74,17 @@ const styles = StyleSheet.create({
   blackColor: {
     color: Const.COLOR.BLACK,
   },
+    infoTextView: {
+        borderRadius: 7.5,
+        padding: 3,
+        borderWidth: 1,
+        borderColor: Const.COLOR.BLUE
+    },
+    infoText: {
+        color: Const.COLOR.BLUE,
+        textAlign: 'center',
+        fontSize: 10,
+    },
     navBarHome: {
         backgroundColor: 'white',
         elevation: 0,
@@ -110,6 +121,10 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     marginHorizontal: 15,
   },
+    viewWithMarg2: {
+        marginVertical: 5,
+        marginHorizontal: 15,
+    },
     tinySpace: {
         height: 5,
     },

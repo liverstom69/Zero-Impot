@@ -7,12 +7,14 @@ import styles from '../config/styles';
 import images from '../config/images';
 import SavingResult from "../components/saving/SavingResult";
 import LawItem from "../components/law/LawItem";
+import SmsButton from "../components/public/SmsButton";
 import TaxLib from "../lib/TaxLib";
 import AlertLib from "../lib/AlertLib";
 import Const from "../config/Const";
 import MHLib from "../lib/MHLib";
 import MalrauxLib from "../lib/MalrauxLib";
 import PinelLib from "../lib/PinelLib";
+import PinelOMLib from "../lib/PinelOMLib";
 let moment = require('moment');
 
 export default class Result extends React.Component {
@@ -66,9 +68,9 @@ export default class Result extends React.Component {
                 if (law.name === Const.LAW_NAME.MALRAUX) {
                     law = MalrauxLib.getSpecficObject(MalrauxLib.getObject(programs, TaxLib.getTaxByInvestmentByLaw(name, value), true), value);
                 } else if (law.name === Const.LAW_NAME.MONUMENT_HISTORIQUE) {
-                    law = MHLib.getObject(programs, value, false);
+                    law = MHLib.getSpecificObject(MHLib.getObject(programs, TaxLib.getTaxByInvestmentByLaw(name, value), true), value);
                 } else if (law.name === Const.LAW_NAME.PINEL_OUTREMER) {
-                    law = PinelLib.getObject(programs, value, false);
+                    law = PinelOMLib.getObject(programs, value, false);
                 } else {
                     law = TaxLib.getLawData(this.props.navigation.state.params.basicLaws,
                         name,
@@ -134,6 +136,7 @@ export default class Result extends React.Component {
               />
           )}
         />
+          <SmsButton />
       </ScrollView>
     )
   }

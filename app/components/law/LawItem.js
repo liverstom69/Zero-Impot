@@ -42,7 +42,7 @@ export default class LawItem extends React.Component {
                 </View>
                 {this.props.isLast === false && (
                     <View>
-                        <LawDelimiter text={"OU"} />
+                        <LawDelimiter text={"AUTRES LOIS"} />
                         <View style={styles.tinySpace} />
                     </View>
                 )}
